@@ -16,7 +16,6 @@ const useLogin = () => {
       return data;
     },
     onSuccess: async (data) => {
-      console.log("ini data",data);
       localStorage.setItem("key", data)
       await signIn("credentials", { ...data, redirect: false });
       const lastPath = localStorage.getItem("lastPath") || "/";

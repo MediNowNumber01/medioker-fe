@@ -49,26 +49,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ account, profile, user }) {
-      console.log("SIGN IN");
-      console.log(
-        `account ${account?.access_token}, user ${user}, profile ${profile}`
-      );
-
       if (account?.provider === "google") {
         try {
-          console.log("MASUK TRYY"); //debug
-
           const response = await axiosInstance.post("/auth/google-login", {
-            token: account.access_token, // Kirim token di body
+            token: account.access_token, //body
           });
 
           if (response.data) {
-            console.log(response.data);
-
-            // profile!.backendData = response.data;
-            user.id = response.data.id
-            user.fullName = response.data.fullName
-            user.isVerified = response.data.isVerified
+            user.id = response.data.id;
+            user.fullName = response.data.fullName;
+            user.isVerified = response.data.isVerified;
             return true;
           }
         } catch (error) {
@@ -79,12 +69,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     async jwt({ token, user, account, profile }) {
-      console.log(
-        `account ${account?.access_token}, user ${user}, profile ${profile}`
-      );
       if (account?.provider === "google") {
         token.accessToken = account.access_token;
-        
+
         // Tambahkan data dari Google profile
         token.fullName = profile?.fullName;
         token.isVerified = profile?.isVerified;
