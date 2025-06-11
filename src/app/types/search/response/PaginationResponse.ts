@@ -1,6 +1,8 @@
 export interface PaginationMeta {
+  hasNext: boolean;
+  hasPrevious: boolean;
   page: number;
-  take: number;
+  perPage: number;
   total: number;
 }
 
