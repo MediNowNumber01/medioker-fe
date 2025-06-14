@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NuqsProvider from "@/providers/NuqsProvider";
+import { Toaster } from "@/components/ui/sonner";
+import NextAuthProvider from "@/providers/NextAuthProvider";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import { Toaster } from "sonner";
+import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,10 +34,13 @@ export default function RootLayout({
       >
         <NuqsProvider>
           <ReactQueryProvider>
-            {children}
-            <Toaster />
+            <NextAuthProvider>
+              {children}
+              <Toaster />
+            </NextAuthProvider>
           </ReactQueryProvider>
         </NuqsProvider>
+        <Toaster position="top-right" />
       </body>
     </html>
   );

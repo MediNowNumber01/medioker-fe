@@ -1,6 +1,6 @@
-import { BASE_URL } from "@/config/env";
+import { NEXT_PUBLIC_BASE_URL_API } from "@/config/env";
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: NEXT_PUBLIC_BASE_URL_API,
 });
