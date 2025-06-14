@@ -1,4 +1,4 @@
-import ExplorePage from "../feature/products/explore/ExplorePage";
+import ExplorePage from "../feature/medicine/explore/ExplorePage";
 
 const Explore = () => {
   return <ExplorePage />;

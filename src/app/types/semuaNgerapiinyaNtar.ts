@@ -19,12 +19,12 @@ export enum TypeHistory {
 }
 
 export enum Golongan {
-  OBAT_UMUM = "OBAT_UMUM",
+  OBAT_TERBATAS = "OBAT_TERBATAS",
   OBAT_KERAS = "OBAT_KERAS",
   OBAT_BEBAS = "OBAT_BEBAS",
 }
 
-export enum CatCreate {
+export enum Acquisition {
   GENERIK = "GENERIK",
   NON_GENERIK = "NON_GENERIK",
   HERBAL = "HERBAL",
@@ -179,9 +179,10 @@ export interface Product {
   published: boolean;
   nameMIMS: string;
   golongan: Golongan;
-  catCreate: CatCreate;
+  acquisition: Acquisition;
   nomorEdar: string;
   needsPrescription: boolean;
+  brand: string;
   description: string;
   composition: string;
   dose: string;
@@ -192,7 +193,7 @@ export interface Product {
   deletedAt?: Date | null;
   ProductImage: ProductImage[];
   UnitProduct: UnitProduct[];
-  ProductCategory: ProductCategory[];
+  ProductCategory?: ProductCategory[];
   Stock: Stock[];
 }
 
@@ -200,10 +201,9 @@ export interface Category {
   id: string;
   name: string;
   description: string;
-  color: string;
   updatedAt: Date;
   createdAt: Date;
-  ProductCategory: ProductCategory[];
+  ProductCategory?: ProductCategory[];
 }
 
 export interface ProductImage {
@@ -235,9 +235,9 @@ export interface ProductCategory {
   createdAt: Date;
   updatedAt: Date;
   productId: string;
-  product: Product;
+  product?: Product;
   categoryId: string;
-  category: Category;
+  category?: Category;
 }
 
 export interface Forum {

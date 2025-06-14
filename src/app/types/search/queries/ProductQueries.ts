@@ -1,4 +1,4 @@
-import { CatCreate, Golongan } from "../../semuaNgerapiinyaNtar";
+import { Acquisition, Golongan } from "../../semuaNgerapiinyaNtar";
 import { PaginationQueries } from "./PaginationQueries";
 
 export interface ProductQueries extends PaginationQueries {
@@ -6,5 +6,5 @@ export interface ProductQueries extends PaginationQueries {
   categoryId?: string[];
   pharmacyId?: string;
   golongan?: Golongan;
-  catCreate?: CatCreate;
+  acquisition?: Acquisition;
 }
