@@ -24,6 +24,7 @@ const HomePage = () => {
             alt="erlenplus logo"
             className="h-auto w-40 md:w-48" // Ukuran responsif
           />
+          
           <Image
             src={"/MediNow.svg"}
             width={200} // Sedikit lebih ramping

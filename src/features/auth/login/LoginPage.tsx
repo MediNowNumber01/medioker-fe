@@ -20,8 +20,6 @@ export default function LoginPage() {
   }, [status, router, redirect]);
 
   return (
-    // === BAGIAN YANG DIPERBARUI ===
-    // Menggunakan tinggi pasti dari Navbar Anda.
     <div className="bg-muted flex h-[calc(100svh-68.67px)] flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Link href="/" className="flex items-center justify-center gap-2 self-center">
