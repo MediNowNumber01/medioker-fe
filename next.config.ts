@@ -1,4 +1,3 @@
-
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -11,6 +10,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
         pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com", // Domain standar untuk gambar profil Google
+        port: "",
+        pathname: "/a/**",
       },
     ],
   },

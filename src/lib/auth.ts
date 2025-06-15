@@ -26,9 +26,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: profile.sub,
           name: profile.name, // Nama default dari Google
           email: profile.email,
-          image: profile.picture,
+          role: profile.role,
+          profilePict: profile.picture,
           fullName: profile.name, // Mapping ke fullName
           isVerified: profile.email_verified, // Mapping ke isVerified
+          // profilePict: profile.picture
         };
       },
     }),
@@ -55,10 +57,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token: account.access_token, //body
           });
 
+          console.log(response.data.profilePict);
+
           if (response.data) {
-            user.id = response.data.id;
-            user.fullName = response.data.fullName;
-            user.isVerified = response.data.isVerified;
+            // user.id = response.data.id;
+            // user.fullName = response.data.fullName;
+            // user.isVerified = response.data.isVerified;
+            // user.profilePict = response.data.profilePict
+            profile!.backendData = response.data;
+
             return true;
           }
         } catch (error) {
@@ -75,36 +82,44 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Tambahkan data dari Google profile
         token.fullName = profile?.fullName;
         token.isVerified = profile?.isVerified;
+        token.profilePict = profile?.picture;
 
         // Jika ada data tambahan dari backend
         if (profile?.backendData) {
           token.backendData = profile.backendData;
         }
       }
-      if (user) {
-        token.user = user;
-      }
+      if (user) token.user = user;
+
       return token;
     },
     async session({ session, token }: any) {
+      // if (token) {
+      //   session.accessToken = token.accessToken;
+
+      //   // Prioritaskan data dari backend jika ada
+      //   if (token.backendData) {
+      //     session.user = {
+      //       ...token.backendData,
+      //       fullName: token.fullName || token.backendData.fullName,
+      //       isVerified: token.isVerified || token.backendData.isVerified,
+      //       profilePict: token.profilePict || token.backendData.profilePict,
+      //     };
+      //   } else {
+      //     session.user = {
+      //       ...token.user,
+      //       fullName: token.fullName,
+      //       isVerified: token.isVerified,
+      //       profilePict: token.profilePict,
+      //     };
+      //   }
+      // }
       if (token) {
         session.accessToken = token.accessToken;
-
-        // Prioritaskan data dari backend jika ada
-        if (token.backendData) {
-          session.user = {
-            ...token.backendData,
-            fullName: token.fullName || token.backendData.fullName,
-            isVerified: token.isVerified || token.backendData.isVerified,
-          };
-        } else {
-          session.user = {
-            ...token.user,
-            fullName: token.fullName,
-            isVerified: token.isVerified,
-          };
-        }
+        session.user = token.backendData?.user || token.user;
+        session.backendToken = token.backendData?.token;
       }
+      
       return session;
     },
   },
