@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NuqsProvider from "@/providers/NuqsProvider";
 import { Toaster } from "@/components/ui/sonner";
 import NextAuthProvider from "@/providers/NextAuthProvider";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
@@ -31,12 +32,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ReactQueryProvider>
-          <NextAuthProvider>
-            <Navbar />
-            {children}
-          </NextAuthProvider>
-        </ReactQueryProvider>
+        <NuqsProvider>
+          <ReactQueryProvider>
+            <NextAuthProvider>
+              {children}
+              <Toaster />
+            </NextAuthProvider>
+          </ReactQueryProvider>
+        </NuqsProvider>
         <Toaster position="top-right" />
       </body>
     </html>
