@@ -188,7 +188,7 @@ export interface Product {
   dose: string;
   sideEffects: string;
   indication: string;
-  CreatedAt: Date;
+  createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date | null;
   ProductImage: ProductImage[];

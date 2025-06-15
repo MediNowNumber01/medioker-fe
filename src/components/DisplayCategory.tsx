@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { FC } from "react";
 
-import useGetCategory from "@/app/hooks/api/Category/useGetCategory";
+import useGetCategory from "@/hooks/api/Category/useGetCategory";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

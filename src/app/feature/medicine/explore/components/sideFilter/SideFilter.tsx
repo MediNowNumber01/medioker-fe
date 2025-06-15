@@ -1,5 +1,9 @@
 "use client";
-import { Acquisition, Golongan } from "@/app/types/semuaNgerapiinyaNtar";
+import {
+  Acquisition,
+  Golongan,
+  Pharmacy,
+} from "@/app/types/semuaNgerapiinyaNtar";
 import {
   Accordion,
   AccordionContent,
@@ -13,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Filter } from "lucide-react";
 import { FC } from "react";
 import PharmacySelector from "../pharmacySelector/PharmacySelector";
-import useGetCategories from "@/app/hooks/api/Category/useGetCategories";
+import useGetCategories from "@/hooks/api/Category/useGetCategories";
 
 interface SideFilterProps {
   className?: string;
@@ -23,6 +27,8 @@ interface SideFilterProps {
   onGolonganChange: (golongan: string) => void;
   onAcquisitionChange: (catCreate: string) => void;
   onCategoryChange: (category: string[]) => void;
+  sleectedPharmacy: Pharmacy | null;
+  onPharmacyChange: (pharmacy: string) => void;
 }
 
 const SideFilter: FC<SideFilterProps> = ({
@@ -33,6 +39,8 @@ const SideFilter: FC<SideFilterProps> = ({
   onAcquisitionChange,
   onCategoryChange,
   selectedCategories = [],
+  sleectedPharmacy,
+  onPharmacyChange,
 }) => {
   const { data: categories } = useGetCategories({
     sortBy: "name",
@@ -42,7 +50,11 @@ const SideFilter: FC<SideFilterProps> = ({
 
   return (
     <div className={`${className}`}>
-      <PharmacySelector className="mb-4" />
+      <PharmacySelector
+        className="mb-4"
+        pharmacy={sleectedPharmacy}
+        setPharmacy={onPharmacyChange}
+      />
       <Card className="px-4 gap-4">
         <CardHeader className="p-0 hidden  space-y-2 md:block ">
           <CardTitle className="flex items-center gap-2 text-[1.25rem]">

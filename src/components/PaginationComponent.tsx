@@ -14,12 +14,14 @@ import React, { FC } from "react";
 interface PaginationProps {
   paginationMeta?: PaginationMeta;
   isLoading?: boolean;
+  numberNarest?: number;
   onPageChange: (page: number) => void;
 }
 
 const PaginationComponent: FC<PaginationProps> = ({
   paginationMeta,
   isLoading,
+  numberNarest = 1,
   onPageChange,
 }) => {
   if (isLoading) {
@@ -61,10 +63,12 @@ const PaginationComponent: FC<PaginationProps> = ({
             (_, i) => i + 1
           ).map((page) => {
             // Show first, last, current, and neighbors; ellipsis for gaps
-            const isFirst = page === 1;
-            const isLast = page === paginationMeta.totalPages;
+            const isFirst = page === 1 && numberNarest > 0;
+            const isLast =
+              page === paginationMeta.totalPages && numberNarest > 0;
             const isCurrent = page === paginationMeta.page;
-            const isNearCurrent = Math.abs(page - paginationMeta.page) <= 1;
+            const isNearCurrent =
+              Math.abs(page - paginationMeta.page) <= numberNarest;
 
             if (isFirst || isLast || isCurrent || isNearCurrent) {
               return (
@@ -82,8 +86,9 @@ const PaginationComponent: FC<PaginationProps> = ({
 
             // Show ellipsis only once for left and right gaps
             if (
-              page === paginationMeta.page - 2 ||
-              page === paginationMeta.page + 2
+              numberNarest > 0 &&
+              (page === paginationMeta.page - numberNarest + 1 ||
+                page === paginationMeta.page + numberNarest + 1)
             ) {
               return (
                 <PaginationItem key={`ellipsis-${page}`}>

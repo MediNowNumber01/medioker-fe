@@ -20,10 +20,10 @@ interface SearchBarProps {
   className?: string;
   search: string;
   setSearch: (value: string) => void;
-  sortOrder: string;
-  setSortOrder: (value: string) => void;
-  sortBy: string;
-  setSortBy: (value: string) => void;
+  sortOrder?: string;
+  setSortOrder?: (value: string) => void;
+  sortBy?: string;
+  setSortBy?: (value: string) => void;
 }
 
 const SearchBar: FC<SearchBarProps> = ({
@@ -54,24 +54,28 @@ const SearchBar: FC<SearchBarProps> = ({
           )}
         </div>
         <div className=" items-center gap-2 hidden md:flex">
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="md:w-[120px] bg-card">
-              <SelectValue placeholder="sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="name">A-Z</SelectItem>
-                <SelectItem value="createdAt">Newest</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <div className={`${setSortBy ? "block" : "hidden"}`}>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className={`md:w-[120px] bg-card `}>
+                <SelectValue placeholder="sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="name">A-Z</SelectItem>
+                  <SelectItem value="createdAt">Newest</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
           <Button
-            className="bg-card aspect-square"
+            className={`bg-card aspect-square ${
+              setSortOrder ? "block" : "hidden"
+            }`}
             onClick={() => {
               if (sortOrder === "asc") {
-                setSortOrder("desc");
+                setSortOrder && setSortOrder("desc");
               } else if (sortOrder === "desc") {
-                setSortOrder("asc");
+                setSortOrder && setSortOrder("asc");
               }
             }}
           >

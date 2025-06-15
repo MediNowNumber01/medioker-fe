@@ -1,13 +1,14 @@
 "use client";
-import useGetProducts from "@/app/hooks/api/Products/useGetProducts";
 import { Acquisition, Golongan } from "@/app/types/semuaNgerapiinyaNtar";
+import useGetProducts from "@/hooks/api/Products/useGetProducts";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import ItemCard from "../../../../components/ItemCard";
 import PaginationComponent from "../../../../components/PaginationComponent";
-import PharmacySelector from "./components/pharmacySelector/PharmacySelector";
 import SearchBar from "../../../../components/SearchBar";
+import MobileFilter from "./components/mobileFilter/MobileFilter";
+import PharmacySelector from "./components/pharmacySelector/PharmacySelector";
 import SideFilter from "./components/sideFilter/SideFilter";
 
 const ExplorePage = () => {
@@ -29,14 +30,19 @@ const ExplorePage = () => {
   const [sortOrder, setSortOrder] = useQueryState("order", {
     defaultValue: "asc",
   });
-  const [categories, setCategories] = useQueryState<string[]>("categories", {
+  const [categories, setCategories] = useQueryState("categories", {
     defaultValue: [],
     history: "replace",
-    parse: (value) => (value ? value.split(",") : []),
+    parse: (value) => (value ? value.split(",O") : []),
     serialize: (value) => value.join(","),
   });
   const [page, setPage] = useState<number>(1);
-
+  const [selectedPharmacyId, setSelectedPharmacyId] = useQueryState(
+    "pharmacy",
+    {
+      defaultValue: "",
+    }
+  );
   const { data: getproducts, isLoading } = useGetProducts({
     categoryId: categories.length > 0 ? categories : undefined,
     search: debouncedSearch,
@@ -49,20 +55,23 @@ const ExplorePage = () => {
     take: 30,
     page,
     sortBy,
+    pharmacyId: selectedPharmacyId ? selectedPharmacyId : undefined,
     sortOrder:
       sortOrder === "asc" || sortOrder === "desc" ? sortOrder : undefined,
   });
 
-  const handleCategoryChange = (category: string[]) => {
-    const detachCategory = category.filter((cat) => categories.includes(cat));
-    const attachCategory = category.filter((cat) => !categories.includes(cat));
-    setCategories((prev) =>
-      prev.filter((cat) => !detachCategory.includes(cat)).concat(attachCategory)
+  const handleCategoryChange = (checked: string[]) => {
+    const detachCategory = checked.filter((cat) => categories.includes(cat));
+    const attachCategory = checked.filter((cat) => !categories.includes(cat));
+    const newCategories = categories.filter(
+      (cat) => !detachCategory.includes(cat)
     );
+    newCategories.push(...attachCategory);
+    setCategories(newCategories ? newCategories : []);
   };
-
   useEffect(() => {
     setPage(1);
+    window.scrollTo(0, 0);
   }, [acquisition, golongan, categories, debouncedSearch, sortBy]);
 
   return (
@@ -75,7 +84,11 @@ const ExplorePage = () => {
         </p>
       </section>
       <section className="container mx-auto h-fit  mb-4 px-2">
-        <PharmacySelector className=" md:hidden" />
+        <PharmacySelector
+          className=" md:hidden"
+          pharmacy={getproducts?.pharmacy ? getproducts.pharmacy : null}
+          setPharmacy={setSelectedPharmacyId}
+        />
         <SearchBar
           className="w-full md:pl-[25%]"
           search={search}
@@ -84,6 +97,18 @@ const ExplorePage = () => {
           setSortOrder={setSortOrder}
           sortBy={sortBy}
           setSortBy={setSortBy}
+        />
+        <MobileFilter
+          onAcquisitionChange={setAcquisition}
+          onGolonganChange={setGolongan}
+          onCategoryChange={handleCategoryChange}
+          selectedAquisition={acquisition as Acquisition}
+          selectedGolongan={golongan}
+          selectedCategories={categories}
+          setSortBy={setSortBy}
+          setSortOrder={setSortOrder}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
         />
       </section>
 
@@ -98,6 +123,8 @@ const ExplorePage = () => {
           onAcquisitionChange={setAcquisition}
           onGolonganChange={setGolongan}
           onCategoryChange={handleCategoryChange}
+          onPharmacyChange={setSelectedPharmacyId}
+          sleectedPharmacy={getproducts?.pharmacy ? getproducts.pharmacy : null}
         />
         <div className="w-full md:w-4/5">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5  gap-2">
