@@ -28,8 +28,21 @@ const PharmacyCard: FC<PharmacyCardProps> = ({
         } items-center gap-2`}
       >
         <Avatar className="h-14 w-14">
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>MN</AvatarFallback>
+          <AvatarImage
+            src={pharmacy?.picture}
+            alt={pharmacy?.name}
+            className="object-fill w-full h-full"
+          />
+          <AvatarFallback>
+            {pharmacy?.name
+              ? pharmacy.name
+                  .split(" ")
+                  .map((word) => word[0])
+                  .join("")
+                  .toUpperCase()
+                  .slice(0, 2)
+              : "MN"}
+          </AvatarFallback>
         </Avatar>
         <div
           className={`md:w-full font-medium text-lg ${
