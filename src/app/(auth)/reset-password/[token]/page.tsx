@@ -1,6 +1,6 @@
 import ResetPasswordPage from "@/features/auth/reset-password/ResetPasswordPage";
 import { axiosInstance } from "@/lib/axios";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
 const ResetPassword = async ({
@@ -22,7 +22,7 @@ const ResetPassword = async ({
   const { isValid } = await verifyToken(token);
 
   if (!isValid) {
-    notFound();
+    redirect("/")
   }
   return <ResetPasswordPage token={token} />;
 };
