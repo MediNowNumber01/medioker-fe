@@ -14,7 +14,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
       clientSecret: NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
-      authorization: { /* ... */ },
+      authorization: {
+        params: {
+          prompt: "select_account",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
     Credentials({
       async authorize(credentials) {
