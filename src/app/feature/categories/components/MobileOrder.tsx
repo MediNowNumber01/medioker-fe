@@ -23,10 +23,8 @@ const MobileOrder: FC<MobileOrderProps> = ({
   setSortOrder,
 }) => {
   return (
-    <div className=" items-center gap-2 flex md:hidden items-center">
-        <div className="text-muted-foreground text-sm"> 
-            Order By :
-        </div>
+    <div className="  gap-2 flex md:hidden items-center">
+      <div className="text-muted-foreground text-sm">Order By :</div>
       <div className={`${setSortBy ? "block" : "hidden"} grow`}>
         <Select value={sortBy} onValueChange={setSortBy}>
           <SelectTrigger className={`w-full bg-card `}>
