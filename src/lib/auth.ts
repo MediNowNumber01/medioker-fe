@@ -3,7 +3,8 @@ import {
   NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
 } from "@/config/env";
 import { axiosInstance } from "@/lib/axios";
-import NextAuth from "next-auth";
+import { Role } from "@/types/account";
+import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
@@ -21,22 +22,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
       profile(profile) {
-        // Mapping data dari Google
         return {
           id: profile.sub,
-          name: profile.name, // Nama default dari Google
+          fullName: profile.name,
           email: profile.email,
-          role: profile.role,
           profilePict: profile.picture,
-          fullName: profile.name, // Mapping ke fullName
-          isVerified: profile.email_verified, // Mapping ke isVerified
-          // profilePict: profile.picture
+          role: Role.USER,
+          accessToken: profile.accessToken,
         };
       },
     }),
     Credentials({
-      async authorize(user) {
-        if (user) return user;
+      async authorize(credentials) {
+        if (credentials) return credentials as unknown as User;
         return null;
       },
     }),
@@ -50,76 +48,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/error",
   },
   callbacks: {
-    async signIn({ account, profile, user }) {
+    async signIn({ profile, account, user }) {
       if (account?.provider === "google") {
-        try {
-          const response = await axiosInstance.post("/auth/google-login", {
-            token: account.access_token, //body
-          });
+        const response = await axiosInstance.post("/auth/google-login", {
+          token: account.access_token,
+          tokenId: account.id_token,
+        });
 
-          console.log(response.data.profilePict);
-
-          if (response.data) {
-            // user.id = response.data.id;
-            // user.fullName = response.data.fullName;
-            // user.isVerified = response.data.isVerified;
-            // user.profilePict = response.data.profilePict
-            profile!.backendData = response.data;
-
-            return true;
-          }
-        } catch (error) {
-          return false;
-        }
+        user.id = response.data.id;
+        user.fullName = response.data.fullName;
+        user.profilePict = response.data.profilePict;
+        user.role = response.data.role;
+        user.email = response.data.email;
+        user.isVerified = response.data.isVerified;
+        user.accessToken = response.data.accessToken;
+        
       }
       return true;
     },
 
-    async jwt({ token, user, account, profile }) {
-      if (account?.provider === "google") {
-        token.accessToken = account.access_token;
-
-        // Tambahkan data dari Google profile
-        token.fullName = profile?.fullName;
-        token.isVerified = profile?.isVerified;
-        token.profilePict = profile?.picture;
-
-        // Jika ada data tambahan dari backend
-        if (profile?.backendData) {
-          token.backendData = profile.backendData;
-        }
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
       }
-      if (user) token.user = user;
-
       return token;
     },
-    async session({ session, token }: any) {
-      // if (token) {
-      //   session.accessToken = token.accessToken;
 
-      //   // Prioritaskan data dari backend jika ada
-      //   if (token.backendData) {
-      //     session.user = {
-      //       ...token.backendData,
-      //       fullName: token.fullName || token.backendData.fullName,
-      //       isVerified: token.isVerified || token.backendData.isVerified,
-      //       profilePict: token.profilePict || token.backendData.profilePict,
-      //     };
-      //   } else {
-      //     session.user = {
-      //       ...token.user,
-      //       fullName: token.fullName,
-      //       isVerified: token.isVerified,
-      //       profilePict: token.profilePict,
-      //     };
-      //   }
-      // }
-      if (token) {
-        session.accessToken = token.accessToken;
-        session.user = token.backendData?.user || token.user;
-        session.backendToken = token.backendData?.token;
+    async session({ session, token }: any) {
+      if (token.user) {
+        session.user = token.user;
       }
-      
       return session;
     },
   },

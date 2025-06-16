@@ -1,22 +1,42 @@
-// types/next-auth.d.ts
-import "next-auth";
+import { DefaultSession } from "next-auth";
+import { Role } from "./account"; // Impor Role
 
 declare module "next-auth" {
-  interface User {
-    fullName?: string;
-    isVerified?: boolean;
-    profilePict?: string;
-    role?: Role;
-    accessToken?: string
-  }
-
+ 
   interface Session {
-    user?: User;
+    user: {
+      id: string;
+      fullName: string;
+      email: string;
+      isVerified: boolean
+      role: Role;
+      profilePict?: string | null;
+    } & DefaultSession["user"]; 
+    
+    accessToken: string;
   }
 
-  export enum Role {
-  USER = "USER",
-  ADMIN = "ADMIN",
-  SUPER_ADMIN = "SUPER_ADMIN",
+
+  interface User {
+    id: string;
+    fullName: string;
+    email: string;
+    isVerified?: boolean
+    role: Role;
+    profilePict?: string | null;
+    accessToken: string;
+  }
 }
+
+declare module "next-auth/jwt" {
+ 
+  interface JWT {
+    id: string;
+    fullName: string;
+    isVerified: boolean
+    email: string;
+    role: Role;
+    profilePict?: string | null;
+    accessToken: string;
+  }
 }

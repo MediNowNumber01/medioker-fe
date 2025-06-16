@@ -7,8 +7,7 @@ import { AxiosError } from "axios";
 import { getSession, useSession } from "next-auth/react";
 import { toast } from "sonner";
 
-const useForgotPassword = async () => {
-    const session = await getSession()
+const useForgotPassword = () => {
     
   return useMutation({
     mutationFn: async (payload: Pick<Account, "email">) => {

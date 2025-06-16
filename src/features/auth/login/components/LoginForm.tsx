@@ -15,18 +15,22 @@ import Link from "next/link";
 import useLogin from "@/hooks/api/auth/useLogin";
 import { signIn } from "next-auth/react";
 import { LoginSchema } from "../schemas";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react"; // Impor ikon dari lucide-react
 
-// Menambahkan `redirectUrl` ke dalam props
 interface LoginFormProps extends React.ComponentProps<"div"> {
   redirectUrl?: string;
 }
 
 export function LoginForm({
   className,
-  redirectUrl = "/", // Nilai default jika prop tidak diberikan
+  redirectUrl = "/",
   ...props
 }: LoginFormProps) {
   const { mutateAsync: login, isPending } = useLogin();
+  
+  // 1. Perbaiki urutan deklarasi useState
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
@@ -50,10 +54,9 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <div className="grid gap-6">
-            {/* Tombol Google Login */}
             <Button
               variant="outline"
-              className="w-full flex items-center justify-center gap-2" // Merapikan posisi ikon dan teks
+              className="w-full flex items-center justify-center gap-2"
               onClick={() => signIn("google", { callbackUrl: redirectUrl })}
               type="button"
               disabled={isPending}
@@ -66,16 +69,15 @@ export function LoginForm({
               </svg>
               <span>Login with Google</span>
             </Button>
-            
+
             <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
               <span className="bg-card text-muted-foreground relative z-10 px-2">
                 Or continue with
               </span>
             </div>
 
-            {/* Form Email & Password */}
-            <form onSubmit={formik.handleSubmit} className="grid gap-6">
-              <div className="grid gap-3">
+            <form onSubmit={formik.handleSubmit} className="grid gap-4">
+              <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -88,38 +90,48 @@ export function LoginForm({
                   onBlur={formik.handleBlur}
                   disabled={isPending}
                 />
-                {!!formik.touched.email && !!formik.errors.email && (
-                  <p className="text-xs text-red-500">
-                    {formik.errors.email}
-                  </p>
+                {formik.touched.email && formik.errors.email && (
+                  <p className="text-xs text-destructive">{formik.errors.email}</p>
                 )}
               </div>
-              <div className="grid gap-3">
+
+              <div className="grid gap-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/forgot-password"
-                    className="underline underline-offset-4 text-sm"
-                  >
+                  <Link href="/forgot-password" className="underline underline-offset-4 text-sm">
                     Forgot Password?
                   </Link>
                 </div>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  disabled={isPending}
-                />
-                {!!formik.touched.password && !!formik.errors.password && (
-                  <p className="text-xs text-red-500">
-                    {formik.errors.password}
-                  </p>
+                {/* 3. Bungkus Input dan Button dalam div relative */}
+                <div className="relative">
+                  <Input
+                    id="password"
+                    name="password"
+                    // 2. Ganti `type` menjadi dinamis
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    disabled={isPending}
+                    className="pr-10" // Beri padding kanan agar ikon tidak menimpa teks
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute top-1/2 right-2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:bg-transparent"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5"/> : <Eye className="h-5 w-5" />}
+                  </Button>
+                </div>
+                {formik.touched.password && formik.errors.password && (
+                  <p className="text-xs text-destructive">{formik.errors.password}</p>
                 )}
               </div>
+
               <Button type="submit" className="w-full" disabled={isPending}>
                 {isPending ? "Logging in..." : "Login"}
               </Button>
@@ -133,11 +145,6 @@ export function LoginForm({
           </div>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our{" "}
-        <Link href="#">Terms of Service</Link> and{" "}
-        <Link href="#">Privacy Policy</Link>.
-      </div>
     </div>
   );
 }
