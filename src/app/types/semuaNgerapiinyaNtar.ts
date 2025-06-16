@@ -204,6 +204,9 @@ export interface Category {
   updatedAt: Date;
   createdAt: Date;
   ProductCategory?: ProductCategory[];
+  _count?: {
+    ProductCategory: number;
+  };
 }
 
 export interface ProductImage {
