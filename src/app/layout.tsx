@@ -43,7 +43,6 @@ export default function RootLayout({
             </NextAuthProvider>
           </ReactQueryProvider>
         </NuqsProvider>
-        <Toaster position="top-right" />
       </body>
     </html>
   );
