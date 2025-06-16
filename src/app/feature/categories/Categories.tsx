@@ -22,17 +22,13 @@ const Categories = () => {
 
   return (
     <section className="container mx-auto flex flex-col gap-4 p-2">
-      {/* title */}
       <div>
         <h1 className="text-accent">Categories</h1>
         <p className="text-muted-foreground">
           Manage your categories effectively
         </p>
       </div>
-      {/* overview */}
       <CreateCategory />
-
-      {/* categories */}
       <CategoriesList
         search={search}
         setSearch={setSearch}

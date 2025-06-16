@@ -20,6 +20,7 @@ import { Category } from "@/app/types/semuaNgerapiinyaNtar";
 import PaginationComponent from "@/components/PaginationComponent";
 import EditCategory from "./EditCategory/EditCategory";
 import DeleteCategory from "./DeleteCategory";
+import MobileOrder from "./MobileOrder";
 interface CategoriesListProps {
   search: string;
   setSearch: (search: string) => void;
@@ -50,6 +51,12 @@ const CategoriesList: FC<CategoriesListProps> = ({
         <SearchBar
           search={search}
           setSearch={setSearch}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+        />
+        <MobileOrder
           sortBy={sortBy}
           setSortBy={setSortBy}
           sortOrder={sortOrder}
