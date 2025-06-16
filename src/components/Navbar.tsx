@@ -30,6 +30,9 @@ export default function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLoading = status === "loading";
 
+  console.log(session?.user);
+  
+
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -48,7 +51,6 @@ export default function Navbar() {
     });
   };
 
-  // Komponen untuk link navigasi umum agar tidak duplikasi
   const CommonNavLinks = () => (
     <>
       <Link
@@ -70,14 +72,11 @@ export default function Navbar() {
     </>
   );
 
- return (
+  return (
     <>
-      {/* 1. Wrapper BARU untuk background full-width dan efek sticky */}
       <div className="sticky top-0 bg-background/95 backdrop-blur-sm z-40 border-b border-border">
-        {/* 2. Header sekarang HANYA untuk mengatur container (konten di tengah) */}
         <header className="container mx-auto py-4 px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            {/* Logo */}
             <Link href="/">
               <Image
                 src={"/MediNow.svg"}
@@ -88,14 +87,17 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* === MENU DESKTOP (Tampil di layar medium ke atas) === */}
             <div className="hidden md:flex items-center gap-x-2">
               {isLoading ? (
                 <div className="h-9 w-28 animate-pulse rounded-md bg-muted" />
               ) : session?.user ? (
                 <>
-                  <Link href="/medicines"><Button variant="ghost">Get Medicines</Button></Link>
-                  <Link href="/forum"><Button variant="ghost">Forum</Button></Link>
+                  <Link href="/medicines">
+                    <Button variant="ghost">Get Medicines</Button>
+                  </Link>
+                  <Link href="/forum">
+                    <Button variant="ghost">Forum</Button>
+                  </Link>
                   <Link href="/cart">
                     <Button variant="ghost" size="icon">
                       <ShoppingCartIcon className="h-6 w-6" />
@@ -104,34 +106,68 @@ export default function Navbar() {
                   </Link>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                      <Button
+                        variant="ghost"
+                        className="relative h-9 w-9 rounded-full"
+                      >
                         <Avatar className="h-9 w-9">
-                          <AvatarImage src={session.user.profilePict || undefined} alt="User Avatar" />
-                          <AvatarFallback>{generateInitials(session.user.fullName)}</AvatarFallback>
+                          <AvatarImage
+                            src={session.user.profilePict || undefined}
+                            alt="User Avatar"
+                          />
+                          <AvatarFallback>
+                            {generateInitials(session.user.fullName)}
+                          </AvatarFallback>
                         </Avatar>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuLabel>{session.user.fullName}</DropdownMenuLabel>
+                      <DropdownMenuLabel>
+                        {session.user.fullName}
+                      </DropdownMenuLabel>
+                      <DropdownMenuLabel>
+                        {session.user.isVerified}
+                      </DropdownMenuLabel>
+
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild><Link href="/profile" className="w-full cursor-pointer">Profile</Link></DropdownMenuItem>
-                      <DropdownMenuItem asChild><Link href="/orders" className="w-full cursor-pointer">My Orders</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile" className="w-full cursor-pointer">
+                          Profile
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/orders" className="w-full cursor-pointer">
+                          My Orders
+                        </Link>
+                      </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={logout} className="text-destructive cursor-pointer">Log out</DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={logout}
+                        className="text-destructive cursor-pointer"
+                      >
+                        Log out
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </>
               ) : (
                 <>
-                  <Link href="/medicines"><Button variant="ghost">Get Medicines</Button></Link>
-                  <Link href="/forum"><Button variant="ghost">Forum</Button></Link>
-                  <Link href="/login"><Button variant="outline">Login</Button></Link>
-                  <Link href="/register"><Button>Sign Up</Button></Link>
+                  <Link href="/medicines">
+                    <Button variant="ghost">Get Medicines</Button>
+                  </Link>
+                  <Link href="/forum">
+                    <Button variant="ghost">Forum</Button>
+                  </Link>
+                  <Link href="/login">
+                    <Button variant="outline">Login</Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button>Sign Up</Button>
+                  </Link>
                 </>
               )}
             </div>
 
-            {/* === TOMBOL MENU MOBILE (Hanya tampil di layar kecil) === */}
             <div className="md:hidden">
               <Button
                 variant="ghost"
@@ -146,7 +182,6 @@ export default function Navbar() {
         </header>
       </div>
 
-      {/* === PANEL MENU MOBILE (Overlay) - Tidak ada perubahan di sini === */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm animate-in fade-in-0"
@@ -159,62 +194,141 @@ export default function Navbar() {
             )}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header Menu Mobile */}
             <div className="flex justify-between items-center p-4 border-b">
               <Link href="/" onClick={() => setMobileMenuOpen(false)}>
-                <Image src={"/MediNow.svg"} width={100} height={35} alt="MediNow Logo"/>
+                <Image
+                  src={"/MediNow.svg"}
+                  width={100}
+                  height={35}
+                  alt="MediNow Logo"
+                />
               </Link>
-              <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
-                <X className="h-6 w-6" /><span className="sr-only">Close menu</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <X className="h-6 w-6" />
+                <span className="sr-only">Close menu</span>
               </Button>
             </div>
-            {/* Konten Menu Mobile */}
             <nav className="flex flex-col gap-4 p-6 text-lg font-medium">
-              {/* Logika `navActions` sudah dipindahkan ke sini */}
-              {isLoading ? (<p>Loading...</p>) : session?.user ? (
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : session?.user ? (
                 <>
                   <div className="border-b border-border pb-4 mb-2">
-                    <Link href="/profile" className="flex items-center gap-3 w-full" onClick={() => setMobileMenuOpen(false)}>
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-3 w-full"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
                       <Avatar>
-                        <AvatarImage src={session.user.profilePict || undefined} alt={session.user.fullName || "User Avatar"} />
-                        <AvatarFallback>{generateInitials(session.user.fullName)}</AvatarFallback>
+                        <AvatarImage
+                          src={session.user.profilePict || undefined}
+                          alt={session.user.fullName || "User Avatar"}
+                        />
+                        <AvatarFallback>
+                          {generateInitials(session.user.fullName)}
+                        </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
-                        <p className="font-semibold text-base">{session.user.fullName}</p>
-                        <p className="text-xs font-normal text-muted-foreground truncate">{session.user.email}</p>
+                        <p className="font-semibold text-base">
+                          {session.user.fullName}
+                        </p>
+                        <p className="text-xs font-normal text-muted-foreground truncate">
+                          {session.user.email}
+                        </p>
                       </div>
                     </Link>
                   </div>
-                  <Link href="/medicines" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
-                    <Image src={"/Medicines.svg"} alt="medicines" width={24} height={24} />
+                  <Link
+                    href="/medicines"
+                    className="flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Image
+                      src={"/Medicines.svg"}
+                      alt="medicines"
+                      width={24}
+                      height={24}
+                    />
                     <span>Get Medicines</span>
                   </Link>
-                  <Link href="/forum" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
-                    <Image src={"/Forum.svg"} alt="forum" width={24} height={24} />
+                  <Link
+                    href="/forum"
+                    className="flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Image
+                      src={"/Forum.svg"}
+                      alt="forum"
+                      width={24}
+                      height={24}
+                    />
                     <span>Forum</span>
                   </Link>
-                  <Link href="/cart" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
-                    <ShoppingCartIcon className="h-6 w-6" /><span>Cart</span>
+                  <Link
+                    href="/cart"
+                    className="flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <ShoppingCartIcon className="h-6 w-6" />
+                    <span>Cart</span>
                   </Link>
                   <div className="pt-4 border-t border-border mt-4">
-                    <button onClick={logout} className="flex items-center gap-3 w-full text-destructive">
-                      <ArrowLeftOnRectangleIcon className="h-6 w-6" /><span>Log out</span>
+                    <button
+                      onClick={logout}
+                      className="flex items-center gap-3 w-full text-destructive"
+                    >
+                      <ArrowLeftOnRectangleIcon className="h-6 w-6" />
+                      <span>Log out</span>
                     </button>
                   </div>
                 </>
               ) : (
                 <>
-                  <Link href="/medicines" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
-                    <Image src={"/Medicines.svg"} alt="medicines" width={24} height={24} />
+                  <Link
+                    href="/medicines"
+                    className="flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Image
+                      src={"/Medicines.svg"}
+                      alt="medicines"
+                      width={24}
+                      height={24}
+                    />
                     <span>Get Medicines</span>
                   </Link>
-                  <Link href="/forum" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
-                    <Image src={"/Forum.svg"} alt="forum" width={24} height={24} />
+                  <Link
+                    href="/forum"
+                    className="flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Image
+                      src={"/Forum.svg"}
+                      alt="forum"
+                      width={24}
+                      height={24}
+                    />
                     <span>Forum</span>
                   </Link>
                   <div className="pt-4 border-t border-border mt-4 flex flex-col gap-4">
-                    <Link href="/login" onClick={() => setMobileMenuOpen(false)}><Button className="w-full">Login</Button></Link>
-                    <Link href="/register" onClick={() => setMobileMenuOpen(false)}><Button variant="outline" className="w-full">Sign Up</Button></Link>
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button className="w-full">Login</Button>
+                    </Link>
+                    <Link
+                      href="/register"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button variant="outline" className="w-full">
+                        Sign Up
+                      </Button>
+                    </Link>
                   </div>
                 </>
               )}

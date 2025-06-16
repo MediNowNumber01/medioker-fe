@@ -36,8 +36,9 @@ export default function RootLayout({
         <NuqsProvider>
           <ReactQueryProvider>
             <NextAuthProvider>
+              <Navbar />
               <main className="flex-grow">{children}</main>
-            <Footer />
+              <Footer />
               <Toaster />
             </NextAuthProvider>
           </ReactQueryProvider>

@@ -3,8 +3,8 @@ import {
   NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
 } from "@/config/env";
 import { axiosInstance } from "@/lib/axios";
-import NextAuth, { User, Session } from "next-auth"; // Hapus JWT dari sini
-import { JWT } from "next-auth/jwt"; // 1. Impor JWT dari 'next-auth/jwt'
+import { Role } from "@/types/account";
+import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
@@ -20,6 +20,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           access_type: "offline",
           response_type: "code",
         },
+      },
+      profile(profile) {
+        return {
+          id: profile.sub,
+          fullName: profile.name,
+          email: profile.email,
+          profilePict: profile.picture,
+          role: Role.USER,
+          accessToken: profile.accessToken,
+        };
       },
     }),
     Credentials({
@@ -38,57 +48,35 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/error",
   },
   callbacks: {
-    async signIn({ account }) {
-      if (account?.provider === "google" || account?.provider === "credentials") {
-        return true;
+    async signIn({ profile, account, user }) {
+      if (account?.provider === "google") {
+        const response = await axiosInstance.post("/auth/google-login", {
+          token: account.access_token,
+          tokenId: account.id_token,
+        });
+
+        user.id = response.data.id;
+        user.fullName = response.data.fullName;
+        user.profilePict = response.data.profilePict;
+        user.role = response.data.role;
+        user.email = response.data.email;
+        user.isVerified = response.data.isVerified;
+        user.accessToken = response.data.accessToken;
+        
       }
-      return false;
+      return true;
     },
 
-    async jwt({ token, user, account }) {
-      if (account && user) {
-        if (account.provider === "google") {
-          try {
-            const response = await axiosInstance.post("/auth/google-login", {
-              token: account.access_token,
-            });
-            const backendUser = response.data.data;
-
-            token.id = backendUser.id;
-            token.fullName = backendUser.fullName;
-            token.email = backendUser.email;
-            token.role = backendUser.role;
-            token.profilePict = backendUser.profilePict;
-            token.accessToken = backendUser.accessToken;
-          } catch (error) {
-            console.error("Google login to backend failed:", error);
-            return null;
-          }
-        } else if (account.provider === "credentials") {
-          token.id = user.id;
-          token.fullName = user.fullName;
-          token.email = user.email;
-          token.role = user.role;
-          token.profilePict = user.profilePict;
-          token.accessToken = user.accessToken;
-        }
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
       }
       return token;
     },
 
-    // 2. Perbaiki logika dan tipe di callback session
-    async session({ session, token }: { session: Session; token: JWT }) {
-      if (token) {
-        // Isi `session.user` tanpa `accessToken`
-        session.user = {
-          id: token.id,
-          fullName: token.fullName,
-          email: token.email,
-          role: token.role,
-          profilePict: token.profilePict,
-          accessToken: session.accessToken
-        };
-        session.accessToken = token.accessToken;
+    async session({ session, token }: any) {
+      if (token.user) {
+        session.user = token.user;
       }
       return session;
     },
