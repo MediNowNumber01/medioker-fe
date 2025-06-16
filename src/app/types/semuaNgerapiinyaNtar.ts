@@ -144,6 +144,9 @@ export interface Pharmacy {
   Admin: Admin[];
   Order: Order[];
   Stock: Stock[];
+  _count?: {
+    Admin: number;
+  };
 }
 
 export interface Stock {

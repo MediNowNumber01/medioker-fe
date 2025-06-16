@@ -1,4 +1,4 @@
-import ProductDetailsPage from "@/app/feature/medicine/details/ProductDetailsPage";
+import ProductDetailsPage from "@/features/medicine/details/ProductDetailsPage";
 import UserGuestAuthGuard from "@/hoc/UserGuestAuthGuard";
 
 const ProductDetails = async ({

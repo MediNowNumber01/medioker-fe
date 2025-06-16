@@ -30,9 +30,6 @@ export default function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLoading = status === "loading";
 
-  console.log(session?.user);
-  
-
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";

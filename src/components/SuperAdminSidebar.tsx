@@ -72,7 +72,7 @@ const items = [
 export function SuperAdminSidebar() {
   const pathname = usePathname();
   return (
-    <Sidebar>
+    <Sidebar className="z-50">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>

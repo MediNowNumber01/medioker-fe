@@ -1,4 +1,4 @@
-import Categories from "@/app/feature/categories/Categories";
+import Categories from "@/features/categories/Categories";
 import SuperAdminAuthGuard from "@/hoc/SuperAdminAuthGuard";
 
 const CategoriesPage = () => {
