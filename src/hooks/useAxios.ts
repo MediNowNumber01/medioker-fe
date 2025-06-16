@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-// import { getSession, signOut } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import { axiosInstance } from "@/lib/axios";
 const useAxios = () => {
   useEffect(() => {
     const requestIntercept = axiosInstance.interceptors.request.use(
       async (config) => {
-        // const session = await getSession();
-        // const accessToken = session?.user.accessToken;
-        // if (accessToken) {
-        //   config.headers.Authorization = `Bearer ${accessToken}`;
-        // }
+        const session = await getSession();
+        const accessToken = session?.user?.accessToken;
+        if (accessToken) {
+          config.headers.Authorization = `Bearer ${accessToken}`;
+        }
 
         return config;
       },
@@ -30,7 +30,7 @@ const useAxios = () => {
           err?.response.data.message === "Token expired" ||
           err?.response.data.message === "Invalid token"
         ) {
-        //   signOut();
+          //   signOut();
         }
 
         return Promise.reject(err);

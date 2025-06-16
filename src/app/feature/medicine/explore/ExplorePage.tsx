@@ -23,7 +23,7 @@ const ExplorePage = () => {
   const [golongan, setGolongan] = useQueryState("golongan", {
     defaultValue: "",
   });
-  const [sortBy, setSortBy] = useQueryState("name", {
+  const [sortBy, setSortBy] = useQueryState("sort", {
     defaultValue: "name",
   });
 
@@ -77,7 +77,7 @@ const ExplorePage = () => {
   return (
     <main className="min-h-screen ">
       <section className="container mx-auto px-2 py-8">
-        <h1>Explore Your Needs</h1>
+        <h1 className="text-accent">Explore Your Needs</h1>
         <p className="text-muted-foreground md:text-lg">
           Explore the latest trends, products, and services tailored to your
           interests. Discover new possibilities and find what suits you best.
