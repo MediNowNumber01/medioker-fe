@@ -3,7 +3,7 @@ import {
   Acquisition,
   Golongan,
   Pharmacy,
-} from "@/app/types/semuaNgerapiinyaNtar";
+} from "@/types/semuaNgerapiinyaNtar";
 import {
   Accordion,
   AccordionContent,

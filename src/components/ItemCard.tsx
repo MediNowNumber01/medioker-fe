@@ -1,5 +1,5 @@
 "use client";
-import { Product, UnitProduct } from "@/app/types/semuaNgerapiinyaNtar";
+import { Product, UnitProduct } from "@/types/semuaNgerapiinyaNtar";
 import { formatPrice } from "@/app/utils/formatPrice";
 import { Badge } from "@/components/ui/badge";
 import {

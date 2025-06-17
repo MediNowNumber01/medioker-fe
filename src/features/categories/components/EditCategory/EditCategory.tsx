@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import useCreateCategory from "@/hooks/api/Category/useCreateCategory";
 import { Input } from "@/components/ui/input";
-import { Category } from "@/app/types/semuaNgerapiinyaNtar";
+import { Category } from "@/types/semuaNgerapiinyaNtar";
 import useUpdateCategory from "@/hooks/api/Category/useUpdateCategory";
 import { Edit } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";

@@ -1,4 +1,4 @@
-import { PaginationMeta } from "@/app/types/search/response/PaginationResponse";
+import { PaginationMeta } from "@/types/search/response/PaginationResponse";
 import { FC } from "react";
 import {
   Table,
@@ -16,7 +16,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import SearchBar from "@/components/SearchBar";
-import { Category } from "@/app/types/semuaNgerapiinyaNtar";
+import { Category } from "@/types/semuaNgerapiinyaNtar";
 import PaginationComponent from "@/components/PaginationComponent";
 import EditCategory from "./EditCategory/EditCategory";
 import DeleteCategory from "./DeleteCategory";

@@ -1,6 +1,6 @@
-import { PaginationQueries } from "@/app/types/search/queries/PaginationQueries";
-import { PageableResponse } from "@/app/types/search/response/PaginationResponse";
-import { Pharmacy, Product } from "@/app/types/semuaNgerapiinyaNtar";
+import { PaginationQueries } from "@/types/search/queries/PaginationQueries";
+import { PageableResponse } from "@/types/search/response/PaginationResponse";
+import { Pharmacy, Product } from "@/types/semuaNgerapiinyaNtar";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../useAxios";
 

@@ -4,16 +4,8 @@ export const CreatePharmacySchema = yup.object().shape({
   name: yup
     .string()
     .required("Name is required")
-    .min(3, "Name must be at least 3 characters"),
-  description: yup
-    .string()
-    .required("Description is required")
-    .test(
-      "min-words",
-      "Description must have at least 3 words",
-      (value) =>
-        typeof value === "string" && value.trim().split(/\s+/).length >= 3
-    ),
+    .min(3, "Name must be at least 3 characters")
+    .max(20, "Name must be at most 20 characters"),
   picture: yup.mixed().required("picture / logo is required"),
   detailLocation: yup
     .string()
@@ -22,31 +14,43 @@ export const CreatePharmacySchema = yup.object().shape({
   lat: yup
     .string()
     .required("Latitude is required")
-    .test("is-decimal", "Latitude must be a decimal number", (value) => {
-      if (typeof value !== "string") return false;
-      const parts = value.split(".");
-      return (
-        parts.length === 2 &&
-        parts[0].length > 0 &&
-        parts[1].length > 7 &&
-        !isNaN(Number(parts[0])) &&
-        !isNaN(Number(parts[1]))
-      );
-    }),
+    .test(
+      "is-lat",
+      "Latitude must be a number and min 7 digits after decimal",
+      (value) => {
+        if (typeof value !== "string") return false;
+        const parts = value.split(".");
+        return (
+          parts.length === 2 &&
+          parts[0].length > 0 &&
+          parts[1].length >= 7 &&
+          !isNaN(Number(parts[0])) &&
+          !isNaN(Number(parts[1])) &&
+          Number(parts[0]) >= -90 &&
+          Number(parts[0]) <= 90
+        );
+      }
+    ),
   lng: yup
     .string()
     .required("Longitude is required")
-    .test("is-decimal", "Longitude must be a decimal number", (value) => {
-      if (typeof value !== "string") return false;
-      const parts = value.split(".");
-      return (
-        parts.length === 2 &&
-        parts[0].length > 0 &&
-        parts[1].length > 7 &&
-        !isNaN(Number(parts[0])) &&
-        !isNaN(Number(parts[1]))
-      );
-    }),
+    .test(
+      "is-lng",
+      "Longitude must be a number and min 7 digits after decimal",
+      (value) => {
+        if (typeof value !== "string") return false;
+        const parts = value.split(".");
+        return (
+          parts.length === 2 &&
+          parts[0].length > 0 &&
+          parts[1].length >= 7 &&
+          !isNaN(Number(parts[0])) &&
+          !isNaN(Number(parts[1])) &&
+          Number(parts[0]) >= -180 &&
+          Number(parts[0]) <= 180
+        );
+      }
+    ),
   isMain: yup
     .string()
     .oneOf(["true", "false"], "Is main must be 'true' or 'false'")

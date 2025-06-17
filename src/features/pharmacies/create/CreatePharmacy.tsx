@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { CreatePharmacySchema } from "./CreatePharmacySchema";
 import LocationPicker from "./selectLocation/LocationPicker";
 
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -28,7 +29,6 @@ const CreatePharmacy = () => {
   const { mutateAsync: createPharmacy } = useCreatePharmacy();
   const initialValues = {
     name: "",
-    description: "",
     picture: null,
     detailLocation: "",
     lat: "",
@@ -44,7 +44,7 @@ const CreatePharmacy = () => {
       await createPharmacy(values);
     },
   });
-
+  const [selectInMap, setSelectInMap] = useState<string>("manual");
   const [selectedImage, setSelectedImage] = useState<string>("");
   const pictref = useRef<HTMLInputElement>(null);
   const onchangepicture = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +102,7 @@ const CreatePharmacy = () => {
                     src={selectedImage}
                     alt="picture"
                     fill
-                    className="object-cover"
+                    className="object-cover rounded-full"
                   />
                 </div>
               </div>
@@ -172,40 +172,88 @@ const CreatePharmacy = () => {
               <p className="text-destructive text-sm">{formik.errors.name}</p>
             )}
           </div>
-          {/* description */}
-          <div className="space-y-2">
-            <Label>Description</Label>
-            <Textarea
-              name="description"
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Enter pharmacy description"
-            />
-            {formik.touched.description && formik.errors.description && (
-              <p className="text-destructive text-sm">
-                {formik.errors.description}
-              </p>
-            )}
-          </div>
 
           {/* detail location */}
 
           <div className="space-y-2">
             <Label className="mb-2">Location</Label>
-            <LocationPicker
-              onLocationSelect={(location: LocationType) => {
-                formik.setFieldValue("lat", location.lat.toString());
-                formik.setFieldValue("lng", location.lng.toString());
-                formik.setFieldValue("detailLocation", location.address);
-              }}
-              initialAddress={""}
-            />
-            {formik.errors.lat && (
-              <p className="text-destructive text-sm">{formik.errors.lat}</p>
-            )}
-            {formik.errors.lng && (
-              <p className="text-destructive text-sm">{formik.errors.lng}</p>
+            <RadioGroup
+              value={selectInMap}
+              onValueChange={setSelectInMap}
+              className="my-4"
+            >
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="manual" id="r1" />
+                <Label htmlFor="r1">Manual</Label>
+                <RadioGroupItem value="select" id="r2" />
+                <Label htmlFor="r2">Select on Map</Label>
+              </div>
+            </RadioGroup>
+
+            {selectInMap === "manual" ? (
+              <>
+                <div>
+                  <Label className="mb-2">Latitude </Label>
+                  <Input
+                    type="text"
+                    name="lat"
+                    value={formik.values.lat}
+                    onChange={(e) =>
+                      /^-?\d*\.?\d*$/.test(e.target.value)
+                        ? formik.handleChange(e)
+                        : null
+                    }
+                    onBlur={formik.handleBlur}
+                    placeholder="Enter latitude"
+                  />
+                </div>
+                {formik.touched.lat && formik.errors.lat && (
+                  <p className="text-destructive text-sm">
+                    {formik.errors.lat}
+                  </p>
+                )}
+                <div>
+                  <Label className="mb-2">longitude </Label>
+                  <Input
+                    type="text"
+                    name="lng"
+                    value={formik.values.lng}
+                    onChange={(e) =>
+                      /^-?\d*\.?\d*$/.test(e.target.value)
+                        ? formik.handleChange(e)
+                        : null
+                    }
+                    onBlur={formik.handleBlur}
+                    placeholder="Enter longitude"
+                  />
+                </div>
+                {formik.touched.lng && formik.errors.lng && (
+                  <p className="text-destructive text-sm">
+                    {formik.errors.lng}
+                  </p>
+                )}
+              </>
+            ) : (
+              <div>
+                <LocationPicker
+                  onLocationSelect={(location: LocationType) => {
+                    formik.setFieldValue("lat", location.lat.toString());
+                    formik.setFieldValue("lng", location.lng.toString());
+                    formik.setFieldValue("detailLocation", location.address);
+                  }}
+                  initialAddress={""}
+                />
+                {formik.errors.lat && (
+                  <p className="text-destructive text-sm">
+                    {formik.errors.lat}
+                  </p>
+                )}
+                {formik.errors.lng && (
+                  <p className="text-destructive text-sm">
+                    {formik.errors.lng}
+                  </p>
+                )}
+              </div>
             )}
             <div className="space-y-2">
               <Label className="mb-2">Detail Location</Label>

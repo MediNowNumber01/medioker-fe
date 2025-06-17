@@ -1,4 +1,4 @@
-import { Pharmacy } from "@/app/types/semuaNgerapiinyaNtar";
+import { Pharmacy } from "@/types/semuaNgerapiinyaNtar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";

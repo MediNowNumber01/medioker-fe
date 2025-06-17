@@ -1,6 +1,6 @@
 "use client";
 
-import { Pharmacy } from "@/app/types/semuaNgerapiinyaNtar";
+import { Pharmacy } from "@/types/semuaNgerapiinyaNtar";
 import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";

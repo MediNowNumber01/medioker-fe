@@ -8,7 +8,6 @@ import { toast } from "sonner";
 
 interface CreatePharmacyPayload {
   name: string;
-  description: string;
   picture: File | null;
   detailLocation: string;
   lat: string;
@@ -25,7 +24,6 @@ const useCreatePharmacy = () => {
     mutationFn: async (payload: CreatePharmacyPayload) => {
       const formData = new FormData();
       formData.append("name", payload.name);
-      formData.append("description", payload.description);
       if (payload.picture) {
         formData.append("picture", payload.picture);
       }

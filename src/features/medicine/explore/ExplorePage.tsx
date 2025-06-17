@@ -1,5 +1,5 @@
 "use client";
-import { Acquisition, Golongan } from "@/app/types/semuaNgerapiinyaNtar";
+import { Acquisition, Golongan } from "@/types/semuaNgerapiinyaNtar";
 import useGetProducts from "@/hooks/api/Products/useGetProducts";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";

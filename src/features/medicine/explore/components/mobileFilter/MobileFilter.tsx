@@ -1,5 +1,5 @@
 "use client";
-import { Acquisition, Golongan } from "@/app/types/semuaNgerapiinyaNtar";
+import { Acquisition, Golongan } from "@/types/semuaNgerapiinyaNtar";
 import { Button } from "@/components/ui/button";
 import {
   Command,

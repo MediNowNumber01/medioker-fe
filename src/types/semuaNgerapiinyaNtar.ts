@@ -130,8 +130,6 @@ export interface SuperAdmin {
 export interface Pharmacy {
   id: string;
   name: string;
-  description: string;
-  slug: string;
   picture: string;
   isOpen: boolean;
   createdAt: Date;

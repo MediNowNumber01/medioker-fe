@@ -1,5 +1,5 @@
-import { PaginationMeta } from "@/app/types/search/response/PaginationResponse";
-import { Pharmacy } from "@/app/types/semuaNgerapiinyaNtar";
+import { PaginationMeta } from "@/types/search/response/PaginationResponse";
+import { Pharmacy } from "@/types/semuaNgerapiinyaNtar";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -103,7 +103,7 @@ const PharmaciesList: FC<PharmaciesListProps> = ({
                       {pharmacy.isMain && (
                         <Badge
                           variant="outline"
-                          className="absolute top-1/2 right-0 -translate-y-1/2"
+                          className="absolute top-[-6px] right-[-6px] bg-accent/50 text-white"
                         >
                           Main
                         </Badge>

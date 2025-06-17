@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductImage } from "@/app/types/semuaNgerapiinyaNtar";
+import { ProductImage } from "@/types/semuaNgerapiinyaNtar";
 import Image from "next/image";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
