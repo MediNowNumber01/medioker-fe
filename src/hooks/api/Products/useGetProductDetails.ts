@@ -13,7 +13,5 @@ export const useGetProductDetails = (slug: string) => {
       }
       return response.data;
     },
-    refetchOnWindowFocus: false,
-    retry: 1,
   });
 };

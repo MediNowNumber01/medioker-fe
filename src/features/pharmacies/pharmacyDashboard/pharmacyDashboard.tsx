@@ -7,7 +7,7 @@ import { useDebounce } from "use-debounce";
 import PharmaciesList from "../components/PharmaciesList";
 import PharmaciesOverview from "../components/PharmaciesOverview";
 
-const Pharmaciest = () => {
+const PharmacyDashboard = () => {
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
   const [page, setPage] = useState(1);
@@ -34,13 +34,11 @@ const Pharmaciest = () => {
       {/* title */}
       <section className="container mx-auto flex flex-col gap-4 p-2">
         <div>
-          <h1 className="text-accent">Pharmacies</h1>
+          <h1 className="text-primary">Pharmacies</h1>
           <p className="text-muted-foreground">
             Manage your pharmacy effectively
           </p>
         </div>
-
-        {/* overview   */}
         <PharmaciesOverview />
         <Link
           href="/superadmin/pharmacies/create"
@@ -63,12 +61,8 @@ const Pharmaciest = () => {
           isLoading={false}
         />
       </section>
-      {/* basic info */}
-
-      {/* list */}
-      <section></section>
     </>
   );
 };
 
-export default Pharmaciest;
+export default PharmacyDashboard;

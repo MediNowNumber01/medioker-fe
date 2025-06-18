@@ -1,7 +1,12 @@
-import SuperAdminAuthGuard from "@/hoc/SuperAdminAuthGuard";
+import PharmacyDetail from "@/features/pharmacies/pharmacyDetail/DetailPharmacy";
 
-const AdminPharmacyDetailPage = () => {
-  return <div>page</div>;
+const AdminPharmacyDetailPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
+  return <PharmacyDetail pharmacyId={id} />;
 };
 
-export default SuperAdminAuthGuard(AdminPharmacyDetailPage);
+export default AdminPharmacyDetailPage;

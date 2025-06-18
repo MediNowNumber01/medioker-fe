@@ -9,12 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import useCreatePharmacy from "@/hooks/api/Pharmacy/useCreatePharmacy";
 import { useFormik } from "formik";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CreatePharmacySchema } from "./CreatePharmacySchema";
 import LocationPicker from "./selectLocation/LocationPicker";
 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -25,6 +24,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LocationType } from "@/types/location";
+import { BadgeCheck, CircleArrowLeft, CircleX } from "lucide-react";
+import { redirect } from "next/navigation";
+import { useDebounce } from "use-debounce";
+import { axiosInstance } from "@/lib/axios";
 const CreatePharmacy = () => {
   const { mutateAsync: createPharmacy } = useCreatePharmacy();
   const initialValues = {
@@ -44,9 +47,45 @@ const CreatePharmacy = () => {
       await createPharmacy(values);
     },
   });
-  const [selectInMap, setSelectInMap] = useState<string>("manual");
   const [selectedImage, setSelectedImage] = useState<string>("");
   const pictref = useRef<HTMLInputElement>(null);
+
+  // handle name validation
+  const [debounceName] = useDebounce(formik.values.name, 500);
+  const [validName, setValidName] = useState<boolean>(false);
+  const [validNameError, setValidNameError] = useState<string>("");
+  const verifyname = async (name: string) => {
+    try {
+      const { data } = await axiosInstance.get("/pharmacies/verify-name", {
+        params: { name },
+      });
+      return {
+        isValid: data.isValid,
+        message: data.message || "",
+      };
+    } catch (error) {
+      return { isValid: false, message: "Error verifying pharmacy name" };
+    }
+  };
+  useEffect(() => {
+    if (debounceName.trim() === "") {
+      setValidName(false);
+      setValidNameError("");
+      return;
+    }
+    verifyname(debounceName)
+      .then((result) => {
+        setValidName(result.isValid);
+        setValidNameError(result.message);
+      })
+      .catch((error) => {
+        console.error("Error verifying pharmacy name:", error);
+        setValidName(false);
+        setValidNameError("Error verifying pharmacy name");
+      });
+  }, [debounceName]);
+
+  // handle picture change
   const onchangepicture = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
     if (file) {
@@ -79,14 +118,21 @@ const CreatePharmacy = () => {
     <section className="container mx-auto flex flex-col gap-4 p-2">
       <Card>
         {/* header */}
-        <div className="px-4  text-center">
-          <h1 className="text-primary ">Create Pharmacy</h1>
-          <p className="text-muted-foreground">
-            Fill in the details below to create a new pharmacy.
-          </p>
-          <Separator className="my-4" />
+        <div className="relative ">
+          <CircleArrowLeft
+            className="hidden absolute  md:block left-10 -top-5 translate-y-1/2 h-10 w-10 cursor-pointer "
+            onClick={() => {
+              redirect("/superadmin/pharmacies");
+            }}
+          />
+          <div className="px-4  text-center">
+            <h1 className="text-primary ">Create Pharmacy</h1>
+            <p className="text-muted-foreground">
+              Fill in the details below to create a new pharmacy.
+            </p>
+            <Separator className="my-4" />
+          </div>
         </div>
-
         {/* form */}
         <form
           onSubmit={formik.handleSubmit}
@@ -128,7 +174,7 @@ const CreatePharmacy = () => {
                 </Button>
               )}
             </div>
-            {formik.dirty && formik.errors.picture && (
+            {formik.touched.picture && formik.errors.picture && (
               <p className="text-sm text-destructive">
                 {formik.errors.picture}
               </p>
@@ -160,16 +206,31 @@ const CreatePharmacy = () => {
           {/* name */}
           <div className="space-y-2">
             <Label>Pharmacy Name</Label>
-            <Input
-              type="text"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Enter pharmacy name"
-            />
+            <div className="flex items-center">
+              <Input
+                className=" flex-1"
+                type="text"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder="Enter pharmacy name"
+              />
+              {formik.touched.name && (
+                <>
+                  {validName ? (
+                    <BadgeCheck className="text-green-500 ml-2" />
+                  ) : (
+                    <CircleX className="text-red-500 ml-2" />
+                  )}
+                </>
+              )}
+            </div>
             {formik.touched.name && formik.errors.name && (
               <p className="text-destructive text-sm">{formik.errors.name}</p>
+            )}
+            {formik.touched.name && !validName && (
+              <p className="text-destructive text-sm">{validNameError}</p>
             )}
           </div>
 
@@ -177,84 +238,23 @@ const CreatePharmacy = () => {
 
           <div className="space-y-2">
             <Label className="mb-2">Location</Label>
-            <RadioGroup
-              value={selectInMap}
-              onValueChange={setSelectInMap}
-              className="my-4"
-            >
-              <div className="flex items-center gap-3">
-                <RadioGroupItem value="manual" id="r1" />
-                <Label htmlFor="r1">Manual</Label>
-                <RadioGroupItem value="select" id="r2" />
-                <Label htmlFor="r2">Select on Map</Label>
-              </div>
-            </RadioGroup>
 
-            {selectInMap === "manual" ? (
-              <>
-                <div>
-                  <Label className="mb-2">Latitude </Label>
-                  <Input
-                    type="text"
-                    name="lat"
-                    value={formik.values.lat}
-                    onChange={(e) =>
-                      /^-?\d*\.?\d*$/.test(e.target.value)
-                        ? formik.handleChange(e)
-                        : null
-                    }
-                    onBlur={formik.handleBlur}
-                    placeholder="Enter latitude"
-                  />
-                </div>
-                {formik.touched.lat && formik.errors.lat && (
-                  <p className="text-destructive text-sm">
-                    {formik.errors.lat}
-                  </p>
-                )}
-                <div>
-                  <Label className="mb-2">longitude </Label>
-                  <Input
-                    type="text"
-                    name="lng"
-                    value={formik.values.lng}
-                    onChange={(e) =>
-                      /^-?\d*\.?\d*$/.test(e.target.value)
-                        ? formik.handleChange(e)
-                        : null
-                    }
-                    onBlur={formik.handleBlur}
-                    placeholder="Enter longitude"
-                  />
-                </div>
-                {formik.touched.lng && formik.errors.lng && (
-                  <p className="text-destructive text-sm">
-                    {formik.errors.lng}
-                  </p>
-                )}
-              </>
-            ) : (
-              <div>
-                <LocationPicker
-                  onLocationSelect={(location: LocationType) => {
-                    formik.setFieldValue("lat", location.lat.toString());
-                    formik.setFieldValue("lng", location.lng.toString());
-                    formik.setFieldValue("detailLocation", location.address);
-                  }}
-                  initialAddress={""}
-                />
-                {formik.errors.lat && (
-                  <p className="text-destructive text-sm">
-                    {formik.errors.lat}
-                  </p>
-                )}
-                {formik.errors.lng && (
-                  <p className="text-destructive text-sm">
-                    {formik.errors.lng}
-                  </p>
-                )}
-              </div>
-            )}
+            <div>
+              <LocationPicker
+                onLocationSelect={(location: LocationType) => {
+                  formik.setFieldValue("lat", location.lat.toString());
+                  formik.setFieldValue("lng", location.lng.toString());
+                  formik.setFieldValue("detailLocation", location.address);
+                }}
+                initialAddress={""}
+              />
+              {formik.errors.lat && (
+                <p className="text-destructive text-sm">{formik.errors.lat}</p>
+              )}
+              {formik.errors.lng && (
+                <p className="text-destructive text-sm">{formik.errors.lng}</p>
+              )}
+            </div>
             <div className="space-y-2">
               <Label className="mb-2">Detail Location</Label>
               <Textarea
@@ -276,7 +276,7 @@ const CreatePharmacy = () => {
             <Button
               type="submit"
               className="bg-primary text-white hover:bg-primary/90"
-              disabled={!formik.isValid || formik.isSubmitting}
+              disabled={!formik.isValid || formik.isSubmitting || !validName}
             >
               Submit
             </Button>

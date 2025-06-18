@@ -7,6 +7,8 @@ import NextAuthProvider from "@/providers/NextAuthProvider";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SuperAdminSidebar } from "@/components/SuperAdminSidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,9 +38,15 @@ export default function RootLayout({
         <NuqsProvider>
           <ReactQueryProvider>
             <NextAuthProvider>
-              <Navbar />
-              <main className="flex-grow">{children}</main>
-              <Footer />
+              <SidebarProvider>
+                <SuperAdminSidebar />
+                <main className="flex flex-col w-screen ">
+                  <Navbar />
+                  <SidebarTrigger />
+                  {children}
+                  <Footer />
+                </main>
+              </SidebarProvider>
               <Toaster />
             </NextAuthProvider>
           </ReactQueryProvider>

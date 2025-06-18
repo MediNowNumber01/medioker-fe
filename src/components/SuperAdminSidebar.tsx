@@ -1,14 +1,5 @@
 "use client";
-import {
-  ArrowRight,
-  ChevronDown,
-  ChevronRight,
-  Home,
-  Package,
-  Pill,
-  ShoppingCart,
-  Store,
-} from "lucide-react";
+import { Home, Package, Pill, Store } from "lucide-react";
 
 import {
   Sidebar,
@@ -22,6 +13,9 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -29,8 +23,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
 
 // Menu items.
 const items = [
@@ -71,6 +63,9 @@ const items = [
 
 export function SuperAdminSidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  if (!session || session.user?.role !== "SUPER_ADMIN") return null;
+
   return (
     <Sidebar className="z-50">
       <SidebarContent>
@@ -90,7 +85,7 @@ export function SuperAdminSidebar() {
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton>
                             <item.icon />
-                            <span>{item.title}</span>
+                            <div>{item.title}</div>
                           </SidebarMenuButton>
                         </CollapsibleTrigger>
                         <CollapsibleContent>

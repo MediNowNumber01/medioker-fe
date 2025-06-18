@@ -21,6 +21,7 @@ import {
 import { Eye } from "lucide-react";
 import { FC } from "react";
 import PharmaciesSearch from "./PharmaciesSearch";
+import Link from "next/link";
 interface PharmaciesListProps {
   search: string;
   setSearch: (search: string) => void;
@@ -103,7 +104,7 @@ const PharmaciesList: FC<PharmaciesListProps> = ({
                       {pharmacy.isMain && (
                         <Badge
                           variant="outline"
-                          className="absolute top-[-6px] right-[-6px] bg-accent/50 text-white"
+                          className="absolute top-[-6px] right-[-6px] "
                         >
                           Main
                         </Badge>
@@ -126,7 +127,9 @@ const PharmaciesList: FC<PharmaciesListProps> = ({
                   </TableCell>
                   <TableCell>{pharmacy._count?.Admin || 0}</TableCell>
                   <TableCell>
-                    <Eye />
+                    <Link href={`/superadmin/pharmacies/${pharmacy.id}`}>
+                      <Eye />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

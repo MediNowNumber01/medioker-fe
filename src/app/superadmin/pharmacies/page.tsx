@@ -1,8 +1,7 @@
-import Pharmaciest from "@/features/pharmacies/dashboard/Pharmaciest";
-import SuperAdminAuthGuard from "@/hoc/SuperAdminAuthGuard";
+import PharmacyDashboard from "@/features/pharmacies/pharmacyDashboard/pharmacyDashboard";
 
-const PharmaciesPage = () => {
-  return <Pharmaciest />;
+const pharmacyDashboardPage = () => {
+  return <PharmacyDashboard />;
 };
 
-export default SuperAdminAuthGuard(PharmaciesPage);
+export default pharmacyDashboardPage;
