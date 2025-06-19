@@ -1,14 +1,14 @@
-import { PaginationQueries } from "@/app/types/search/queries/PaginationQueries";
-import { PageableResponse } from "@/app/types/search/response/PaginationResponse";
-import { Pharmacy, Product } from "@/app/types/semuaNgerapiinyaNtar";
+import { PaginationQueries } from "@/types/search/queries/PaginationQueries";
+import { PageableResponse } from "@/types/search/response/PaginationResponse";
+import { Pharmacy } from "@/types/semuaNgerapiinyaNtar";
+import { axiosInstance } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
-import useAxios from "../../useAxios";
 
 interface PharmacyQuery extends PaginationQueries {
   search?: string;
+  isOpen?: "open" | "closed" | undefined;
 }
 const useGetPharmacies = (queries: PharmacyQuery) => {
-  const { axiosInstance } = useAxios();
   return useQuery({
     queryKey: ["pharmacies", queries],
     queryFn: async () => {

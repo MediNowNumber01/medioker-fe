@@ -1,11 +1,10 @@
-import { PageableResponse } from "@/app/types/search/response/PaginationResponse";
+import { axiosInstance } from "@/lib/axios";
+import { CategoryQueries } from "@/types/search/queries/CategoryQueries";
+import { PageableResponse } from "@/types/search/response/PaginationResponse";
+import { Category } from "@/types/semuaNgerapiinyaNtar";
 import { useQuery } from "@tanstack/react-query";
-import useAxios from "../../useAxios";
-import { Category } from "@/app/types/semuaNgerapiinyaNtar";
-import { CategoryQueries } from "@/app/types/search/queries/CategoryQueries";
 
 const useGetCategories = (queries: CategoryQueries) => {
-  const { axiosInstance } = useAxios();
   return useQuery({
     queryKey: ["categories", queries],
     queryFn: async () => {

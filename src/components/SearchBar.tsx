@@ -24,6 +24,7 @@ interface SearchBarProps {
   setSortOrder?: (value: string) => void;
   sortBy?: string;
   setSortBy?: (value: string) => void;
+  placeholder?: string;
 }
 
 const SearchBar: FC<SearchBarProps> = ({
@@ -34,6 +35,7 @@ const SearchBar: FC<SearchBarProps> = ({
   setSortOrder,
   sortBy,
   setSortBy,
+  placeholder = "Search",
 }) => {
   return (
     <div>
@@ -41,7 +43,7 @@ const SearchBar: FC<SearchBarProps> = ({
         <div className="relative grow w-full md:w-full">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
           <Input
-            placeholder="Search "
+            placeholder={placeholder}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-12 text-lg bg-card"
@@ -68,7 +70,7 @@ const SearchBar: FC<SearchBarProps> = ({
             </Select>
           </div>
           <Button
-            className={`bg-card aspect-square ${
+            className={`bg-card hover:bg-accent aspect-square ${
               setSortOrder ? "block" : "hidden"
             }`}
             onClick={() => {

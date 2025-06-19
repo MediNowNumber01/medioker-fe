@@ -1,4 +1,5 @@
-import ProductDetailsPage from "@/app/feature/medicine/details/ProductDetailsPage";
+import ProductDetailsPage from "@/features/medicine/details/ProductDetailsPage";
+import UserGuestAuthGuard from "@/hoc/UserGuestAuthGuard";
 
 const ProductDetails = async ({
   params,
@@ -9,4 +10,4 @@ const ProductDetails = async ({
   return <ProductDetailsPage slug={slug} />;
 };
 
-export default ProductDetails;
+export default UserGuestAuthGuard(ProductDetails);

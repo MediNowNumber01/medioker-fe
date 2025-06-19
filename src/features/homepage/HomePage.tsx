@@ -9,6 +9,7 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline"; // Contoh ikon Heroicons
 import { StarIcon } from "@heroicons/react/20/solid";
+import UserGuestAuthGuard from "@/hoc/UserGuestAuthGuard";
 
 const HomePage = () => {
   return (
@@ -24,7 +25,7 @@ const HomePage = () => {
             alt="erlenplus logo"
             className="h-auto w-40 md:w-48" // Ukuran responsif
           />
-          
+
           <Image
             src={"/MediNow.svg"}
             width={200} // Sedikit lebih ramping
@@ -219,4 +220,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default UserGuestAuthGuard(HomePage);

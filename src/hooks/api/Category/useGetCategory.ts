@@ -1,5 +1,5 @@
-import { PageableResponse } from "@/app/types/search/response/PaginationResponse";
-import { Category } from "@/app/types/semuaNgerapiinyaNtar";
+import { PageableResponse } from "@/types/search/response/PaginationResponse";
+import { Category } from "@/types/semuaNgerapiinyaNtar";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../useAxios";
 
