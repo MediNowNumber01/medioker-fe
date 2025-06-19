@@ -1,7 +1,7 @@
 "use client";
 import { Acquisition, Golongan } from "@/types/semuaNgerapiinyaNtar";
 import useGetProducts from "@/hooks/api/Products/useGetProducts";
-import { useQueryState } from "nuqs";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import ItemCard from "../../../components/ItemCard";
@@ -36,7 +36,7 @@ const ExplorePage = () => {
     parse: (value) => (value ? value.split(",O") : []),
     serialize: (value) => value.join(","),
   });
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [selectedPharmacyId, setSelectedPharmacyId] = useQueryState(
     "pharmacy",
     {
