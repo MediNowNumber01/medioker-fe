@@ -1,5 +1,5 @@
 import UserGuestAuthGuard from "@/hoc/UserGuestAuthGuard";
-import ExplorePage from "../feature/medicine/explore/ExplorePage";
+import ExplorePage from "../../features/medicine/explore/ExplorePage";
 
 const Explore = () => {
   return <ExplorePage />;

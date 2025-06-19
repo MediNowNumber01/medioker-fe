@@ -1,4 +1,4 @@
-import { PaginationMeta } from "@/app/types/search/response/PaginationResponse";
+import { PaginationMeta } from "@/types/search/response/PaginationResponse";
 import { Button } from "@/components/ui/button";
 import {
   Pagination,

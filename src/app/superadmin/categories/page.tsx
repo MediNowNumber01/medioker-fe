@@ -1,8 +1,7 @@
-import Categories from "@/app/feature/categories/Categories";
-import SuperAdminAuthGuard from "@/hoc/SuperAdminAuthGuard";
+import Categories from "@/features/categories/Categories";
 
 const CategoriesPage = () => {
   return <Categories />;
 };
 
-export default SuperAdminAuthGuard(CategoriesPage);
+export default CategoriesPage;
