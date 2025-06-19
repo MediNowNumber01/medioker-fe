@@ -29,10 +29,7 @@ export default function Navbar() {
   const { data: session, status } = useSession();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLoading = status === "loading";
-
-  console.log(session?.user);
   
-
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -50,27 +47,6 @@ export default function Navbar() {
       router.push("/login");
     });
   };
-
-  const CommonNavLinks = () => (
-    <>
-      <Link
-        href="/medicines"
-        className="flex items-center gap-3"
-        onClick={() => setMobileMenuOpen(false)}
-      >
-        <Image src={"/Medicines.svg"} alt="medicines" width={24} height={24} />
-        <span>Get Medicines</span>
-      </Link>
-      <Link
-        href="/forum"
-        className="flex items-center gap-3"
-        onClick={() => setMobileMenuOpen(false)}
-      >
-        <Image src={"/Forum.svg"} alt="forum" width={24} height={24} />
-        <span>Forum</span>
-      </Link>
-    </>
-  );
 
   return (
     <>
@@ -110,34 +86,30 @@ export default function Navbar() {
                         variant="ghost"
                         className="relative h-9 w-9 rounded-full"
                       >
-                        <Avatar className="h-9 w-9">
-                          <AvatarImage
-                            src={session.user.profilePict || undefined}
-                            alt="User Avatar"
-                          />
-                          <AvatarFallback>
-                            {generateInitials(session.user.fullName)}
-                          </AvatarFallback>
-                        </Avatar>
+                        
+                        {session.user.profilePict && (
+                          // <Image src={session.user.profilePict} width={100} height={100} alt="test"/>
+                          <Avatar className="h-9 w-9">
+                            <AvatarImage
+                              src={session.user.profilePict}
+                              alt="User Avatar"
+                              className="object-cover"
+                            />
+                            <AvatarFallback>
+                              {generateInitials(session.user.fullName)}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">
                       <DropdownMenuLabel>
                         {session.user.fullName}
                       </DropdownMenuLabel>
-                      <DropdownMenuLabel>
-                        {session.user.isVerified}
-                      </DropdownMenuLabel>
-
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
                         <Link href="/profile" className="w-full cursor-pointer">
                           Profile
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href="/orders" className="w-full cursor-pointer">
-                          My Orders
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />

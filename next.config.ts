@@ -14,8 +14,7 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com", // Domain standar untuk gambar profil Google
-        port: "",
-        pathname: "/a/**",
+ 
       },
     ],
   },
