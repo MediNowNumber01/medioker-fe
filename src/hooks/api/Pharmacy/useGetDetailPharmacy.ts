@@ -9,7 +9,7 @@ interface GetDetailPharmacyResponse {
 export const useGetDetailPharmacy = (id: string) => {
   const { axiosInstance } = useAxios();
   return useQuery({
-    queryKey: ["pharmacyDetails", id],
+    queryKey: ["pharmacydetails", id],
     queryFn: async () => {
       const response = await axiosInstance.get<GetDetailPharmacyResponse>(
         `/pharmacies/${id}`

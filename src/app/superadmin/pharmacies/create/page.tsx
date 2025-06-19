@@ -1,4 +1,4 @@
-import CreatePharmacy from "@/features/pharmacies/create/CreatePharmacy";
+import CreatePharmacy from "@/features/pharmacies/createPharmacy/CreatePharmacy";
 import React from "react";
 
 const CreatePharmacyPage = () => {

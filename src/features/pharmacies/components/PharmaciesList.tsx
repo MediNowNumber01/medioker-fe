@@ -33,8 +33,8 @@ interface PharmaciesListProps {
   setSortBy: (sortBy: string) => void;
   sortOrder: string;
   setSortOrder: (sortOrder: string) => void;
-  isOpen: string | undefined;
-  setIsOpen: (isOpen: string | undefined) => void;
+  isOpen: string;
+  setIsOpen: (isOpen: string) => void;
 }
 const PharmaciesList: FC<PharmaciesListProps> = ({
   search,

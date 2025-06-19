@@ -16,7 +16,7 @@ interface GetDashboardPharmacyResponse {
 const useGetDashboardPharmacy = () => {
   const { axiosInstance } = useAxios();
   return useQuery({
-    queryKey: ["dashboard_pharmacy"],
+    queryKey: ["dashboardpharmacy"],
     queryFn: async () => {
       const { data } = await axiosInstance.get<GetDashboardPharmacyResponse>(
         "/pharmacies/dashboard"

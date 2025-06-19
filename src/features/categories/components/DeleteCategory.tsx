@@ -33,7 +33,7 @@ const DeleteCategory: FC<DeleteCategoryProps> = ({ id }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" size="icon">
+        <Button className="hover:cursor-pointer " variant="destructive" size="icon">
           <Trash2 />
         </Button>
       </DialogTrigger>

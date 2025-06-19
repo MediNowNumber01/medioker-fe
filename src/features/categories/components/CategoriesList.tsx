@@ -89,7 +89,9 @@ const CategoriesList: FC<CategoriesListProps> = ({
                   </TableCell>
                   <TableCell>{category._count?.ProductCategory || 0}</TableCell>
                   <TableCell>
-                    <EditCategory category={category} />
+                    <div className="hover:cursor-pointer">
+                      <EditCategory category={category} />
+                    </div>
                   </TableCell>
                   <TableCell>
                     <DeleteCategory id={category.id} />

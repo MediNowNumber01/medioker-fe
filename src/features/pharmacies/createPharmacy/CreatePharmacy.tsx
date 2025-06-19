@@ -12,7 +12,7 @@ import Image from "next/image";
 import { use, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CreatePharmacySchema } from "./CreatePharmacySchema";
-import LocationPicker from "./selectLocation/LocationPicker";
+import LocationPicker from "../components/selectLocation/LocationPicker";
 
 import {
   Select,

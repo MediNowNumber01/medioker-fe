@@ -13,7 +13,7 @@ const PharmacyDashboard = () => {
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [isOpen, setIsOpen] = useState<undefined | string>(undefined);
+  const [isOpen, setIsOpen] = useState<string>("all");
   const { data: pharmacies } = useGetAdminPharmacies({
     search: debouncedSearch,
     page: page,
@@ -27,12 +27,10 @@ const PharmacyDashboard = () => {
 
   useEffect(() => {
     setPage(1);
-    window.scrollTo(0, 0);
   }, [debouncedSearch, sortBy, sortOrder, isOpen]);
   return (
     <>
-      {/* title */}
-      <section className="container mx-auto flex flex-col gap-4 p-2">
+      <section className="container mx-auto flex flex-col gap-4 px-4 ">
         <div>
           <h1 className="text-primary">Pharmacies</h1>
           <p className="text-muted-foreground">

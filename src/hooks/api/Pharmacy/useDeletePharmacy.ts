@@ -6,35 +6,17 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-interface CreatePharmacyPayload {
-  name: string;
-  picture: File | null;
-  detailLocation: string;
-  lat: string;
-  lng: string;
-  isMain: string;
-}
-
-const useCreatePharmacy = () => {
+const useDeletePharmacy = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const { axiosInstance } = useAxios();
   return useMutation({
-    mutationFn: async (payload: CreatePharmacyPayload) => {
-      const formData = new FormData();
-      formData.append("name", payload.name);
-      if (payload.picture) {
-        formData.append("picture", payload.picture);
-      }
-      formData.append("detailLocation", payload.detailLocation);
-      formData.append("lat", payload.lat);
-      formData.append("lng", payload.lng);
-      formData.append("isMain", String(payload.isMain));
-      const { data } = await axiosInstance.post(`/pharmacies`, formData);
+    mutationFn: async (pharmacyId: string) => {
+      const { data } = await axiosInstance.delete(`/pharmacies/${pharmacyId}`);
       return data;
     },
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["dashboardpharmacy"],
       });
@@ -44,7 +26,7 @@ const useCreatePharmacy = () => {
         refetchType: "all",
         type: "all",
       });
-      toast.success("Pharmacy created successfully");
+      toast.success("Pharmacy deleted successfully");
       router.push("/superadmin/pharmacies");
       return true;
     },
@@ -54,4 +36,4 @@ const useCreatePharmacy = () => {
   });
 };
 
-export default useCreatePharmacy;
+export default useDeletePharmacy;

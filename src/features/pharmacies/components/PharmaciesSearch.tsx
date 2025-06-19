@@ -24,8 +24,8 @@ interface PharmaciesSearchProps {
   setSortOrder: (value: string) => void;
   sortBy: string;
   setSortBy: (value: string) => void;
-  isOpen: string | undefined;
-  setIsOpen: (isOpen: string | undefined) => void;
+  isOpen: string;
+  setIsOpen: (isOpen: string) => void;
 }
 
 const PharmaciesSearch: FC<PharmaciesSearchProps> = ({
@@ -69,9 +69,7 @@ const PharmaciesSearch: FC<PharmaciesSearchProps> = ({
                 <SelectGroup>
                   <SelectItem value="open">Open</SelectItem>
                   <SelectItem value="closed">Closed</SelectItem>
-                  <SelectItem onClick={() => setIsOpen(undefined)} value="all">
-                    All
-                  </SelectItem>
+                  <SelectItem value="all">All</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

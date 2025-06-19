@@ -6,32 +6,37 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-interface CreatePharmacyPayload {
-  name: string;
+interface UpdatePharmacyPayload {
+  id: string;
+  name: string | null;
   picture: File | null;
-  detailLocation: string;
-  lat: string;
-  lng: string;
-  isMain: string;
+  detailLocation: string | null;
+  lat: string | null;
+  lng: string | null;
+  isMain: string | null;
 }
 
-const useCreatePharmacy = () => {
+const useUpdatePharmacy = (pharmacyId: string) => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const { axiosInstance } = useAxios();
   return useMutation({
-    mutationFn: async (payload: CreatePharmacyPayload) => {
+    mutationFn: async (payload: UpdatePharmacyPayload) => {
       const formData = new FormData();
-      formData.append("name", payload.name);
+      payload.name && formData.append("name", payload.name);
       if (payload.picture) {
         formData.append("picture", payload.picture);
       }
-      formData.append("detailLocation", payload.detailLocation);
-      formData.append("lat", payload.lat);
-      formData.append("lng", payload.lng);
-      formData.append("isMain", String(payload.isMain));
-      const { data } = await axiosInstance.post(`/pharmacies`, formData);
+      payload.detailLocation &&
+        formData.append("detailLocation", payload.detailLocation);
+      payload.lat && formData.append("lat", payload.lat);
+      payload.lng && formData.append("lng", payload.lng);
+      payload.isMain && formData.append("isMain", String(payload.isMain));
+      const { data } = await axiosInstance.patch(
+        `/pharmacies/${pharmacyId}`,
+        formData
+      );
       return data;
     },
     onSuccess: async (data) => {
@@ -44,8 +49,11 @@ const useCreatePharmacy = () => {
         refetchType: "all",
         type: "all",
       });
-      toast.success("Pharmacy created successfully");
-      router.push("/superadmin/pharmacies");
+      await queryClient.invalidateQueries({
+        queryKey: ["pharmacydetails", pharmacyId],
+      });
+      toast.success("Pharmacy updated successfully");
+      router.push(`/superadmin/pharmacies/${pharmacyId}`);
       return true;
     },
     onError: (error: AxiosError<{ message: string; code: number }>) => {
@@ -54,4 +62,4 @@ const useCreatePharmacy = () => {
   });
 };
 
-export default useCreatePharmacy;
+export default useUpdatePharmacy;
