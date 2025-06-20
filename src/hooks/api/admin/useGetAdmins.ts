@@ -1,20 +1,27 @@
 import { PaginationQueries } from "@/types/search/queries/PaginationQueries";
 import { PageableResponse } from "@/types/search/response/PaginationResponse";
-import { Pharmacy, Product } from "@/types/semuaNgerapiinyaNtar";
+import {
+  Admin,
+  AdminRole,
+  Pharmacy,
+  Product,
+} from "@/types/semuaNgerapiinyaNtar";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../useAxios";
 
-interface PharmacyQuery extends PaginationQueries {
+interface GetAdminQuery extends PaginationQueries {
   search?: string;
-  isOpen?: "open" | "closed" | undefined;
+  role?: AdminRole;
+  status?: string;
+  notOnPharmacy?: string;
 }
-const useGetEmployee = (queries: PharmacyQuery) => {
+const useGetAdmins = (queries: GetAdminQuery) => {
   const { axiosInstance } = useAxios();
   return useQuery({
-    queryKey: ["pharmacies", queries],
+    queryKey: ["admin", queries],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<PageableResponse<Pharmacy>>(
-        "/pharmacies",
+      const { data } = await axiosInstance.get<PageableResponse<Admin>>(
+        "/admins",
         { params: queries }
       );
       return data;
@@ -22,4 +29,4 @@ const useGetEmployee = (queries: PharmacyQuery) => {
   });
 };
 
-export default useGetEmployee;
+export default useGetAdmins;

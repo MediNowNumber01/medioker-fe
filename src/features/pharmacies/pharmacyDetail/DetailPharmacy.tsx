@@ -9,8 +9,11 @@ import { AvatarFallback } from "@radix-ui/react-avatar";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { FC } from "react";
+import { FC, useState } from "react";
 import PharmacyInfo from "./components/PharmacyInfo";
+import { TabsContent } from "@radix-ui/react-tabs";
+import PharmacyEmployee from "./components/PharmacyEmployee";
+import { useQueryState } from "nuqs";
 
 interface PharmacyDetailProps {
   pharmacyId: string;
@@ -18,12 +21,15 @@ interface PharmacyDetailProps {
 
 const PharmacyDetail: FC<PharmacyDetailProps> = ({ pharmacyId }) => {
   const { data: pharmacy, isError } = useGetDetailPharmacy(pharmacyId);
+  const [tabsValue, setTabsValue] = useQueryState("tabs", {
+    defaultValue: "overview",
+  });
   if (isError) {
     return redirect("/superadmin/pharmacies");
   }
 
   return (
-    <section className="container mx-auto flex flex-col gap-4 p-2 md:space-y-4">
+    <section className="container mx-auto flex flex-col gap-4 p-4 md:space-y-4">
       <Link
         href={"/superadmin/pharmacies"}
         className="flex items-center hover:font-medium hover:cursor-pointer text-muted-foreground"
@@ -64,19 +70,23 @@ const PharmacyDetail: FC<PharmacyDetailProps> = ({ pharmacyId }) => {
         </>
       </Card>
       <div>
-        <Tabs defaultValue="overview">
+        <Tabs value={tabsValue} onValueChange={setTabsValue}>
           <TabsList className="flex w-full gap-6">
             <TabsTrigger value="overview" className="w-full">
               Details
             </TabsTrigger>
-            <TabsTrigger value="admins" className="w-full">
+            <TabsTrigger value="employee" className="w-full">
               Admins
             </TabsTrigger>
           </TabsList>
+          <TabsContent value="overview">
+            <PharmacyInfo pharmacyId={pharmacyId} />
+          </TabsContent>
+          <TabsContent value="employee">
+            <PharmacyEmployee pharmacyId={pharmacyId} />
+          </TabsContent>
         </Tabs>
       </div>
-
-      <PharmacyInfo pharmacyId={pharmacyId} />
     </section>
   );
 };

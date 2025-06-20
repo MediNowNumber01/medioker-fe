@@ -58,7 +58,7 @@ const PharmaciesOverview = () => {
         <div className="flex flex-col text-center">
           <p className="text-muted-foreground">Total Admin</p>
           <p className="text-4xl font-bold">
-            {dashboard?.data.totalAdmins || 0}
+            {dashboard?.data.totalEmployees || 0}
           </p>
         </div>
         <Separator />
@@ -66,14 +66,14 @@ const PharmaciesOverview = () => {
           <div className="text-center text-green-500 font-bold">
             <div className=""> Assigned</div>
             <div className="flex w-full justify-center items-center gap-2 text-xl">
-              {dashboard?.data.assignedAdmin || 0}
+              {dashboard?.data.assignedEmployees || 0}
               <CheckBadgeIcon className="h-8 w-8 " />
             </div>
           </div>
           <div className="text-center text-red-500 font-bold">
             <div className=""> Unassigned</div>
             <div className="flex w-full justify-center items-center gap-2 text-xl">
-              {dashboard?.data.unassignedAdmin || 0}
+              {dashboard?.data.unassignedEmployees || 0}
               <BadgeXIcon className="h-8 w-8 " />
             </div>
           </div>

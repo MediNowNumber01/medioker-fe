@@ -28,7 +28,7 @@ const Categories = () => {
   });
 
   return (
-    <section className="container mx-auto flex flex-col gap-4 p-2 md:p-6">
+    <section className="container mx-auto flex flex-col gap-4 p-4 md:p-6">
       <div>
         <h1 className="text-primary">Categories</h1>
         <p className="text-muted-foreground">
