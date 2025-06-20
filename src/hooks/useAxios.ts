@@ -8,7 +8,7 @@ const useAxios = () => {
     const requestIntercept = axiosInstance.interceptors.request.use(
       async (config) => {
         const session = await getSession();
-        const accessToken = session?.user?.accessToken;
+        const accessToken = session?.user.accessToken;
         if (accessToken) {
           config.headers.Authorization = `Bearer ${accessToken}`;
         }
@@ -30,7 +30,7 @@ const useAxios = () => {
           err?.response.data.message === "Token expired" ||
           err?.response.data.message === "Invalid token"
         ) {
-          //   signOut();
+          signOut();
         }
 
         return Promise.reject(err);
