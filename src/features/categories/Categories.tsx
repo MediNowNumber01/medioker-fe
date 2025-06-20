@@ -5,13 +5,20 @@ import CategoriesList from "./components/CategoriesList";
 import useGetCategories from "@/hooks/api/Category/useGetCategories";
 import { useDebounce } from "use-debounce";
 import CreateCategory from "./components/CreateCategory/CreateCategory";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 const Categories = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useQueryState("search", {
+    defaultValue: "",
+  });
   const [debouncedSearch] = useDebounce(search, 500);
-  const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState("name");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [sortBy, setSortBy] = useQueryState("sortBy", {
+    defaultValue: "name",
+  });
+  const [sortOrder, setSortOrder] = useQueryState("sortOrder", {
+    defaultValue: "asc",
+  });
 
   const { data: categories, isLoading } = useGetCategories({
     search: debouncedSearch ? debouncedSearch : undefined,
@@ -21,7 +28,7 @@ const Categories = () => {
   });
 
   return (
-    <section className="container mx-auto flex flex-col gap-4 p-2 md:p-6">
+    <section className="container mx-auto flex flex-col gap-4 p-4 md:p-6">
       <div>
         <h1 className="text-primary">Categories</h1>
         <p className="text-muted-foreground">

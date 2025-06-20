@@ -1,7 +1,7 @@
 "use client";
 import { Acquisition, Golongan } from "@/types/semuaNgerapiinyaNtar";
 import useGetProducts from "@/hooks/api/Products/useGetProducts";
-import { useQueryState } from "nuqs";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import ItemCard from "../../../components/ItemCard";
@@ -36,7 +36,7 @@ const ExplorePage = () => {
     parse: (value) => (value ? value.split(",O") : []),
     serialize: (value) => value.join(","),
   });
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [selectedPharmacyId, setSelectedPharmacyId] = useQueryState(
     "pharmacy",
     {
@@ -76,14 +76,14 @@ const ExplorePage = () => {
 
   return (
     <main className="min-h-screen ">
-      <section className="container mx-auto px-2 py-8 md:px-6">
+      <section className="container mx-auto px-4 py-8 md:px-6">
         <h1 className="text-primary">Explore Your Needs</h1>
         <p className="text-muted-foreground md:text-lg">
           Explore the latest trends, products, and services tailored to your
           interests. Discover new possibilities and find what suits you best.
         </p>
       </section>
-      <section className="container mx-auto h-fit  mb-4 px-2 md:px-6">
+      <section className="container mx-auto h-fit  mb-4 px-4 md:px-6">
         <PharmacySelector
           className=" md:hidden"
           pharmacy={getproducts?.pharmacy ? getproducts.pharmacy : null}
@@ -114,7 +114,7 @@ const ExplorePage = () => {
 
       {/* <filter /> */}
 
-      <section className="container mx-auto  flex relative flex-col md:flex-row gap-4 p-2 md:px-6">
+      <section className="container mx-auto  flex relative flex-col md:flex-row gap-4 p-4 md:px-6">
         <SideFilter
           className="w-full md:w-1/4 hidden md:block"
           selectedAquisition={acquisition as Acquisition}

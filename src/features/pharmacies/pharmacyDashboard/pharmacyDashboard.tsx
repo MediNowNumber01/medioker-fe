@@ -6,14 +6,24 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import PharmaciesList from "../components/PharmaciesList";
 import PharmaciesOverview from "../components/PharmaciesOverview";
+import { parseAsInteger, useQueryState } from "nuqs";
+import { parse } from "path";
 
 const PharmacyDashboard = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useQueryState("search", {
+    defaultValue: "",
+  });
   const [debouncedSearch] = useDebounce(search, 500);
-  const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState("name");
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [isOpen, setIsOpen] = useState<string>("all");
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [sortBy, setSortBy] = useQueryState("sortBy", {
+    defaultValue: "name",
+  });
+  const [sortOrder, setSortOrder] = useQueryState("sortOrder", {
+    defaultValue: "asc",
+  });
+  const [isOpen, setIsOpen] = useQueryState("isOpen", {
+    defaultValue: "all",
+  });
   const { data: pharmacies } = useGetAdminPharmacies({
     search: debouncedSearch,
     page: page,

@@ -6,9 +6,9 @@ interface GetDashboardPharmacyResponse {
     totalPharmacies: number;
     openPharmacies: number;
     closedPharmacies: number;
-    totalAdmins: number;
-    assignedAdmin: number;
-    unassignedAdmin: number;
+    totalEmployees: number;
+    assignedEmployees: number;
+    unassignedEmployees: number;
   };
   message: string;
 }
