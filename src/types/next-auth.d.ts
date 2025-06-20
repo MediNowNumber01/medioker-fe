@@ -11,6 +11,7 @@ declare module "next-auth" {
       isVerified: boolean
       role: Role;
       profilePict?: string | null;
+      
     } & DefaultSession["user"]; 
     
     accessToken: string;
@@ -24,7 +25,9 @@ declare module "next-auth" {
     isVerified?: boolean
     role: Role;
     profilePict?: string | null;
+    addresses?: UserAddress[]
     accessToken: string;
+   provider: string
   }
 }
 
@@ -38,5 +41,6 @@ declare module "next-auth/jwt" {
     role: Role;
     profilePict?: string | null;
     accessToken: string;
+
   }
 }

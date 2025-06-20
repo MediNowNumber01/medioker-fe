@@ -1,5 +1,4 @@
 "use client";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,13 +9,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useFormik } from "formik";
-import Link from "next/link";
 import useLogin from "@/hooks/api/auth/useLogin";
-import { signIn } from "next-auth/react";
-import { LoginSchema } from "../schemas";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { useFormik } from "formik";
 import { Eye, EyeOff } from "lucide-react"; // Impor ikon dari lucide-react
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { LoginSchema } from "../schemas";
 
 interface LoginFormProps extends React.ComponentProps<"div"> {
   redirectUrl?: string;
@@ -28,7 +30,8 @@ export function LoginForm({
   ...props
 }: LoginFormProps) {
   const { mutateAsync: login, isPending } = useLogin();
-  
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
   // 1. Perbaiki urutan deklarasi useState
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -42,6 +45,13 @@ export function LoginForm({
       await login(values);
     },
   });
+
+   useEffect(() => {
+    if (error) {
+      // Tampilkan toast dengan pesan error dari backend
+      toast.error(decodeURIComponent(error));
+    }
+  }, [error]); 
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
