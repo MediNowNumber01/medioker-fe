@@ -22,14 +22,14 @@ export default function EditProfilePage() {
           Back to Profile
         </Button>
       </Link>
-      <Card>
+      <Card className="mx-2">
         <CardHeader>
           <CardTitle>Edit Profile</CardTitle>
           <CardDescription>
             Update your personal information here.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent >
           <EditProfileForm user={user} isLoading={isLoading}/>
         </CardContent>
       </Card>

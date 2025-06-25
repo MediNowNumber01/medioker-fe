@@ -1,7 +1,9 @@
 import { SuperAdminSidebar } from "@/components/SuperAdminSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SuperAdminHeader } from "@/components/SuperAdminSidebarHeader";
 import { auth } from "@/lib/auth";
+import NuqsProvider from "@/providers/NuqsProvider";
 import { redirect } from "next/navigation";
+import type React from "react";
 
 export default async function SuperadminLayout({
   children,
@@ -11,10 +13,12 @@ export default async function SuperadminLayout({
   const session = await auth();
   if (!session) return redirect("/login");
   if (session.user?.role !== "SUPER_ADMIN") return redirect("/");
+
   return (
-    <>
-      <SidebarTrigger />
-      {children}
-    </>
+    <div className="flex flex-1 flex-col">
+      <SuperAdminHeader />
+      <SuperAdminSidebar />
+      <NuqsProvider>{children}</NuqsProvider>
+    </div>
   );
 }

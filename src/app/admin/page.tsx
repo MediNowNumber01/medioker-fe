@@ -1,5 +1,7 @@
+import AdminAuthGuard from "@/hoc/AdminAuthGuard";
+
 const DashboardAdminPage = () => {
   return <div>DashboardAdminPage</div>;
 };
 
-export default DashboardAdminPage;
+export default AdminAuthGuard(DashboardAdminPage);

@@ -1,7 +1,9 @@
+import SuperAdminDashboard from "@/features/superadmin/SuperAdminPage";
+import SuperAdminAuthGuard from "@/hoc/SuperAdminAuthGuard";
 import React from "react";
 
 const DashboardSuperAdminPage = () => {
-  return <div>Super Admin Dashboard</div>;
+  return <div className="p-8"><SuperAdminDashboard/></div>;
 };
 
-export default DashboardSuperAdminPage;
+export default SuperAdminAuthGuard(DashboardSuperAdminPage);
