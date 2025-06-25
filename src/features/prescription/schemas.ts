@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 
-// Ukuran file diubah menjadi 2MB
-const FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const FILE_SIZE = 2 * 1024 * 1024;
 const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/heic', 'image/svg'];
 
 export const UploadPrescriptionSchema = Yup.object().shape({

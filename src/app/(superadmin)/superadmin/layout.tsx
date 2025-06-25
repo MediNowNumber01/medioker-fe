@@ -11,5 +11,10 @@ export default async function SuperadminLayout({
   const session = await auth();
   if (!session) return redirect("/login");
   if (session.user?.role !== "SUPER_ADMIN") return redirect("/");
-  return <>{children}</>;
+  return (
+    <>
+      <SidebarTrigger />
+      {children}
+    </>
+  );
 }

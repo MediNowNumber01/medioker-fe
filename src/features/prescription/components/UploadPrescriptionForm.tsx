@@ -1,16 +1,11 @@
 "use client";
 
 import { useFormik } from "formik";
-import { ChangeEvent, useEffect, useState, useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { UploadPrescriptionSchema } from "../schemas";
-import { UserAddress } from "@/types/userAddress";
-import { Pharmacy } from "@/types/pharmacy";
-
-// Komponen UI & Lainnya
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
@@ -19,37 +14,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { MapPin, Trash2, UploadCloud } from "lucide-react";
 import Image from "next/image";
-import { UploadCloud, Trash2, MapPin } from "lucide-react";
 import { toast } from "sonner";
-
-// Hooks untuk interaksi API
-import useGetPrescriptionPharmacies, { PharmacyWithDistance } from "@/hooks/api/prescription/useGetPrescriptionPharmacies";
+import useGetUserAddresses from "@/hooks/api/address/useGetUserAddresses";
 import useCreatePrescription from "@/hooks/api/prescription/useCreatePrescription";
-import useGetUserAddresses from "@/hooks/api/prescription/useGetUserAddresses";
+import useGetPrescriptionPharmacies, {
+  PharmacyWithDistance,
+} from "@/hooks/api/prescription/useGetPrescriptionPharmacies";
 import useAxios from "@/hooks/useAxios";
 
 export function UploadPrescriptionForm() {
- useAxios();
-  const { mutateAsync: createPrescription, isPending } = useCreatePrescription();
-  const [userLocation, setUserLocation] = useState<{ latitude: string; longitude: string; } | null>(null);
+  useAxios();
+  const { mutateAsync: createPrescription, isPending } =
+    useCreatePrescription();
+  const [userLocation, setUserLocation] = useState<{
+    latitude: string;
+    longitude: string;
+  } | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
 
-  const { data: userAddresses, isLoading: isLoadingAddresses } = useGetUserAddresses();
-  const { data: pharmacies, isLoading: isLoadingPharmacies } = useGetPrescriptionPharmacies({
-    lat: userLocation?.latitude,
-    lng: userLocation?.longitude,
-  });
+  const { data: userAddresses, isLoading: isLoadingAddresses } =
+    useGetUserAddresses();
+  const { data: pharmacies, isLoading: isLoadingPharmacies } =
+    useGetPrescriptionPharmacies({
+      lat: userLocation?.latitude,
+      lng: userLocation?.longitude,
+    });
 
   const imageRef = useRef<HTMLInputElement>(null);
   const [previews, setPreviews] = useState<string[]>([]);
   const ALLOWED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/png',
-  'image/jpg',
-  'image/gif',
-  'image/svg+xml', 
-  'image/heic'
-];
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+    "image/gif",
+    "image/svg+xml",
+    "image/heic",
+  ];
 
   useEffect(() => {
     setUserLocation({ latitude: "-7.7956", longitude: "110.3695" });
@@ -65,9 +68,9 @@ export function UploadPrescriptionForm() {
     },
     validationSchema: UploadPrescriptionSchema,
     onSubmit: async (values) => {
-      await createPrescription(values); 
+      await createPrescription(values);
     },
-  })
+  });
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -81,13 +84,18 @@ export function UploadPrescriptionForm() {
 
     const newFiles = Array.from(files);
 
-    const invalidFiles = newFiles.filter(file => !ALLOWED_IMAGE_TYPES.includes(file.type));
+    const invalidFiles = newFiles.filter(
+      (file) => !ALLOWED_IMAGE_TYPES.includes(file.type)
+    );
     if (invalidFiles.length > 0) {
-      formik.setFieldError('prescriptionImages', `Invalid file type: ${invalidFiles[0].name}. Please upload images only.`);
-      toast.error('Invalid file type detected.');
-      return; // Hentikan proses jika ada file tidak valid
+      formik.setFieldError(
+        "prescriptionImages",
+        `Invalid file type: ${invalidFiles[0].name}. Please upload images only.`
+      );
+      toast.error("Invalid file type detected.");
+      return;
     }
-    
+
     const validFiles = newFiles.filter((file) => file.size <= 2 * 1024 * 1024);
     if (validFiles.length !== newFiles.length) {
       toast.error("Some files were too large (max 2MB) and were not added.");
@@ -96,13 +104,37 @@ export function UploadPrescriptionForm() {
     const updatedFiles = [...currentFiles, ...validFiles];
     formik.setFieldValue("prescriptionImages", updatedFiles);
     if (formik.errors.prescriptionImages) {
-      formik.setFieldError('prescriptionImages', undefined);
+      formik.setFieldError("prescriptionImages", undefined);
     }
 
     const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
     setPreviews((prev) => [...prev, ...newPreviews]);
   };
 
+  const handleGetLocation = () => {
+    if (navigator.geolocation) {
+      setIsLocating(true);
+      toast.info("Getting your location...");
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({
+            latitude: latitude.toString(),
+            longitude: longitude.toString(),
+          });
+          toast.success("Location found!");
+          setIsLocating(false);
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+          toast.error("Could not get your location. Please grant permission.");
+          setIsLocating(false);
+        }
+      );
+    } else {
+      toast.error("Geolocation is not supported by your browser.");
+    }
+  };
 
   const removeImage = (indexToRemove: number) => {
     const updatedFiles = formik.values.prescriptionImages.filter(
@@ -122,7 +154,9 @@ export function UploadPrescriptionForm() {
         <Label className="font-semibold text-base">
           Upload Prescriptions (Max 5, @2MB)
         </Label>
-          <span className="font-semibold text-s">(only .jpg, .jpeg, .heic, .svg type allowed) </span>
+        <span className="font-semibold text-s">
+          (only .jpg, .jpeg, .heic, .svg type allowed){" "}
+        </span>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 space-y-12">
           {previews.map((src, index) => (
             <div key={index} className="relative aspect-square">
@@ -162,7 +196,7 @@ export function UploadPrescriptionForm() {
           type="file"
           multiple
           className="hidden space-y-2"
-          accept='image/*'
+          accept="image/*"
           onChange={handleImageChange}
           onBlur={formik.handleBlur}
         />
@@ -174,7 +208,6 @@ export function UploadPrescriptionForm() {
           )}
       </div>
 
-      {/* Notes */}
       <div className="grid gap-2">
         <Label htmlFor="notes" className="font-semibold">
           Additional Notes
@@ -188,8 +221,7 @@ export function UploadPrescriptionForm() {
           onBlur={formik.handleBlur}
         />
       </div>
-      
-      {/* Delivery Method */}
+
       <div className="grid gap-3">
         <Label className="font-semibold">Delivery Method</Label>
         <RadioGroup
@@ -214,7 +246,6 @@ export function UploadPrescriptionForm() {
         </RadioGroup>
       </div>
 
-      {/* Conditional: Delivery Address */}
       {formik.values.deliveryMethod === "delivery" && (
         <div className="grid gap-2 animate-in fade-in-0">
           <Label htmlFor="addressId" className="font-semibold">
@@ -224,13 +255,20 @@ export function UploadPrescriptionForm() {
             name="addressId"
             value={formik.values.addressId}
             onValueChange={(value) => formik.setFieldValue("addressId", value)}
-            disabled={isLoadingAddresses || !userAddresses || userAddresses.length === 0}
+            disabled={
+              isLoadingAddresses || !userAddresses || userAddresses.length === 0
+            }
           >
             <SelectTrigger>
-              <SelectValue placeholder={
-                isLoadingAddresses ? "Loading addresses..." : 
-                !userAddresses || userAddresses.length === 0 ? "No address found" : "Select an address"
-              } />
+              <SelectValue
+                placeholder={
+                  isLoadingAddresses
+                    ? "Loading addresses..."
+                    : !userAddresses || userAddresses.length === 0
+                    ? "No address found"
+                    : "Select an address"
+                }
+              />
             </SelectTrigger>
             <SelectContent>
               {userAddresses?.map((addr: any) => (
@@ -241,11 +279,13 @@ export function UploadPrescriptionForm() {
             </SelectContent>
           </Select>
           {formik.touched.addressId && formik.errors.addressId && (
-            <p className="text-xs text-destructive">{formik.errors.addressId}</p>
+            <p className="text-xs text-destructive">
+              {formik.errors.addressId}
+            </p>
           )}
         </div>
       )}
-      
+
       <div className="grid gap-2">
         <Label htmlFor="pharmacyId" className="font-semibold">
           {formik.values.deliveryMethod === "delivery"

@@ -1,7 +1,7 @@
 "use client";
 
 import useAxios from "@/hooks/useAxios";
-import { Pharmacy } from "@/types/pharmacy"; // Pastikan path tipe benar
+import { Pharmacy } from "@/types/pharmacy"; 
 import { useQuery } from "@tanstack/react-query";
 
 interface GetPharmaciesParams {

@@ -28,7 +28,7 @@ const useCreatePrescription = () => {
         payload.deliveryMethod === "delivery" ? "DELIVERY" : "PICKUP"
       );
       formData.append("pharmacyId", payload.pharmacyId);
-            if (payload.deliveryMethod === "delivery" && payload.addressId) {
+      if (payload.deliveryMethod === "delivery" && payload.addressId) {
         formData.append("userAddressId", payload.addressId);
       }
       payload.prescriptionImages.forEach((file) => {
@@ -42,11 +42,11 @@ const useCreatePrescription = () => {
       toast.success(
         response.message || "Prescription order created successfully!"
       );
-      // Redirect setelah sukses
-      router.push(`/orders/${response.data.id}`); 
+      router.push(`/orders/${response.data.id}`);
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred.";
       console.error("Error creating prescription:", error.response?.data);
       toast.error(errorMessage);
     },

@@ -10,6 +10,7 @@ import SearchBar from "../../../components/SearchBar";
 import MobileFilter from "./components/mobileFilter/MobileFilter";
 import PharmacySelector from "./components/pharmacySelector/PharmacySelector";
 import SideFilter from "./components/sideFilter/SideFilter";
+import { LocationRequester } from "@/features/homepage/components/LocationRequester";
 
 const ExplorePage = () => {
   const [search, setSearch] = useQueryState("search", {
@@ -76,6 +77,7 @@ const ExplorePage = () => {
 
   return (
     <main className="min-h-screen ">
+      <LocationRequester />
       <section className="container mx-auto px-4 py-8 md:px-6">
         <h1 className="text-primary">Explore Your Needs</h1>
         <p className="text-muted-foreground md:text-lg">

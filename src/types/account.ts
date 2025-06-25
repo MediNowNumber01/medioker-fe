@@ -6,12 +6,10 @@ export interface Account {
   role: Role;
   profilePict: string | null;
   isVerified: boolean;
+  provider: string | null;
   deletedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
-//   User: User | null; // Relasi ke model User
-//   Admin: Admin | null; // Relasi ke model Admin
-//   SuperAdmin: SuperAdmin | null; // Relasi ke model SuperAdmin
 }
 
 export enum Role {

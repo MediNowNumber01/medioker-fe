@@ -9,3 +9,9 @@ export interface LocationType {
   lng: number;
   address: string;
 }
+
+export interface AddressLocationType{
+  latitude: number;
+  longitude: number;
+  fullAddress: string
+}

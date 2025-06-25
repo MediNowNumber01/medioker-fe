@@ -1,17 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Instagram, Facebook, Twitter, Linkedin } from "lucide-react";
+import {
+  Instagram,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-card text-card-foreground border-t">
-      <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-4">
-          
-          {/* Kolom 1: Branding & Media Sosial */}
-          <div className="flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-2">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid md:grid-cols-4 gap-8">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
               <Image
                 src="/erlenplus.svg"
                 width={32}
@@ -19,9 +25,10 @@ export default function Footer() {
                 alt="MediNow Erlenmeyer Logo"
               />
               <span className="text-xl font-bold">MediNow</span>
-            </Link>
-            <p className="text-muted-foreground text-sm">
-              Your trusted one-stop solution for all pharmacy needs. Fast, reliable, and always caring.
+            </div>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Your trusted partner for all pharmaceutical needs. Quality
+              medicines, expert care, delivered to your doorstep.
             </p>
             <div className="flex gap-2 mt-2">
               <Link href="#" aria-label="Facebook">
@@ -47,41 +54,75 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Kolom 2: Navigasi Produk */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Product</h3>
-            <div className="flex flex-col gap-3 text-sm">
-              <Link href="/medicines" className="text-muted-foreground hover:text-primary transition-colors">Get Medicines</Link>
-              <Link href="/forum" className="text-muted-foreground hover:text-primary transition-colors">Forum</Link>
-              <Link href="/articles" className="text-muted-foreground hover:text-primary transition-colors">Health Articles</Link>
-              <Link href="/promo" className="text-muted-foreground hover:text-primary transition-colors">Promotions</Link>
+            <h3 className="font-semibold text-foreground mb-4">Quick Links</h3>
+            <div className="space-y-3 text-sm">
+              <Link
+                href="/medicines"
+                className="block text-muted-foreground hover:text-primary transition-colors"
+              >
+                Medicines
+              </Link>
+              <Link
+                href="/forum"
+                className="block text-muted-foreground hover:text-primary transition-colors"
+              >
+                Forum
+              </Link>
+              <Link
+                href="/profile"
+                className="block text-muted-foreground hover:text-primary transition-colors"
+              >
+                Profile
+              </Link>
+              <Link
+                href="/cart"
+                className="block text-muted-foreground hover:text-primary transition-colors"
+              >
+                Cart
+              </Link>
             </div>
           </div>
 
-          {/* Kolom 3: Navigasi Perusahaan */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Company</h3>
-            <div className="flex flex-col gap-3 text-sm">
-              <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link>
-              <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link>
-              <Link href="/careers" className="text-muted-foreground hover:text-primary transition-colors">Careers</Link>
+            <h3 className="font-semibold text-foreground mb-4">Support</h3>
+            <div className="space-y-3 text-sm">
+              <Link
+                href="/privacy"
+                className="block text-muted-foreground hover:text-primary transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="block text-muted-foreground hover:text-primary transition-colors"
+              >
+                Terms of Service
+              </Link>
             </div>
           </div>
 
-          {/* Kolom 4: Legal */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
-            <div className="flex flex-col gap-3 text-sm">
-              <Link href="/terms-of-service" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link>
-              <Link href="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link>
+            <h3 className="font-semibold text-foreground mb-4">Contact Info</h3>
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                <span>medionwnumber1@gmail.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4" />
+                <span>+1 (555) 123-4567</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4" />
+                <span>Indonesia</span>
+              </div>
             </div>
           </div>
-
         </div>
 
-        {/* Bagian Bawah Footer: Hak Cipta */}
-        <div className="mt-12 pt-8 border-t text-center text-muted-foreground text-sm">
-          <p>&copy; {new Date().getFullYear()} MediNow. All Rights Reserved.</p>
+        <div className="border-t mt-12 pt-8 text-center text-muted-foreground text-sm">
+          <p>&copy; {new Date().getFullYear()} MediNow. All rights reserved.</p>
         </div>
       </div>
     </footer>

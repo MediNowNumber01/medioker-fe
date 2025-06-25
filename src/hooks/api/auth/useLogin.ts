@@ -19,11 +19,13 @@ const useLogin = () => {
       localStorage.setItem("key", data)
       await signIn("credentials", { ...data, redirect: false });
       const lastPath = localStorage.getItem("lastPath") || "/";
-    //   window.location.href = lastPath;
+      window.location.href = lastPath;
       toast.success("Login Success");
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data.message);
+      console.log("error", error);
+      
     },
   });
 };

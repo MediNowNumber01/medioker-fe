@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,9 +20,8 @@ interface ResetPasswordFormProps {
   token: string;
 }
 
-
 const ResetPasswordForm: FC<ResetPasswordFormProps> = ({ token }) => {
-    const { mutateAsync: resetPassword, isPending } = useResetPassword(token);
+  const { mutateAsync: resetPassword, isPending } = useResetPassword(token);
 
   const formik = useFormik({
     initialValues: {
@@ -45,7 +44,6 @@ const ResetPasswordForm: FC<ResetPasswordFormProps> = ({ token }) => {
       </CardHeader>
       <CardContent>
         <form onSubmit={formik.handleSubmit} className="grid gap-4">
-          {/* New Password */}
           <div className="grid gap-2">
             <Label htmlFor="password">New Password</Label>
             <Input
@@ -64,7 +62,6 @@ const ResetPasswordForm: FC<ResetPasswordFormProps> = ({ token }) => {
             )}
           </div>
 
-          {/* Confirm New Password */}
           <div className="grid gap-2">
             <Label htmlFor="confirmPassword">Confirm New Password</Label>
             <Input
@@ -76,11 +73,12 @@ const ResetPasswordForm: FC<ResetPasswordFormProps> = ({ token }) => {
               onBlur={formik.handleBlur}
               disabled={isPending}
             />
-            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-              <p className="text-xs text-destructive">
-                {formik.errors.confirmPassword}
-              </p>
-            )}
+            {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword && (
+                <p className="text-xs text-destructive">
+                  {formik.errors.confirmPassword}
+                </p>
+              )}
           </div>
 
           <Button type="submit" className="w-full mt-2" disabled={isPending}>
@@ -96,6 +94,6 @@ const ResetPasswordForm: FC<ResetPasswordFormProps> = ({ token }) => {
       </CardContent>
     </Card>
   );
-}
+};
 
 export default ResetPasswordForm;

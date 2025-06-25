@@ -1,6 +1,6 @@
-import { Account } from "./account"; // Assuming you have an Account type defined elsewhere
+import { Account } from "./account"; 
 import { ForumComment } from "./forumComment";
-import { Pharmacy } from "./pharmacy"; // Assuming you have a Pharmacy type defined elsewhere
+import { Pharmacy } from "./pharmacy"; 
 
 export enum AdminRole {
   DOCTOR = "DOCTOR",

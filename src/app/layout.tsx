@@ -9,6 +9,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { SuperAdminSidebar } from "@/components/SuperAdminSidebar";
+import "leaflet/dist/leaflet.css";
+import { LocationProvider } from "@/providers/LocationProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +23,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
- title: "MediNow",
+  title: "MediNow",
   description: "Your Trusted Pharmacy",
-  referrer: "no-referrer", 
+  referrer: "no-referrer",
 };
 
 export default function RootLayout({
@@ -42,13 +44,14 @@ export default function RootLayout({
               <SidebarProvider>
                 <SuperAdminSidebar />
                 <main className="flex flex-col w-screen ">
-                  <Navbar />
-                  <SidebarTrigger />
-                  {children}
-                  <Footer />
+                  <LocationProvider>
+                    {/* <Navbar /> */}
+                    {/* <SidebarTrigger /> */}
+                    {children}
+                  </LocationProvider>
                 </main>
               </SidebarProvider>
-              <Toaster />
+              <Toaster position="top-left" />
             </NextAuthProvider>
           </ReactQueryProvider>
         </NuqsProvider>

@@ -40,56 +40,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/error",
   },
   callbacks: {
-    async signIn({ profile, account, user }) {
-      // if (account?.provider === "google") {
-      //   const response = await axiosInstance.post("/auth/google-login", {
-      //     token: account.access_token,
-      //     tokenId: account.id_token,
-      //   });
-
-      //   user.id = response.data.id;
-      //   user.fullName = response.data.fullName;
-      //   user.profilePict = response.data.profilePict;
-      //   user.role = response.data.role;
-      //   user.email = response.data.email;
-      //   user.isVerified = response.data.isVerified;
-      //   user.accessToken = response.data.accessToken;
-      //   user.provider = response.data.provider;
-      // }
+      async signIn({ profile, account, user }) {
       if (account?.provider === "google") {
         try {
           const response = await axiosInstance.post("/auth/google-login", {
-            token: account.access_token,
+            token: account.access_token, 
+            tokenId: account.id_token,
           });
-
-          // Jika sukses, perkaya objek `user` untuk diteruskan ke `jwt`
-          const backendData = response.data.data;
-          user.id = backendData.id;
-          user.fullName = backendData.fullName;
-          user.email = backendData.email;
-          user.role = backendData.role;
-          user.profilePict = backendData.profilePict;
-          user.isVerified = backendData.isVerified;
-          user.accessToken = backendData.accessToken;
-
-          return true; // Lanjutkan proses login
+          user.id = response.data.id;
+          user.fullName = response.data.fullName;
+          user.profilePict = response.data.profilePict;
+          user.role = response.data.role;
+          user.email = response.data.email;
+          user.isVerified = response.data.isVerified;
+          user.accessToken = response.data.accessToken;
+          user.provider = response.data.provider;
         } catch (error) {
           const axiosError = error as AxiosError<{ message: string }>;
 
           if (
-            axiosError.response?.status === 400 ||
-            axiosError.response?.status === 409
+            axiosError.response?.status === 409 ||
+            axiosError.response?.status === 404 ||
+            axiosError.response?.status === 401
           ) {
             const errorMessage =
-              axiosError.response?.data?.message ||
-              "Please log in using your credentials.";
-
+              axiosError.response.data.message ||
+              "Please use your credentials to log in.";
             const redirectUrl = `/login?error=${encodeURIComponent(
               errorMessage
             )}`;
-            return redirectUrl; 
+            return redirectUrl;
           }
-          return "/error?error=OAuthAccountNotLinked";
+
+          return "/login?error=OAuthSigninFailed";
         }
       }
       return true;
