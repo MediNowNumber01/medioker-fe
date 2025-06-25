@@ -1,14 +1,13 @@
 import AdminAccountsPage from "@/features/superadmin/account/admin/AdminPage";
 import SuperAdminAuthGuard from "@/hoc/SuperAdminAuthGuard";
-import UserGuestAuthGuard from "@/hoc/UserGuestAuthGuard";
 import React from "react";
 
-const page = () => {
+const admins = () => {
   return (
-    <div>
+    <div className="p-8">
       <AdminAccountsPage />
     </div>
   );
 };
 
-export default SuperAdminAuthGuard(page);
+export default SuperAdminAuthGuard(admins);
