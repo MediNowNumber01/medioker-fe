@@ -50,7 +50,7 @@ const useUpdateProfile = () => {
         });
         setTimeout(() => signOut({ callbackUrl: "/login" }), 2000);
       } else {
-        toast.success("Profile updated successfully!");
+        toast.success("Profile updated successfully, please relogin to see the changes.");
         await queryClient.invalidateQueries({ queryKey: ["get-account"] });
         await updateSession(data);
 

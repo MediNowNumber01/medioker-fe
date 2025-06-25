@@ -13,6 +13,10 @@ export default function UserGuestAuthGuard(Component: any) {
         return redirect("/superadmin");
       }
     }
+
+    if (!session) {
+      return redirect("/login");
+    }
     return <Component {...props} />;
   };
 }

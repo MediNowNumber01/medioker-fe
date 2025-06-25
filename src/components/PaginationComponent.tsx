@@ -58,7 +58,7 @@ const PaginationComponent: FC<PaginationProps> = ({
           Array.from(
             {
               length:
-                paginationMeta.totalPages === 0 ? 1 : paginationMeta.totalPages,
+                paginationMeta.totalPages === 0 ? 1 : paginationMeta.totalPages!,
             },
             (_, i) => i + 1
           ).map((page) => {

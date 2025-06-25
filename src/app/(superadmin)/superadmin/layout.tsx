@@ -1,7 +1,9 @@
 import { SuperAdminSidebar } from "@/components/SuperAdminSidebar";
 import { SuperAdminHeader } from "@/components/SuperAdminSidebarHeader";
+import AxiosInterceptor from "@/hooks/axiosInterceptors";
 import { auth } from "@/lib/auth";
 import NuqsProvider from "@/providers/NuqsProvider";
+import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
 import type React from "react";
 
@@ -16,9 +18,14 @@ export default async function SuperadminLayout({
 
   return (
     <div className="flex flex-1 flex-col">
-      <SuperAdminHeader />
-      <SuperAdminSidebar />
-      <NuqsProvider>{children}</NuqsProvider>
+      <SessionProvider>
+        <SuperAdminHeader />
+        <SuperAdminSidebar />
+        <NuqsProvider>
+          <AxiosInterceptor />
+          {children}
+        </NuqsProvider>
+      </SessionProvider>
     </div>
   );
 }
