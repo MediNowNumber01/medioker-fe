@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useUpdateProfile from "@/hooks/api/profile/useUpdateProfile";
-import { generateInitials } from "@/lib/generateInitials"; // Pastikan path ini benar
+import { generateInitials } from "@/lib/generateInitials"; 
 import { useFormik } from "formik";
 import { Trash2, LoaderCircle } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -33,13 +33,11 @@ interface EditProfileFormProps {
 }
 
 export function EditProfileForm({ user, isLoading }: EditProfileFormProps) {
-  // Hanya gunakan `update` dari useSession untuk me-refresh data
   const { update: updateSession } = useSession();
   const { mutateAsync: updateProfile, isPending } = useUpdateProfile();
   const { mutate: deletePicture, isPending: isDeleting } = useDeletePic();
   const router = useRouter();
 
-  // State untuk preview gambar
   const [preview, setPreview] = useState<string | null>(null);
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -112,7 +110,6 @@ export function EditProfileForm({ user, isLoading }: EditProfileFormProps) {
     }
   };
 
-  // Fungsi untuk MENGHAPUS GAMBAR DARI SERVER
   const handleDeleteExistingPicture = () => {
     deletePicture(undefined, {
       onSuccess: async () => {
@@ -122,10 +119,8 @@ export function EditProfileForm({ user, isLoading }: EditProfileFormProps) {
     });
   };
 
-  // Fungsi untuk MENGHAPUS PREVIEW gambar yang BARU dipilih
   const handleRemovePreview = () => {
     formik.setFieldValue("profilePict", null);
-    // Kembalikan preview ke gambar asli dari server (jika ada)
     setPreview(user?.profilePict || null);
     if (imageRef.current) {
       imageRef.current.value = "";
@@ -136,12 +131,10 @@ export function EditProfileForm({ user, isLoading }: EditProfileFormProps) {
 
   const removeNewImagePreview = () => {
     formik.setFieldValue("profilePict", null);
-    // Kembalikan preview ke gambar asli dari user
     setPreview(user?.profilePict || null);
     if (imageRef.current) imageRef.current.value = "";
   };
 
-  // Tampilkan loading skeleton jika data user dari parent belum siap
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -181,9 +174,7 @@ export function EditProfileForm({ user, isLoading }: EditProfileFormProps) {
             )}
           </div>
 
-          {/* Tombol hapus hanya muncul jika ada gambar (baik lama maupun preview baru) */}
           {preview &&
-            // Jika ini adalah preview gambar baru, tombol hapus hanya akan menghapus preview
             (isNewImagePreview ? (
               <Button
                 size="icon"
@@ -195,7 +186,6 @@ export function EditProfileForm({ user, isLoading }: EditProfileFormProps) {
                 <Trash2 className="h-4 w-4" />
               </Button>
             ) : (
-              // Jika ini gambar lama dari server, tombol hapus akan memicu modal konfirmasi
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button

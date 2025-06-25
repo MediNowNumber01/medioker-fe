@@ -1,5 +1,8 @@
 import EditProfilePage from "@/features/profile/edit/EditProfilePage";
+import UserGuestAuthGuard from "@/hoc/UserGuestAuthGuard";
 
-export default function Page() {
+function editProfile() {
   return <EditProfilePage />;
 }
+
+export default UserGuestAuthGuard(editProfile);

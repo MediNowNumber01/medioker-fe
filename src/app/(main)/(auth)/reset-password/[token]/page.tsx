@@ -1,31 +1,36 @@
+"use client"; // 1. Jadikan ini Client Component
+
+import { redirect, useParams } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
+
 import ResetPasswordPage from "@/features/auth/reset-password/ResetPasswordPage";
-import { axiosInstance } from "@/lib/axios";
-import { redirect } from "next/navigation";
+import useVerifyResetToken from "@/hooks/api/auth/useVerifyTokenIsValid";
 
-async function verifyTokenIsValid(token: string): Promise<boolean> {
-  try {
-    await axiosInstance.get(`/auth/verify-reset-token/${token}`);
-    return true; 
-  } catch (error) {
-    console.error("Token verification failed:", error);
-    return false;
-  }
-}
+export default function ResetPasswordTokenRoute() {
+  const params = useParams();
+  const token = params.token as string;
 
-export default async function ResetPasswordTokenRoute({
-  params,
-}: {
-  params: { token: string };
-}) {
-  const { token } = params;
+  const { isLoading, isError, error } = useVerifyResetToken(token);
 
-  const isTokenValid = await verifyTokenIsValid(token);
+  useEffect(() => {
+    if (isError) {
+      const axiosError = error as any;
+      const errorMessage =
+        axiosError.response?.data?.message ||
+        "Your password reset link is invalid or has expired.";
+      
+      toast.error(errorMessage);
+      redirect(`/login`);
+    }
+  }, [isError, error]);
 
-  if (!isTokenValid) {
-    const errorMessage = encodeURIComponent(
-      "Your password reset link is invalid or has expired."
+  if (isLoading) {
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
     );
-    redirect(`/login?error=${errorMessage}`);
   }
 
   return <ResetPasswordPage token={token} />;

@@ -44,11 +44,7 @@ export default function RootLayout({
               <SidebarProvider>
                 <SuperAdminSidebar />
                 <main className="flex flex-col w-screen ">
-                  <LocationProvider>
-                    {/* <Navbar /> */}
-                    {/* <SidebarTrigger /> */}
-                    {children}
-                  </LocationProvider>
+                  <LocationProvider>{children}</LocationProvider>
                 </main>
               </SidebarProvider>
               <Toaster position="top-left" />

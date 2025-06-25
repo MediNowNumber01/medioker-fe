@@ -1,5 +1,8 @@
 import ProfilePage from "@/features/profile/ProfilePage";
+import UserGuestAuthGuard from "@/hoc/UserGuestAuthGuard";
 
-export default function Page() {
+function profilePage() {
   return <ProfilePage />;
 }
+
+export default UserGuestAuthGuard(profilePage);
