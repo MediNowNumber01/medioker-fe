@@ -1,8 +1,5 @@
-import { Account } from "./account"; // Assuming 'Account' type is in './account'
-// import { UserAddresses } from "./userAddresses"; // Assuming 'UserAddresses' type is in './userAddresses'
-// import { Forum } from "./forum"; // Assuming 'Forum' type is in './forum'
+import { Account } from "./account"; 
 import { UserAddress } from "./userAddress";
-// import { Cart } from "./cart"; // Assuming 'Cart' type is in './cart'
 
 export enum Role {
   USER = "USER",
@@ -18,8 +15,4 @@ export interface User {
   accountId: string;
   account: Account;
   user_addresses: UserAddress[];
-  
-//   Forum: Forum[];
-//   Order?: Order | null;
-//   Cart: Cart[];
 }

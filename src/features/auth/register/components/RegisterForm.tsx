@@ -32,12 +32,8 @@ export function RegisterForm() {
       profilePict: null as File | null,
     },
     validationSchema: RegisterSchema,
-    // === BAGIAN YANG DIPERBAIKI ===
     onSubmit: async (values) => {
-      // Hapus `confirmPassword` dari object sebelum dikirim ke hook
       const { confirmPassword, ...registerData } = values;
-      
-      // Kirim data yang sudah bersih
       await register(registerData);
     },
   });
@@ -68,7 +64,6 @@ export function RegisterForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={formik.handleSubmit} className="grid gap-4">
-          
           <div className="grid gap-2 items-center justify-center text-center">
             <Label htmlFor="profilePict">Profile Picture (Optional)</Label>
             {preview ? (
@@ -90,7 +85,10 @@ export function RegisterForm() {
                 </Button>
               </div>
             ) : (
-              <Label htmlFor="profilePict" className="mx-auto h-24 w-24 cursor-pointer rounded-full bg-muted border-2 border-dashed flex items-center justify-center">
+              <Label
+                htmlFor="profilePict"
+                className="mx-auto h-24 w-24 cursor-pointer rounded-full bg-muted border-2 border-dashed flex items-center justify-center"
+              >
                 <User className="h-8 w-8 text-gray-400" />
               </Label>
             )}
@@ -105,32 +103,82 @@ export function RegisterForm() {
               onBlur={formik.handleBlur}
             />
             {formik.touched.profilePict && formik.errors.profilePict && (
-              <p className="text-xs text-destructive">{formik.errors.profilePict as string}</p>
+              <p className="text-xs text-destructive">
+                {formik.errors.profilePict as string}
+              </p>
             )}
           </div>
-          
+
           <div className="grid gap-2">
             <Label htmlFor="fullName">Full Name</Label>
-            <Input id="fullName" name="fullName" placeholder="John Doe" value={formik.values.fullName} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={isPending} />
-            {formik.touched.fullName && formik.errors.fullName && <p className="text-xs text-destructive">{formik.errors.fullName}</p>}
+            <Input
+              id="fullName"
+              name="fullName"
+              placeholder="John Doe"
+              value={formik.values.fullName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              disabled={isPending}
+            />
+            {formik.touched.fullName && formik.errors.fullName && (
+              <p className="text-xs text-destructive">
+                {formik.errors.fullName}
+              </p>
+            )}
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" placeholder="m@example.com" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={isPending} />
-            {formik.touched.email && formik.errors.email && <p className="text-xs text-destructive">{formik.errors.email}</p>}
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="m@example.com"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              disabled={isPending}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <p className="text-xs text-destructive">{formik.errors.email}</p>
+            )}
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" type="password" value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={isPending} />
-            {formik.touched.password && formik.errors.password && <p className="text-xs text-destructive">{formik.errors.password}</p>}
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              disabled={isPending}
+            />
+            {formik.touched.password && formik.errors.password && (
+              <p className="text-xs text-destructive">
+                {formik.errors.password}
+              </p>
+            )}
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input id="confirmPassword" name="confirmPassword" type="password" value={formik.values.confirmPassword} onChange={formik.handleChange} onBlur={formik.handleBlur} disabled={isPending} />
-            {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="text-xs text-destructive">{formik.errors.confirmPassword}</p>}
+            <Input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              disabled={isPending}
+            />
+            {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword && (
+                <p className="text-xs text-destructive">
+                  {formik.errors.confirmPassword}
+                </p>
+              )}
           </div>
 
           <Button type="submit" className="w-full mt-2" disabled={isPending}>
@@ -138,7 +186,10 @@ export function RegisterForm() {
           </Button>
 
           <div className="mt-4 text-center text-sm">
-            Already have an account? <Link href="/login" className="underline underline-offset-4">Login</Link>
+            Already have an account?{" "}
+            <Link href="/login" className="underline underline-offset-4">
+              Login
+            </Link>
           </div>
         </form>
       </CardContent>

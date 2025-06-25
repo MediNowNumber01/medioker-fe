@@ -88,7 +88,6 @@ export default function Navbar() {
                       >
                         
                         {session.user.profilePict && (
-                          // <Image src={session.user.profilePict} width={100} height={100} alt="test"/>
                           <Avatar className="h-9 w-9">
                             <AvatarImage
                               src={session.user.profilePict}
@@ -247,6 +246,14 @@ export default function Navbar() {
                   >
                     <ShoppingCartIcon className="h-6 w-6" />
                     <span>Cart</span>
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <UserIcon className="h-6 w-6" />
+                    <span>Profile</span>
                   </Link>
                   <div className="pt-4 border-t border-border mt-4">
                     <button

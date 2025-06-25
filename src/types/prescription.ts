@@ -1,4 +1,4 @@
-import { Order } from "./order"; // Assuming 'Order' type is in './order'
+import { Order } from "./order"; 
 
 export interface Prescription {
   id: string;

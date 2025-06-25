@@ -11,8 +11,7 @@ const useGetUserAddresses = () => {
     queryKey: ["userAddresses"],
     queryFn: async () => {
       
-      const response = await axiosInstance.get("/prescriptions/addresses");
-      console.log("adres", response.data);
+      const response = await axiosInstance.get("/addresses");
 
       return response.data;
     },

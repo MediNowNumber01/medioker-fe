@@ -1,9 +1,3 @@
-// import { User } from "./user"; // Assuming 'User' type is in './user'
-import { Pharmacy } from "./pharmacy"; // Assuming 'Pharmacy' type is in './pharmacy'
-// import { Prescription } from "./prescription"; // Assuming 'Prescription' type is in './prescription'
-// import { OrderActivity } from "./orderActivity"; // Assuming 'OrderActivity' type is in './orderActivity'
-// import { Delivery } from "./delivery"; // Assuming 'Delivery' type is in './delivery'
-// import { OrderStock } from "./orderStock"; // Assuming 'OrderStock' type is in './orderStock'
 
 export enum Status {
   WAITING_FOR_PAYMENT = "WAITING_FOR_PAYMENT",
@@ -40,11 +34,5 @@ export interface Order {
   createAt: Date;
   deletedAt?: Date | null;
   userId: string;
-//   user: User;
-//   pharmacyId: string;
-//   pharmacy: Pharmacy;
-//   Prescription: Prescription[];
-//   OrderActivity: OrderActivity[];
-//   Delivery?: Delivery | null;
-//   OrderStock: OrderStock[];
+
 }
