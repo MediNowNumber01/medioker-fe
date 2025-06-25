@@ -10,7 +10,7 @@ interface RegisterPayload {
   fullName: string;
   email: string;
   password: string;
-  profilePict?: File | null; 
+  profilePict?: File | null;
 }
 
 const useRegister = () => {
@@ -28,10 +28,7 @@ const useRegister = () => {
         registerForm.append("profilePict", payload.profilePict);
       }
 
-      const { data } = await axiosInstance.post(
-        "/auth/register",
-        registerForm
-      );
+      const { data } = await axiosInstance.post("/auth/register", registerForm);
 
       return data;
     },
@@ -44,7 +41,9 @@ const useRegister = () => {
       }, 1500);
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message || "An unexpected error occurred.");
+      toast.error(
+        error.response?.data.message || "An unexpected error occurred."
+      );
     },
   });
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import useAxios from "@/hooks/useAxios";
-import { Pharmacy } from "@/types/pharmacy"; 
+import { Pharmacy } from "@/types/pharmacy";
 import { useQuery } from "@tanstack/react-query";
 
 interface GetPharmaciesParams {
@@ -14,7 +14,7 @@ export type PharmacyWithDistance = Pharmacy & { distance: number };
 const useGetPrescriptionPharmacies = ({ lat, lng }: GetPharmaciesParams) => {
   const { axiosInstance } = useAxios();
   return useQuery({
-    enabled: !!lat && !!lng, 
+    enabled: !!lat && !!lng,
     queryKey: ["pharmacies", lat, lng],
     queryFn: async () => {
       const url =
@@ -23,8 +23,8 @@ const useGetPrescriptionPharmacies = ({ lat, lng }: GetPharmaciesParams) => {
           : "/prescriptions/pharmacies";
 
       const response = await axiosInstance.get(url);
-      console.log("pharm", response.data.data);
-
+      console.log(response.data.data);
+      
       return response.data.data;
     },
   });

@@ -1,4 +1,4 @@
-"use client"; // 1. Jadikan ini Client Component
+"use client";
 
 import { redirect, useParams } from "next/navigation";
 import { useEffect } from "react";
