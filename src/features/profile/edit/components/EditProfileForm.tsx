@@ -1,20 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import useUpdateProfile from "@/hooks/api/profile/useUpdateProfile";
-import { generateInitials } from "@/lib/generateInitials"; 
-import { useFormik } from "formik";
-import { Trash2, LoaderCircle } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-import { ChangeEvent, useRef, useState, useEffect } from "react";
-import { toast } from "sonner";
-import { EditProfileSchema } from "../schemas";
-import { useRouter } from "next/navigation";
-import { Account } from "@/types/account";
-import useDeletePic from "@/hooks/api/profile/useDeletePic";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,6 +11,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import useDeletePic from "@/hooks/api/profile/useDeletePic";
+import useUpdateProfile from "@/hooks/api/profile/useUpdateProfile";
+import { generateInitials } from "@/lib/generateInitials";
+import { Account } from "@/types/account";
+import { useFormik } from "formik";
+import { LoaderCircle, Trash2 } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { EditProfileSchema } from "../schemas";
 
 interface EditProfileFormProps {
   user: Account | undefined;

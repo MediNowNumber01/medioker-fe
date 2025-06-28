@@ -12,22 +12,25 @@ const useLogin = () => {
   return useMutation({
     mutationFn: async (payload: Pick<Account, "email" | "password">) => {
       const { data } = await axiosInstance.post("/auth/login", payload);
-
       return data;
     },
     onSuccess: async (data) => {
-      localStorage.setItem("key", data)
-      await signIn("credentials", { ...data, redirect: false });
-      const lastPath = localStorage.getItem("lastPath") || "/";
-      window.location.href = lastPath;
+      const callbackUrl = localStorage.getItem("lastPath") || "/"; 
+      
+      await signIn("credentials", {
+        ...data,
+        callbackUrl,
+        redirect: true,
+      });
+
       toast.success("Login Success");
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data.message);
       console.log("error", error);
-      
     },
   });
 };
+
 
 export default useLogin;

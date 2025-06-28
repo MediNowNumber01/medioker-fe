@@ -1,15 +1,4 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
-import {
-  UserIcon,
-  ShoppingCartIcon,
-  ArrowRightOnRectangleIcon,
-  ArrowLeftOnRectangleIcon,
-} from "@heroicons/react/24/outline";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,11 +7,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { generateInitials } from "@/lib/generateInitials";
+import { cn } from "@/lib/utils";
+import {
+  ArrowLeftOnRectangleIcon,
+  ShoppingCartIcon,
+  UserIcon
+} from "@heroicons/react/24/outline";
+import { Menu, X } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
 
 export default function Navbar() {
   const router = useRouter();
@@ -70,6 +69,9 @@ export default function Navbar() {
                 <>
                   <Link href="/medicines">
                     <Button variant="ghost">Get Medicines</Button>
+                  </Link>
+                  <Link href="/prescription">
+                    <Button variant="ghost">Upload Prescription</Button>
                   </Link>
                   <Link href="/forum">
                     <Button variant="ghost">Forum</Button>
@@ -227,6 +229,19 @@ export default function Navbar() {
                     <span>Get Medicines</span>
                   </Link>
                   <Link
+                    href="/prescription"
+                    className="flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Image
+                      src={"/prescription.svg"}
+                      alt="prescription"
+                      width={24}
+                      height={24}
+                    />
+                    <span>Upload Prescription</span>
+                  </Link>
+                  <Link
                     href="/forum"
                     className="flex items-center gap-3"
                     onClick={() => setMobileMenuOpen(false)}
@@ -244,7 +259,7 @@ export default function Navbar() {
                     className="flex items-center gap-3"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <ShoppingCartIcon className="h-6 w-6" />
+                    <ShoppingCartIcon className="h-6 w-6 text-[#0083D9]" />
                     <span>Cart</span>
                   </Link>
                   <Link
@@ -252,7 +267,12 @@ export default function Navbar() {
                     className="flex items-center gap-3"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <UserIcon className="h-6 w-6" />
+                    <Image
+                      src={"/user.svg"}
+                      alt="forum"
+                      width={24}
+                      height={24}
+                    />
                     <span>Profile</span>
                   </Link>
                   <div className="pt-4 border-t border-border mt-4">

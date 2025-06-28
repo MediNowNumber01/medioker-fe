@@ -48,6 +48,7 @@ export function LoginForm({
     },
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
+      localStorage.setItem("lastPath", redirectUrl);
       await login(values);
     },
   });

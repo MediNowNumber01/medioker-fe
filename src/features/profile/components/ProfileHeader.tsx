@@ -107,9 +107,9 @@ export function ProfileHeader({ user, isLoading }: ProfileHeaderProps) {
       
       <div className="flex items-center gap-4 mb-2">
         <Link href="/">
-          <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" size="sm" className="gap-2 text-black hover:text-foreground">
             <ArrowLeft className="h-4 w-4" />
-            <span className="hidden md:inline">Back to Home</span>
+            <span className="hidden md:inline ">Back to Home</span>
             <span className="md:hidden">Back</span>
           </Button>
         </Link>

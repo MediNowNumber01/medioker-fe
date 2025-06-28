@@ -23,9 +23,11 @@ import type { UserAddress } from "@/types/userAddress"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AddressSelectionModal } from "./AddressSelectionModal"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useSession } from "next-auth/react"
 
 export function UploadPrescriptionForm() {
   useAxios()
+  const {data: session} = useSession()
   const { mutateAsync: createPrescription, isPending } = useCreatePrescription()
   const imageRef = useRef<HTMLInputElement>(null)
   const [previews, setPreviews] = useState<string[]>([])
@@ -45,6 +47,7 @@ export function UploadPrescriptionForm() {
 
   const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpg", "image/gif", "image/heic"]
 
+  const isVerified = session?.user?.isVerified
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(

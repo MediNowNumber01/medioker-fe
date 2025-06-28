@@ -1,4 +1,6 @@
-import { User } from "./user"; 
+import { Stock } from "./stock";
+import { UnitProduct } from "./unitProduct";
+import { User } from "./user";
 
 export interface Cart {
   id: string;
@@ -7,5 +9,8 @@ export interface Cart {
   quantity: number;
   userId: string;
   user: User;
-
+  stockId: string;
+  stock: Stock;
+  unitId: string;
+  unit: UnitProduct;
 }

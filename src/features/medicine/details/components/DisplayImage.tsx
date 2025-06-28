@@ -1,56 +1,60 @@
 "use client";
 
-import { ProductImage } from "@/types/semuaNgerapiinyaNtar";
+import { useState } from "react";
 import Image from "next/image";
-import { useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
-
-const dummyImage: string[] = [
-  "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-  "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
-  "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
-  "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
-];
+import { Card, CardContent } from "@/components/ui/card";
+import { ProductImage } from "@/types/productImage";
 
 interface DisplayImageProps {
-  productImage?: ProductImage[];
+  images: ProductImage[];
+  productName: string;
 }
-const DisplayImage = () => {
-  const [productImage, setProductImage] = useState<string>(dummyImage[0]);
+
+export default function DisplayImage({ images, productName }: DisplayImageProps) {
+  const [mainImage, setMainImage] = useState(
+    images.find((img) => img.isThumbnail)?.imageUrl || images[0]?.imageUrl || "/placeholder.svg"
+  );
+
+  if (!images || images.length === 0) {
+    return (
+      <div className="aspect-square w-full bg-muted rounded-lg flex items-center justify-center">
+        <p className="text-muted-foreground">No Image</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
-      <div className="relative bg-white rounded-lg border p-8">
+      <div className="relative aspect-square w-full overflow-hidden rounded-lg border">
         <Image
-          src={productImage || "/placeholder.svg"}
-          alt={"product.name"}
-          width={400}
-          height={400}
-          className="w-full h-auto object-contain"
+          priority
+          src={mainImage}
+          alt={`Main image of ${productName}`}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-contain"
         />
       </div>
-
-      {/* Selector */}
-      <div className={`flex gap-2`}>
-        {dummyImage.map((image, i) => (
-          <div
-            key={i}
-            className="aspect-square grow bg-card rounded border p-2"
-          >
-            <Image
-              src={image}
-              onClick={() => setProductImage(image)}
-              alt={`Product view ${i}`}
-              width={80}
-              height={80}
-              className="w-full h-full object-contain"
-            />
-          </div>
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div className="grid grid-cols-5 gap-2">
+          {images.map((image) => (
+            <button
+              key={image.id}
+              className={`relative aspect-square w-full rounded-md overflow-hidden border-2 transition-all ${
+                mainImage === image.imageUrl ? "border-primary" : "border-transparent"
+              }`}
+              onClick={() => setMainImage(image.imageUrl)}
+            >
+              <Image
+                src={image.imageUrl}
+                alt={`Thumbnail of ${productName}`}
+                fill
+                className="object-contain"
+              />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
-};
-
-export default DisplayImage;
+}

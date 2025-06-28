@@ -5,4 +5,4 @@ const Explore = () => {
   return <ExplorePage />;
 };
 
-export default UserGuestAuthGuard(Explore);
+export default (Explore);

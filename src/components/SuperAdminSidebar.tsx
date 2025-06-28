@@ -1,5 +1,15 @@
-"use client"
-import { ChevronDown, Home, Package, Pill, Store, User, UserCheck, Users, LogOut } from "lucide-react"
+"use client";
+import {
+  ChevronDown,
+  Home,
+  Package,
+  Pill,
+  Store,
+  User,
+  UserCheck,
+  Users,
+  LogOut,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -14,24 +24,19 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { useSession, signOut } from "next-auth/react"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
-
-function getInitials(name?: string | null): string {
-  if (!name) return "SA"
-  return name
-    .split(" ")
-    .map((word) => word.charAt(0))
-    .join("")
-    .toUpperCase()
-    .slice(0, 2)
-}
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
+import { generateInitials } from "@/lib/generateInitials";
 
 // Menu items
 const items = [
@@ -89,25 +94,25 @@ const items = [
     url: "/superadmin/stocks",
     icon: Package,
   },
-]
+];
 
 export function SuperAdminSidebar() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const { data: session, status } = useSession()
+  const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
   // Don't render if loading or not authorized
-  if (status === "loading") return null
-  if (!session || session.user?.role !== "SUPER_ADMIN") return null
+  if (status === "loading") return null;
+  if (!session || session.user?.role !== "SUPER_ADMIN") return null;
 
   const handleSignOut = async () => {
     try {
-      await signOut({ redirect: false })
-      router.push("/login")
+      await signOut({ redirect: false });
+      router.push("/login");
     } catch (error) {
-      console.error("Sign out error:", error)
+      console.error("Sign out error:", error);
     }
-  }
+  };
 
   return (
     <Sidebar className="border-r">
@@ -120,8 +125,12 @@ export function SuperAdminSidebar() {
             <SidebarMenu className="space-y-1">
               {items.map((item) => {
                 if (item.type === "group") {
-                  const isActive = item.subItem?.some((subItem) => pathname === subItem.url)
-                  const isParentActive = pathname.includes(`/superadmin/${item.title.toLowerCase().replace(" ", "")}`)
+                  const isActive = item.subItem?.some(
+                    (subItem) => pathname === subItem.url
+                  );
+                  const isParentActive = pathname.includes(
+                    `/superadmin/${item.title.toLowerCase().replace(" ", "")}`
+                  );
 
                   return (
                     <Collapsible
@@ -134,7 +143,8 @@ export function SuperAdminSidebar() {
                           <SidebarMenuButton
                             className={cn(
                               "w-full justify-between hover:bg-accent hover:text-accent-foreground",
-                              (isActive || isParentActive) && "bg-accent text-accent-foreground",
+                              (isActive || isParentActive) &&
+                                "bg-accent text-accent-foreground"
                             )}
                           >
                             <div className="flex items-center gap-3">
@@ -154,7 +164,9 @@ export function SuperAdminSidebar() {
                                   className="w-full justify-start"
                                 >
                                   <Link href={subItem.url}>
-                                    {subItem.icon && <subItem.icon className="h-4 w-4" />}
+                                    {subItem.icon && (
+                                      <subItem.icon className="h-4 w-4" />
+                                    )}
                                     <span>{subItem.title}</span>
                                   </Link>
                                 </SidebarMenuSubButton>
@@ -164,18 +176,22 @@ export function SuperAdminSidebar() {
                         </CollapsibleContent>
                       </SidebarMenuItem>
                     </Collapsible>
-                  )
+                  );
                 } else {
                   return (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={pathname === item.url} className="w-full justify-start">
+                      <SidebarMenuButton
+                        asChild
+                        isActive={pathname === item.url}
+                        className="w-full justify-start"
+                      >
                         <Link href={item.url}>
                           <item.icon className="h-4 w-4" />
                           <span>{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
-                  )
+                  );
                 }
               })}
             </SidebarMenu>
@@ -187,12 +203,21 @@ export function SuperAdminSidebar() {
         {/* User Profile Section */}
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={session.user?.profilePict || undefined} alt={session.user?.fullName || "Super Admin"} />
-            <AvatarFallback className="text-xs">{getInitials(session.user?.fullName)}</AvatarFallback>
+            <AvatarImage
+              src={session.user?.profilePict || undefined}
+              alt={session.user?.fullName || "Super Admin"}
+            />
+            <AvatarFallback className="text-xs">
+              {generateInitials(session.user?.fullName)}
+            </AvatarFallback>
           </Avatar>
           <div className="flex flex-col min-w-0 flex-1">
-            <span className="text-sm font-medium truncate">{session.user?.fullName || "Super Admin"}</span>
-            <span className="text-xs text-muted-foreground truncate">{session.user?.email || "admin@medinow.com"}</span>
+            <span className="text-sm font-medium truncate">
+              {session.user?.fullName || "Super Admin"}
+            </span>
+            <span className="text-xs text-muted-foreground truncate">
+              {session.user?.email || "admin@medinow.com"}
+            </span>
           </div>
         </div>
 
@@ -208,5 +233,5 @@ export function SuperAdminSidebar() {
         </Button>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

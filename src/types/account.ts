@@ -17,3 +17,9 @@ export enum Role {
   ADMIN = "ADMIN",
   SUPER_ADMIN = "SUPER_ADMIN",
 }
+
+export enum AdminRole{
+  DOCTOR = "DOCTOR",
+  PHARMACIST = "PHARMACIST",
+  CASHIER = "CASHIER",
+}

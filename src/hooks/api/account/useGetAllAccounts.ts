@@ -13,11 +13,11 @@ interface GetAccountsQueries extends PaginationQueries {
 const useGetAllAccounts = (queries: GetAccountsQueries) => {
   const { axiosInstance } = useAxios();
 
-  return useQuery<PageableResponse<Account>>({
+  return useQuery({
     queryKey: ["get-all-accounts", queries],
 
     queryFn: async () => {
-      const { data } = await axiosInstance.get("/accounts", {
+      const { data } = await axiosInstance.get<PageableResponse<Account>>("/accounts", {
         params: queries,
       });
       return data;

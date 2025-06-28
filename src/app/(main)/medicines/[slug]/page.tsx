@@ -10,4 +10,4 @@ const ProductDetails = async ({
   return <ProductDetailsPage slug={slug} />;
 };
 
-export default UserGuestAuthGuard(ProductDetails);
+export default (ProductDetails);

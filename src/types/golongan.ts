@@ -1,0 +1,5 @@
+export enum Golongan {
+  OBAT_TERBATAS = "OBAT_TERBATAS",
+  OBAT_KERAS = "OBAT_KERAS",
+  OBAT_BEBAS = "OBAT_BEBAS",
+}

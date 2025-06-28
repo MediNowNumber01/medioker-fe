@@ -46,8 +46,10 @@ const useCreatePrescription = () => {
     },
     onError: (error: AxiosError<{ message: string }>) => {
       const errorMessage =
-        error.response?.data?.message || "An unexpected error occurred.";
-      console.error("Error creating prescription:", error.response?.data);
+        error.response?.data?.message ||
+        error.message ||
+        "An unexpected error occurred.";
+
       toast.error(errorMessage);
     },
   });

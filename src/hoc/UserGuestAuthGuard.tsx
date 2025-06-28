@@ -14,9 +14,12 @@ export default function UserGuestAuthGuard(Component: any) {
       }
     }
 
-    if (!session) {
-      return redirect("/login");
+    if(!session) {
+      return redirect("/");
     }
+
+    
+
     return <Component {...props} />;
   };
 }

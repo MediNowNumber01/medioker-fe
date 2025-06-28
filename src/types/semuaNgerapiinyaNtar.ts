@@ -1,5 +1,9 @@
 // Enums
 
+import { Account } from "./account";
+import { ProductImage } from "./productImage";
+import { UnitProduct } from "./unitProduct";
+
 export enum Role {
   USER = "USER",
   ADMIN = "ADMIN",
@@ -51,7 +55,7 @@ export enum OrderType {
 
 // Interfaces
 
-export interface Account {
+export interface Accountz {
   id: string;
   fullName: string;
   email: string;
@@ -59,6 +63,7 @@ export interface Account {
   role: Role;
   profilePict?: string | null;
   isVerified: boolean;
+  provider?: string | null;
   deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -72,8 +77,8 @@ export interface User {
   deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  accountId: string;
-  account: Account;
+  zId: string;
+  z: Accountz;
   user_addresses: UserAddresses[];
   Forum: Forum[];
   Order?: Order | null;
@@ -210,29 +215,9 @@ export interface Category {
   };
 }
 
-export interface ProductImage {
-  id: string;
-  imageUrl: string;
-  isThumbnail: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  productId: string;
-  product: Product;
-}
 
-export interface UnitProduct {
-  id: string;
-  name: string;
-  isMain: boolean;
-  weight: number;
-  price: number;
-  ratioToMain: number;
-  createdAt: Date;
-  updatedAt: Date;
-  Product: Product;
-  productId: string;
-  Cart: Cart[];
-}
+
+
 
 export interface ProductCategory {
   id: string;

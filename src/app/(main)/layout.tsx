@@ -1,5 +1,8 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import NextAuthProvider from "@/providers/NextAuthProvider";
+import NuqsProvider from "@/providers/NuqsProvider";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 export default function MainLayout({
   children,
@@ -8,9 +11,15 @@ export default function MainLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <main className="flex-grow">{children}</main>
-      <Footer />
+      <NuqsProvider>
+        <ReactQueryProvider>
+          <NextAuthProvider>
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </NextAuthProvider>
+        </ReactQueryProvider>
+      </NuqsProvider>
     </div>
   );
 }

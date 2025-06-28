@@ -18,12 +18,12 @@ interface GetAdminQuery extends PaginationQueries {
 const useGetAdmins = (queries: GetAdminQuery) => {
   const { axiosInstance } = useAxios();
   return useQuery({
-    queryKey: ["admin", queries],
+    queryKey: ["admins", queries],
     queryFn: async () => {
       const { data } = await axiosInstance.get<PageableResponse<Admin>>(
         "/admins",
         { params: queries }
-      );
+      );      
       return data;
     },
   });
