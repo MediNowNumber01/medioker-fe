@@ -47,7 +47,7 @@ export default function RootLayout({
                   <LocationProvider>{children}</LocationProvider>
                 </main>
               </SidebarProvider>
-              <Toaster position="top-left" />
+              <Toaster position="top-center" />
             </NextAuthProvider>
           </ReactQueryProvider>
         </NuqsProvider>

@@ -1,4 +1,8 @@
-import { Pharmacy } from "./pharmacy"; // Assuming 'Pharmacy' type is in './pharmacy'
+import { Cart } from "./cart";
+import { OrderStock } from "./orderStock";
+import { Pharmacy } from "./pharmacy";
+import { Product } from "./product";
+import { StockHistory } from "./semuaNgerapiinyaNtar";
 
 export interface Stock {
   id: string;
@@ -7,6 +11,10 @@ export interface Stock {
   updatedAt: Date;
   deletedAt?: Date | null;
   productId: string;
+  product: Product;
   pharmacyId: string;
   pharmacy: Pharmacy;
+  StockHistory: StockHistory[];
+  Cart: Cart[];
+  OrderStock: OrderStock[];
 }

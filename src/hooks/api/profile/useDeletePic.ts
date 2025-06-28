@@ -13,7 +13,7 @@ const useDeletePic = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const { data } = await axiosInstance.delete(`/accounts/delete-pic`);
+      const { data } = await axiosInstance.delete(`/accounts/profilepict`);
       return data;
     },
     onSuccess: async () => {

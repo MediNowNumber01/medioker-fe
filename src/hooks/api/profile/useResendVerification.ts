@@ -15,9 +15,7 @@ const useResendVerification = () => {
       return data;
     },
     onSuccess: () => {
-      toast.success("Verification email sent!", {
-        description: "Please check your inbox for the verification link.",
-      });
+      toast.success("Verification email sent!");
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error.response?.data?.message || "Failed to send email.");

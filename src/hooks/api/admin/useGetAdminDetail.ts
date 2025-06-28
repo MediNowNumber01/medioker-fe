@@ -1,5 +1,4 @@
-import { PageableResponse } from "@/types/search/response/PaginationResponse";
-import { Admin } from "@/types/semuaNgerapiinyaNtar";
+import { Admin } from "@/types/admin";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../useAxios";
 
@@ -8,10 +7,10 @@ const useGetAdmin = (adminId: string) => {
   return useQuery({
     queryKey: ["admindetail", adminId],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<PageableResponse<Admin>>(
+      const { data } = await axiosInstance.get(
         `/admins/${adminId}`
       );
-      return data;
+      return data.data;
     },
   });
 };

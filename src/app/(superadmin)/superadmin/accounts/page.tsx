@@ -1,4 +1,4 @@
-import AccountsPage from '@/features/superadmin/account/AccountPage'
+import AccountsPage from '@/features/superadmin/account/AccountsPage'
 import SuperAdminAuthGuard from '@/hoc/SuperAdminAuthGuard'
 import React from 'react'
 

@@ -1,6 +1,6 @@
 import HomePage from "@/features/homepage/HomePage";
 
-export default async function Home() {
+async function Home() {
   
   return (
     <div>
@@ -8,3 +8,5 @@ export default async function Home() {
     </div>
   );
 }
+
+export default (Home)

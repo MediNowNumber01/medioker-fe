@@ -34,7 +34,7 @@ const useUpdateAdmin = (accountId: string) => {
     onSuccess: () => {
       toast.success("Admin account updated successfully!");
       // Invalidate query untuk me-refresh data di halaman daftar admin
-      queryClient.invalidateQueries({ queryKey: ["get-all-admins"] });
+      queryClient.invalidateQueries({ queryKey: ["admins"] });
       // Kembali ke halaman daftar admin
       router.push('/superadmin/accounts/admins');
     },

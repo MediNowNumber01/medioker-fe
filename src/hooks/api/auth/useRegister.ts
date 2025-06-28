@@ -38,7 +38,7 @@ const useRegister = () => {
       });
       setTimeout(() => {
         router.push("/login");
-      }, 1500);
+      }, 700);
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(

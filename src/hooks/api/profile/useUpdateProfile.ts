@@ -38,17 +38,14 @@ const useUpdateProfile = () => {
       }
 
       const { data } = await axiosInstance.patch(
-        "/accounts/update-account",
+        "/accounts/",
         formData
       );
       return data;
     },
     onSuccess: async (data) => {
       if (data.isVerified === false) {
-        toast.info("Profile updated. Please verify your new email.", {
-          description: "You will be logged out for security.",
-        });
-        setTimeout(() => signOut({ callbackUrl: "/login" }), 2000);
+        toast.info("Profile updated. Please verify your new email.", );
       } else {
         toast.success("Profile updated successfully, please relogin to see the changes.");
         await queryClient.invalidateQueries({ queryKey: ["get-account"] });

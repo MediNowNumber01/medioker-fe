@@ -3,12 +3,10 @@ import {
   NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
 } from "@/config/env";
 import { axiosInstance } from "@/lib/axios";
-import { Role } from "@/types/account";
 import { AxiosError } from "axios";
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { toast } from "sonner";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
@@ -66,7 +64,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const errorMessage =
               axiosError.response.data.message ||
               "Please use your credentials to log in.";
-            const redirectUrl = `/login?error=${encodeURIComponent(
+            const redirectUrl = `medinow.site/login?error=${encodeURIComponent(
               errorMessage
             )}`;
             return redirectUrl;

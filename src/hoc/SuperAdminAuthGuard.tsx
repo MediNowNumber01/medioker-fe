@@ -12,10 +12,6 @@ export default function SuperAdminAuthGuard(Component: any) {
       return redirect("/");
     }
 
-    if (!session) {
-      return redirect("/login");
-    }
-
 
     return <Component {...props} />;
   };

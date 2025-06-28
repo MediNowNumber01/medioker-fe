@@ -10,14 +10,14 @@ export enum AdminRole {
 
 export interface Admin {
   id: string;
-  createdAt: Date;
-  updateAt: Date;
+  createdAt?: Date;
+  updateAt?: Date;
   deleteAt?: Date | null;
-  adminRole: AdminRole;
-  validToAnswerForum: boolean;
-  accountId: string;
-  account: Account;
+  adminRole?: AdminRole;
+  validToAnswerForum?: boolean;
+  accountId?: string;
+  account?: Account;
   pharmacyId?: string | null;
   pharmacy?: Pharmacy | null;
-  ForumComment: ForumComment[];
+  ForumComment?: ForumComment[];
 }

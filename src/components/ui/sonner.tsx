@@ -39,7 +39,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         },
         className:
           "group toast group-[.toaster]:bg-popover group-[.toaster]:text-popover-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
-        descriptionClassName: "group-[.toast]:text-muted-foreground group-[.toast]:opacity-90",
+        descriptionClassName: "group-[.toast]:text-black dark:group-[.toast]:text-black",
       }}
       {...props}
     />
