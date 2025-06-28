@@ -1,5 +1,5 @@
 "use client";
-import { Product, UnitProduct } from "@/types/semuaNgerapiinyaNtar";
+import { Product } from "@/types/semuaNgerapiinyaNtar";
 import { formatPrice } from "@/app/utils/formatPrice";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,6 +14,7 @@ import Image from "next/image";
 import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import DisplayCategory from "./DisplayCategory";
+import { UnitProduct } from "@/types/unitProduct";
 
 interface ItemCardProps {
   className?: string;
