@@ -91,9 +91,6 @@ const PharmacySelector: FC<PharmacySelectorProps> = ({
                 />
               </div>
               <div className=" w-full max-h-[400px]">
-                <div className="text-muted-foreground">
-                  total: {pharmacies?.meta.total} pharmacies
-                </div>
                 <div className="grid gap-2 max-h-[300px] overflow-y-auto px-2">
                   {isLoading ? (
                     <div>Loading...</div>

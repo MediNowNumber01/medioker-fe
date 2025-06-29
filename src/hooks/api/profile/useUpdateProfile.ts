@@ -37,22 +37,17 @@ const useUpdateProfile = () => {
         formData.append("password", payload.password);
       }
 
-      const { data } = await axiosInstance.patch(
-        "/accounts/",
-        formData
-      );
+      const { data } = await axiosInstance.patch("/accounts/", formData);
       return data;
     },
     onSuccess: async (data) => {
-      if (data.isVerified === false) {
-        toast.info("Profile updated. Please verify your new email.", );
-      } else {
-        toast.success("Profile updated successfully, please relogin to see the changes.");
-        await queryClient.invalidateQueries({ queryKey: ["get-account"] });
-        await updateSession(data);
+      toast.success(
+        "Profile updated successfully, please relogin to see the changes."
+      );
+      await queryClient.invalidateQueries({ queryKey: ["get-account"] });
+      await updateSession(data);
 
-        router.push("/profile");
-      }
+      router.push("/profile");
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error.response?.data?.message || "Failed to update profile.");

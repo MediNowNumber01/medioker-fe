@@ -42,7 +42,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <NextAuthProvider>
               <SidebarProvider>
-                <SuperAdminSidebar />
+                <SuperAdminSidebar/>
                 <main className="flex flex-col w-screen ">
                   <LocationProvider>{children}</LocationProvider>
                 </main>

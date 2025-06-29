@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
-const FILE_SIZE = 2 * 1024 * 1024;
-const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/heic', 'image/svg'];
+const FILE_SIZE = 1 * 1024 * 1024;
+const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png', 'image/heic' ];
 
 export const UploadPrescriptionSchema = Yup.object().shape({
   prescriptionImages: Yup.array()
