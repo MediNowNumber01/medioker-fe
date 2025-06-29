@@ -1,5 +1,6 @@
 import { SuperAdminSidebar } from "@/components/SuperAdminSidebar";
 import { SuperAdminHeader } from "@/components/SuperAdminSidebarHeader";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import NuqsProvider from "@/providers/NuqsProvider";
 import { redirect } from "next/navigation";
@@ -16,9 +17,9 @@ export default async function SuperadminLayout({
 
   return (
     <div className="flex flex-1 flex-col">
-      <SuperAdminHeader />
-      <SuperAdminSidebar />
-      <NuqsProvider>{children}</NuqsProvider>
+        <SuperAdminHeader />
+        <SuperAdminSidebar />
+        <NuqsProvider>{children}</NuqsProvider>
     </div>
   );
 }

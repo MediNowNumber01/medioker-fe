@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import useVerifyAccount from "@/hooks/api/auth/useVerifyAccount";
 import { CheckCircle, LoaderCircle, TriangleAlert } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -12,6 +12,7 @@ interface VerifyPageProps {
 }
 
 export default function VerifyPage({ token }: VerifyPageProps) {
+  const { status } = useSession();
   const {
     mutate: verifyAccount,
     isPending,
@@ -30,7 +31,7 @@ export default function VerifyPage({ token }: VerifyPageProps) {
     if (isSuccess) {
       signOut({ redirect: false });
     }
-  }, [isSuccess]); 
+  }, [isSuccess]);
 
   const renderContent = () => {
     if (isPending) {
@@ -55,9 +56,16 @@ export default function VerifyPage({ token }: VerifyPageProps) {
           <p className="text-muted-foreground text-sm">
             This link may be invalid or expired.
           </p>
-          <Link href="/profile">
-            <Button className="mt-4">Back to Profile</Button>
-          </Link>
+          {status === "unauthenticated" && (
+            <Link href="/login">
+              <Button className="mt-4">Back to Login</Button>
+            </Link>
+          )}
+          {status === "authenticated" && (
+            <Link href="/profile">
+              <Button className="mt-4">Back to Profile</Button>
+            </Link>
+          )}
         </>
       );
     }
@@ -77,7 +85,7 @@ export default function VerifyPage({ token }: VerifyPageProps) {
       );
     }
 
-    return null; 
+    return null;
   };
 
   return (

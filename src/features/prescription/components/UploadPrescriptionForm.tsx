@@ -187,7 +187,7 @@ export function UploadPrescriptionForm() {
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <CheckCircle2 className="h-4 w-4" />
-              <span>Supported: JPG, PNG, HEIC • Max 2MB each • Up to 5 images</span>
+              <span>Supported: JPG, JPEG, PNG, HEIC • Max 1MB each • Up to 5 images</span>
             </div>
             <Input
               ref={imageRef}

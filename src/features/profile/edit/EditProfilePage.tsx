@@ -13,9 +13,8 @@ import { ChevronLeft } from "lucide-react";
 import useGetAccount from "@/hooks/api/profile/useGetAccount";
 
 export default function EditProfilePage() {
-  const { data: user, isLoading } = useGetAccount();
   return (
-    <div className="container mx-auto max-w-lg py-8">
+    <div className="container mx-auto max-w-lg lg:max-w-5xl xl:max-w-7xl py-8">
       <Link href="/profile">
         <Button variant="ghost" className="mb-4">
           <ChevronLeft className="h-4 w-4 mr-2" />
@@ -30,7 +29,7 @@ export default function EditProfilePage() {
           </CardDescription>
         </CardHeader>
         <CardContent >
-          <EditProfileForm user={user} isLoading={isLoading}/>
+          <EditProfileForm />
         </CardContent>
       </Card>
     </div>
