@@ -100,7 +100,6 @@ export function HeroCarousel() {
                 </div>
               </div>
 
-              {/* Animated Images - Right Side */}
               <div className="relative">
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                   {heroSlides.map((slide, index) => (
@@ -123,7 +122,6 @@ export function HeroCarousel() {
                     </div>
                   ))}
 
-                  {/* Carousel Controls - Overlaid on Image */}
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                     <Button
                       variant="outline"
@@ -147,7 +145,6 @@ export function HeroCarousel() {
             </div>
           </div>
 
-          {/* Carousel Indicators */}
           <div className="flex justify-center mt-8 gap-2">
             {heroSlides.map((_, index) => (
               <button

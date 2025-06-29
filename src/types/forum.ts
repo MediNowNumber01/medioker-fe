@@ -1,5 +1,5 @@
-import { User } from "./user"; // Assuming 'User' type is in './user'
-import { ForumComment } from "./forumComment"; // Assuming 'ForumComment' type is in './forumComment'
+import { User } from "./user"; 
+import { ForumComment } from "./forumComment"; 
 
 export interface Forum {
   id: string;

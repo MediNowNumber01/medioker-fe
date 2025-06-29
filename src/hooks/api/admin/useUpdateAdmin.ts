@@ -21,25 +21,29 @@ const useUpdateAdmin = (accountId: string) => {
   return useMutation({
     mutationFn: async (payload: UpdateAdminPayload) => {
       const formData = new FormData();
-      formData.append('fullName', payload.fullName);
-      formData.append('adminRole', payload.adminRole);
+      formData.append("fullName", payload.fullName);
+      formData.append("adminRole", payload.adminRole);
       if (payload.profilePict) {
-        formData.append('profilePict', payload.profilePict);
+        formData.append("profilePict", payload.profilePict);
       }
-      
-      // Menggunakan metode PATCH ke endpoint spesifik untuk update admin
-      const { data } = await axiosInstance.patch(`/admins/${accountId}`, formData);
+
+      const { data } = await axiosInstance.patch(
+        `/admins/${accountId}`,
+        formData
+      );
       return data;
     },
     onSuccess: () => {
       toast.success("Admin account updated successfully!");
-      // Invalidate query untuk me-refresh data di halaman daftar admin
+
       queryClient.invalidateQueries({ queryKey: ["admins"] });
-      // Kembali ke halaman daftar admin
-      router.push('/superadmin/accounts/admins');
+
+      router.push("/superadmin/accounts/admins");
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data?.message || "Failed to update admin account.");
+      toast.error(
+        error.response?.data?.message || "Failed to update admin account."
+      );
     },
   });
 };

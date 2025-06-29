@@ -58,11 +58,12 @@ const PaginationComponent: FC<PaginationProps> = ({
           Array.from(
             {
               length:
-                paginationMeta.totalPages === 0 ? 1 : paginationMeta.totalPages!,
+                paginationMeta.totalPages === 0
+                  ? 1
+                  : paginationMeta.totalPages!,
             },
             (_, i) => i + 1
           ).map((page) => {
-            // Show first, last, current, and neighbors; ellipsis for gaps
             const isFirst = page === 1 && numberNarest > 0;
             const isLast =
               page === paginationMeta.totalPages && numberNarest > 0;
@@ -76,7 +77,6 @@ const PaginationComponent: FC<PaginationProps> = ({
                   <PaginationLink
                     isActive={isCurrent}
                     onClick={() => onPageChange(page)}
-                    // aria-current={isCurrent ? "page" : undefined}
                   >
                     {page}
                   </PaginationLink>
@@ -84,7 +84,6 @@ const PaginationComponent: FC<PaginationProps> = ({
               );
             }
 
-            // Show ellipsis only once for left and right gaps
             if (
               numberNarest > 0 &&
               (page === paginationMeta.page - numberNarest + 1 ||

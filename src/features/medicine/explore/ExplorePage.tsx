@@ -110,7 +110,7 @@ const ExplorePage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
       <LocationRequester />
 
-      {/* Hero Section */}
+      
       <section className="bg-white border-b">
         <div className="container mx-auto px-4 py-8 md:px-6">
           <div className="max-w-3xl">
@@ -126,9 +126,9 @@ const ExplorePage = () => {
         </div>
       </section>
 
-      {/* Main Content */}
+      
       <div className="container mx-auto px-4 py-6 md:px-6">
-        {/* Mobile Pharmacy Selector */}
+        
         <div className="md:hidden mb-6">
           <PharmacySelector
             pharmacy={pharmacy ?? null}
@@ -136,11 +136,11 @@ const ExplorePage = () => {
           />
         </div>
 
-        {/* Search and Filter Bar */}
+        
         <Card className="mb-6 shadow-sm border-0 bg-white/80 backdrop-blur-sm">
           <CardContent className="p-4 md:p-6">
             <div className="flex flex-col lg:flex-row gap-4">
-              {/* Search Section */}
+              
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -156,7 +156,7 @@ const ExplorePage = () => {
                 </div>
               </div>
 
-              {/* Mobile Filter Button */}
+              
               <div className="lg:hidden">
                 <MobileFilter
                   onAcquisitionChange={(val) =>
@@ -175,7 +175,7 @@ const ExplorePage = () => {
               </div>
             </div>
 
-            {/* Active Filters Display */}
+            
             {activeFiltersCount > 0 && (
               <div className="flex items-center gap-2 mt-4 pt-4 border-t">
                 <Filter className="h-4 w-4 text-gray-500" />
@@ -194,9 +194,9 @@ const ExplorePage = () => {
           </CardContent>
         </Card>
 
-        {/* Main Layout */}
+        
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Desktop Sidebar */}
+          
           <aside className="hidden lg:block lg:w-80 flex-shrink-0">
             <div className="sticky top-20">
               <SideFilter
@@ -214,9 +214,9 @@ const ExplorePage = () => {
             </div>
           </aside>
 
-          {/* Products Section */}
+          
           <main className="flex-1 min-w-0">
-            {/* Results Header */}
+            
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <Package className="h-5 w-5 text-gray-600" />
@@ -233,7 +233,7 @@ const ExplorePage = () => {
               )}
             </div>
 
-            {/* Products Grid */}
+            
             {isLoading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {Array.from({ length: 10 }).map((_, index) => (
@@ -302,7 +302,7 @@ const ExplorePage = () => {
                   ))}
                 </div>
 
-                {/* Pagination */}
+                
                 <div className="flex justify-center">
                   <PaginationComponent
                     paginationMeta={meta}

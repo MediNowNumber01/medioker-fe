@@ -86,7 +86,7 @@ const MobileFilter: FC<MobileFilterProps> = ({
           </DialogHeader>
 
           <div className="flex-1 overflow-y-auto space-y-4">
-            {/* Clear Filters Button */}
+            
             <Button
               variant="outline"
               disabled={activeFiltersCount === 0}
@@ -103,7 +103,7 @@ const MobileFilter: FC<MobileFilterProps> = ({
               Reset All Filters
             </Button>
 
-            {/* Golongan Filter */}
+            
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">Golongan</span>
@@ -131,7 +131,7 @@ const MobileFilter: FC<MobileFilterProps> = ({
               </Select>
             </div>
 
-            {/* Acquisition Filter */}
+            
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">Acquisition</span>
@@ -159,7 +159,7 @@ const MobileFilter: FC<MobileFilterProps> = ({
               </Select>
             </div>
 
-            {/* Category Filter */}
+            
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">Category</span>
@@ -212,7 +212,7 @@ const MobileFilter: FC<MobileFilterProps> = ({
               </Popover>
             </div>
 
-            {/* Sort By */}
+            
             <div className="space-y-2">
               <span className="text-sm font-medium">Sort By</span>
               <Select value={sortBy} onValueChange={setSortBy}>
@@ -226,7 +226,7 @@ const MobileFilter: FC<MobileFilterProps> = ({
               </Select>
             </div>
 
-            {/* Sort Order */}
+            
             <div className="space-y-2">
               <span className="text-sm font-medium">Sort Order</span>
               <Select value={sortOrder} onValueChange={setSortOrder}>

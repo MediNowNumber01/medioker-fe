@@ -45,8 +45,6 @@ interface GeocodingResult {
   boundingbox: [string, string, string, string];
 }
 
-// --- Internal Map Component (Client-Side Only) ---
-// This component now loads Leaflet from a CDN to avoid build-time resolution issues.
 function MapPickerComponent({
   position,
   onMapClick,
@@ -55,21 +53,18 @@ function MapPickerComponent({
   onMapClick: (coords: { lat: number; lng: number }) => void;
 }) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any | null>(null); // Using 'any' for Leaflet Map instance
-  const markerInstanceRef = useRef<any | null>(null); // Using 'any' for Leaflet Marker instance
+  const mapInstanceRef = useRef<any | null>(null);
+  const markerInstanceRef = useRef<any | null>(null);
   const [leafletLoaded, setLeafletLoaded] = useState(false);
 
-  // Effect to load Leaflet script and CSS from a CDN
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Check if Leaflet is already loaded
     if (window.L) {
       setLeafletLoaded(true);
       return;
     }
 
-    // Load CSS
     const cssLink = document.createElement("link");
     cssLink.rel = "stylesheet";
     cssLink.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
@@ -77,7 +72,6 @@ function MapPickerComponent({
     cssLink.crossOrigin = "";
     document.head.appendChild(cssLink);
 
-    // Load JS
     const script = document.createElement("script");
     script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
     script.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
@@ -89,13 +83,11 @@ function MapPickerComponent({
     document.body.appendChild(script);
 
     return () => {
-      // Clean up on unmount
       document.head.removeChild(cssLink);
       document.body.removeChild(script);
     };
   }, []);
 
-  // Effect to initialize the map once Leaflet is loaded
   useEffect(() => {
     if (leafletLoaded && mapContainerRef.current && !mapInstanceRef.current) {
       const L = window.L;
@@ -117,7 +109,6 @@ function MapPickerComponent({
     }
   }, [leafletLoaded, position, onMapClick]);
 
-  // This effect runs whenever the external position prop changes
   useEffect(() => {
     if (mapInstanceRef.current && markerInstanceRef.current) {
       mapInstanceRef.current.flyTo(position, 13);
@@ -138,10 +129,9 @@ function MapPickerComponent({
   );
 }
 
-// --- Main Component ---
 export const LocationPicker: FC<LocationPickerProps> = ({
   onLocationSelect,
-  initialPosition = [-6.2000000, 106.816666], // Default to Jakarta, Indonesia
+  initialPosition = [-6.2, 106.816666],
   initialAddress = "Jakarta, Indonesia",
   className,
 }) => {
@@ -189,7 +179,7 @@ export const LocationPicker: FC<LocationPickerProps> = ({
   };
 
   const handleMapClick = async (coords: { lat: number; lng: number }) => {
-    setSearchTerm(""); // Clear search term when clicking on the map
+    setSearchTerm("");
     setIsLoading(true);
     setError(null);
     try {

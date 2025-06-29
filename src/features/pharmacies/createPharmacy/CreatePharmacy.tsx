@@ -50,7 +50,6 @@ const CreatePharmacy = () => {
   const [selectedImage, setSelectedImage] = useState<string>("");
   const pictref = useRef<HTMLInputElement>(null);
 
-  // handle name validation
   const [debounceName] = useDebounce(formik.values.name, 500);
   const [validName, setValidName] = useState<boolean>(false);
   const [validNameError, setValidNameError] = useState<string>("");
@@ -85,7 +84,6 @@ const CreatePharmacy = () => {
       });
   }, [debounceName]);
 
-  // handle picture change
   const onchangepicture = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
     if (file) {
@@ -117,7 +115,7 @@ const CreatePharmacy = () => {
   return (
     <section className="container mx-auto flex flex-col gap-4 p-2">
       <Card>
-        {/* header */}
+        
         <div className="relative ">
           <CircleArrowLeft
             className="hidden absolute  md:block left-10 -top-5 translate-y-1/2 h-10 w-10 cursor-pointer "
@@ -133,7 +131,7 @@ const CreatePharmacy = () => {
             <Separator className="my-4" />
           </div>
         </div>
-        {/* form */}
+        
         <form
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 px-4"
@@ -180,7 +178,7 @@ const CreatePharmacy = () => {
               </p>
             )}
           </div>
-          {/* isMain */}
+          
           <div className="space-y-2">
             <Label>Pharmacy Type</Label>
             <Select
@@ -203,7 +201,7 @@ const CreatePharmacy = () => {
             )}
           </div>
 
-          {/* name */}
+          
           <div className="space-y-2">
             <Label>Pharmacy Name</Label>
             <div className="flex items-center">
@@ -234,7 +232,7 @@ const CreatePharmacy = () => {
             )}
           </div>
 
-          {/* detail location */}
+          
 
           <div className="space-y-2">
             <Label className="mb-2">Location</Label>

@@ -1,17 +1,22 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import React from "react";
 
 const AccountsPageSkeleton = () => {
   return (
     <div className="space-y-6">
-      {/* Header Skeleton */}
       <div className="flex flex-col gap-2">
         <div className="h-8 w-64 bg-muted animate-pulse rounded-md"></div>
         <div className="h-4 w-96 bg-muted animate-pulse rounded-md"></div>
       </div>
 
-      {/* Stats Cards Skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
           <Card key={i}>
@@ -22,7 +27,6 @@ const AccountsPageSkeleton = () => {
         ))}
       </div>
 
-      {/* Table Skeleton */}
       <Card>
         <CardHeader>
           <div className="h-6 w-48 bg-muted animate-pulse rounded-md"></div>

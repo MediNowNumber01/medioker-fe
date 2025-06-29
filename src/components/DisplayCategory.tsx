@@ -22,7 +22,7 @@ interface DisplayCategoryProps {
   className?: string;
 }
 const DisplayCategory: FC<DisplayCategoryProps> = ({ id, type, className }) => {
-  if (!id) return null; // Handle case where id is undefined
+  if (!id) return null; 
   const { data: category } = useGetCategory(id);
   if (!category) return null;
 

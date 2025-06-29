@@ -49,7 +49,6 @@ import getProviderBadgeVariant from "@/lib/getProviderBadgeVariant";
 import useGetUsers from "@/hooks/api/account/useGetUsers";
 
 export default function UserAccountsPage() {
-  // State Management with nuqs for URL persistence
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault("")
@@ -74,14 +73,11 @@ export default function UserAccountsPage() {
 
   const [debouncedSearch] = useDebounce(search, 500);
 
-  // Reset page when search/filter changes
   useEffect(() => {
     if (page !== 1) setPage(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch, verification, provider]);
 
-  // API Hooks - Separate stats from filtered data
-  const { data: statsData, isLoading: statsLoading } = useGetUsers({}); // This hook fetches total stats without filters
+  const { data: statsData, isLoading: statsLoading } = useGetUsers({});
   const { data, isLoading, error, refetch } = useGetUsers({
     page,
     take: 10,
@@ -102,7 +98,6 @@ export default function UserAccountsPage() {
     totalPages: 1,
   };
 
-  // Stats from separate API call (not affected by search/filter)
   const totalUsers = statsData?.meta.total || 0;
   const verifiedCount = statsData?.countVerified;
   const googleCount = statsData?.countGoogle;
@@ -190,7 +185,6 @@ export default function UserAccountsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
           User Accounts
@@ -200,7 +194,6 @@ export default function UserAccountsPage() {
         </p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6">
@@ -308,7 +301,6 @@ export default function UserAccountsPage() {
         </Card>
       </div>
 
-      {/* Filters and Search */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -325,7 +317,6 @@ export default function UserAccountsPage() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row gap-4 mb-6">
-            {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -336,7 +327,6 @@ export default function UserAccountsPage() {
               />
             </div>
 
-            {/* Verification Filter */}
             <Select
               value={verification}
               onValueChange={(v) => setVerification(v || "all")}
@@ -351,7 +341,6 @@ export default function UserAccountsPage() {
               </SelectContent>
             </Select>
 
-            {/* Provider Filter */}
             <Select
               value={provider}
               onValueChange={(v) => setProvider(v || "all")}
@@ -367,7 +356,6 @@ export default function UserAccountsPage() {
             </Select>
           </div>
 
-          {/* Users Table */}
           <div className="rounded-md border">
             <Table>
               <TableHeader>
@@ -534,7 +522,6 @@ export default function UserAccountsPage() {
             </Table>
           </div>
 
-          {/* Pagination */}
           <div className="flex items-center justify-between mt-6">
             <div className="text-sm text-muted-foreground">
               Showing <strong>{users.length}</strong> of{" "}
@@ -565,7 +552,6 @@ export default function UserAccountsPage() {
             </div>
           </div>
 
-          {/* Info Banner */}
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <div className="flex items-center gap-2">
               <Eye className="h-4 w-4 text-blue-600" />

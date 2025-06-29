@@ -7,7 +7,6 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-// Tipe data untuk payload yang dikirim dari form
 interface UpdateProfilePayload {
   fullName: string;
   email?: string;

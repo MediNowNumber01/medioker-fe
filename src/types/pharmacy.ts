@@ -1,9 +1,6 @@
-// types.ts
-
 import { Admin } from "./admin";
 import { Order } from "./order";
 import { Stock } from "./stock";
-
 
 export interface Pharmacy {
   id: string;
@@ -24,4 +21,3 @@ export interface Pharmacy {
     Admin: number;
   };
 }
-

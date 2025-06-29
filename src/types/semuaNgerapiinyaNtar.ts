@@ -1,5 +1,3 @@
-// Enums
-
 import { Account } from "./account";
 import { ProductImage } from "./productImage";
 import { UnitProduct } from "./unitProduct";
@@ -52,8 +50,6 @@ export enum OrderType {
   GENERAL = "GENERAL",
   PRESCRIPTION = "PRESCRIPTION",
 }
-
-// Interfaces
 
 export interface Accountz {
   id: string;
@@ -214,10 +210,6 @@ export interface Category {
     ProductCategory: number;
   };
 }
-
-
-
-
 
 export interface ProductCategory {
   id: string;
