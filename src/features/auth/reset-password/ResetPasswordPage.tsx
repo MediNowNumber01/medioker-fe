@@ -1,4 +1,4 @@
-"use client"; // <-- TAMBAHKAN BARIS INI
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +8,6 @@ interface ResetPasswordPageProps {
   token: string;
 }
 
-// Komponen ini sekarang secara eksplisit adalah Client Component
 export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
@@ -33,7 +32,6 @@ export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
           />
         </Link>
 
-        {/* Form ini sekarang aman untuk dirender karena parent-nya adalah Client Component */}
         <ResetPasswordForm token={token} />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Admin } from "./admin"; // Assuming 'Admin' type is in './admin'
+import { Admin } from "./admin"; 
 import { Forum } from "./forum";
 
 export interface ForumComment {

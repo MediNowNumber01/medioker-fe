@@ -17,7 +17,6 @@ export default function PrivacyPolicy() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
-          {/* Logo Section */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-3">
               <Image
@@ -37,7 +36,6 @@ export default function PrivacyPolicy() {
             </div>
           </div>
 
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
               <Shield className="h-8 w-8 text-blue-600" />
@@ -54,7 +52,6 @@ export default function PrivacyPolicy() {
             </p>
           </div>
 
-          {/* Navigation */}
           <div className="mb-8">
             <Link href="/">
               <Button
@@ -67,9 +64,7 @@ export default function PrivacyPolicy() {
             </Link>
           </div>
 
-          {/* Content */}
           <div className="space-y-8">
-            {/* Information We Collect */}
             <Card className="shadow-sm">
               <CardContent className="p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -110,7 +105,6 @@ export default function PrivacyPolicy() {
               </CardContent>
             </Card>
 
-            {/* How We Use Information */}
             <Card className="shadow-sm">
               <CardContent className="p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -137,7 +131,6 @@ export default function PrivacyPolicy() {
               </CardContent>
             </Card>
 
-            {/* Data Protection */}
             <Card className="shadow-sm">
               <CardContent className="p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -166,7 +159,6 @@ export default function PrivacyPolicy() {
               </CardContent>
             </Card>
 
-            {/* Information Sharing */}
             <Card className="shadow-sm">
               <CardContent className="p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -200,7 +192,6 @@ export default function PrivacyPolicy() {
               </CardContent>
             </Card>
 
-            {/* Your Rights */}
             <Card className="shadow-sm">
               <CardContent className="p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -237,7 +228,6 @@ export default function PrivacyPolicy() {
               </CardContent>
             </Card>
 
-            {/* Contact Information */}
             <Card className="shadow-sm bg-gray-50">
               <CardContent className="p-6 md:p-8 text-center">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
@@ -259,7 +249,6 @@ export default function PrivacyPolicy() {
             </Card>
           </div>
 
-          {/* Footer Navigation */}
           <div className="mt-12 pt-8 border-t border-gray-200">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <Link href="/">

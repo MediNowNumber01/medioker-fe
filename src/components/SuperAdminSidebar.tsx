@@ -38,7 +38,6 @@ import {
 } from "./ui/collapsible";
 import { generateInitials } from "@/lib/generateInitials";
 
-// Menu items
 const items = [
   {
     type: "single" as const,
@@ -101,7 +100,6 @@ export function SuperAdminSidebar() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  // Don't render if loading or not authorized
   if (status === "loading") return null;
   if (!session || session.user?.role !== "SUPER_ADMIN") return null;
 
@@ -200,7 +198,6 @@ export function SuperAdminSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t px-4 py-4 space-y-4">
-        {/* User Profile Section */}
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarImage
@@ -221,7 +218,6 @@ export function SuperAdminSidebar() {
           </div>
         </div>
 
-        {/* Sign Out Button */}
         <Button
           variant="outline"
           size="sm"

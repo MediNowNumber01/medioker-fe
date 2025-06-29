@@ -1,7 +1,7 @@
 import { AdminRole } from "@/types/admin"
 import * as Yup from "yup"
 
-const FILE_SIZE = 1 * 1024 * 1024 // 2MB
+const FILE_SIZE = 1 * 1024 * 1024 
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/heic"]
 
 export const EditAdminSchema = (isCredentialsUser = true) =>

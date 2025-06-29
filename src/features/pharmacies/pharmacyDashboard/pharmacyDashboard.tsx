@@ -58,8 +58,8 @@ const PharmacyDashboard = () => {
           onPageChange={setPage}
           search={search}
           setSearch={setSearch}
-          paginationMeta={pharmacies?.meta} // Replace with actual pagination meta if available
-          pharmacies={pharmacies?.data} // Replace with actual categories data if available
+          paginationMeta={pharmacies?.meta}
+          pharmacies={pharmacies?.data}
           setSortBy={setSortBy}
           sortBy={sortBy}
           setSortOrder={setSortOrder}

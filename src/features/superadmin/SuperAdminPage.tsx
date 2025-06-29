@@ -1,6 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Users,
   Store,
@@ -13,11 +19,10 @@ import {
   Activity,
   UserCheck,
   Building2,
-} from "lucide-react"
-import Link from "next/link"
+} from "lucide-react";
+import Link from "next/link";
 
 export default function SuperAdminDashboard() {
-  // Dummy data
   const stats = [
     {
       title: "Total Users",
@@ -55,7 +60,7 @@ export default function SuperAdminDashboard() {
       color: "text-orange-600",
       bgColor: "bg-orange-100",
     },
-  ]
+  ];
 
   const recentActivities = [
     {
@@ -98,7 +103,7 @@ export default function SuperAdminDashboard() {
       icon: UserCheck,
       color: "text-indigo-600",
     },
-  ]
+  ];
 
   const pendingApprovals = [
     {
@@ -125,7 +130,7 @@ export default function SuperAdminDashboard() {
       submittedAt: "2024-01-13",
       status: "pending",
     },
-  ]
+  ];
 
   const systemHealth = [
     {
@@ -152,29 +157,37 @@ export default function SuperAdminDashboard() {
       uptime: "99.7%",
       lastCheck: "1 min ago",
     },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
-      {/* Welcome Section */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Welcome back, Super Admin!</h1>
-        <p className="text-muted-foreground">Here's what's happening with your platform today.</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+          Welcome back, Super Admin!
+        </h1>
+        <p className="text-muted-foreground">
+          Here's what's happening with your platform today.
+        </p>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <Card key={index} className="hover:shadow-md transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {stat.title}
+                  </p>
                   <p className="text-2xl font-bold">{stat.value}</p>
                   <div className="flex items-center gap-1">
                     <TrendingUp className="h-4 w-4 text-green-600" />
-                    <span className="text-sm text-green-600 font-medium">{stat.change}</span>
-                    <span className="text-sm text-muted-foreground">from last month</span>
+                    <span className="text-sm text-green-600 font-medium">
+                      {stat.change}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      from last month
+                    </span>
                   </div>
                 </div>
                 <div className={`p-3 rounded-full ${stat.bgColor}`}>
@@ -187,14 +200,15 @@ export default function SuperAdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activities */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5" />
               Recent Activities
             </CardTitle>
-            <CardDescription>Latest platform activities and updates</CardDescription>
+            <CardDescription>
+              Latest platform activities and updates
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {recentActivities.map((activity) => (
@@ -206,8 +220,12 @@ export default function SuperAdminDashboard() {
                   <activity.icon className={`h-4 w-4 ${activity.color}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">{activity.message}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {activity.message}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {activity.time}
+                  </p>
                 </div>
               </div>
             ))}
@@ -219,7 +237,6 @@ export default function SuperAdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Pending Approvals */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -233,7 +250,10 @@ export default function SuperAdminDashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             {pendingApprovals.map((item) => (
-              <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg">
+              <div
+                key={item.id}
+                className="flex items-center justify-between p-3 border rounded-lg"
+              >
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-full bg-yellow-100">
                     {item.type === "pharmacy" ? (
@@ -271,32 +291,38 @@ export default function SuperAdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* System Health */}
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5" />
               System Health
             </CardTitle>
-            <CardDescription>Monitor platform services and performance</CardDescription>
+            <CardDescription>
+              Monitor platform services and performance
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {systemHealth.map((service, index) => (
-                <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-3 h-3 rounded-full ${
                         service.status === "healthy"
                           ? "bg-green-500"
                           : service.status === "warning"
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
                       }`}
                     />
                     <div>
                       <p className="font-medium text-sm">{service.service}</p>
-                      <p className="text-xs text-muted-foreground">Uptime: {service.uptime}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Uptime: {service.uptime}
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">
@@ -305,13 +331,15 @@ export default function SuperAdminDashboard() {
                         service.status === "healthy"
                           ? "default"
                           : service.status === "warning"
-                            ? "secondary"
-                            : "destructive"
+                          ? "secondary"
+                          : "destructive"
                       }
                     >
                       {service.status}
                     </Badge>
-                    <p className="text-xs text-muted-foreground mt-1">{service.lastCheck}</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {service.lastCheck}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -319,7 +347,6 @@ export default function SuperAdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* Quick Actions */}
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
@@ -358,5 +385,5 @@ export default function SuperAdminDashboard() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

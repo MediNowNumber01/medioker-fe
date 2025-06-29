@@ -109,10 +109,10 @@ const HomePage = () => {
     <>
       <LocationRequester />
       <div className="min-h-screen bg-white">
-        {/* Hero Carousel Section */}
+        
         <HeroCarousel />
 
-        {/* Stats Section */}
+        
         <section className="py-12 bg-white border-t border-gray-100">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -130,7 +130,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Features Section */}
+        
         <section className="py-16 md:py-24 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
@@ -168,7 +168,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* How It Works Section */}
+        
         <section className="py-16 md:py-24 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
@@ -205,7 +205,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Testimonials Section */}
+        
         <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 to-green-50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
@@ -259,7 +259,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
+        
         <section className="py-16 md:py-24 bg-gradient-to-r from-primary to-blue-600 text-white">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">

@@ -53,7 +53,6 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
-// Hooks & Types
 import useDeleteAdmin from "@/hooks/api/admin/useDeleteAdmin";
 import useGetAdmins from "@/hooks/api/admin/useGetAdmins";
 import formatDate from "@/lib/formatDate";
@@ -62,9 +61,6 @@ import getProviderBadgeVariant from "@/lib/getProviderBadgeVariant";
 import type { Account } from "@/types/account";
 import { AdminRole } from "@/types/admin";
 
-// Separate hook for stats that doesn't depend on search/filter params
-
-// Type definitions
 type AdminWithAccount = {
   id: string;
   adminRole: AdminRole;
@@ -74,7 +70,6 @@ type AdminWithAccount = {
 export default function AdminAccountsPage() {
   const router = useRouter();
 
-  // State Management with nuqs for URL persistence
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault("")
@@ -95,20 +90,16 @@ export default function AdminAccountsPage() {
 
   const [debouncedSearch] = useDebounce(search, 500);
 
-  // UI State for modals
   const [selectedAdmin, setSelectedAdmin] = useState<Account | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [adminToDelete, setAdminToDelete] = useState<Account | null>(null);
 
-  // Reset page when search/filter changes
   useEffect(() => {
     if (page !== 1) setPage(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch, verification]);
 
-  // API Hooks - Separate stats from filtered data
-  const { data: statsData, isLoading: statsLoading } = useGetAdmins({}); // This hook should fetch total stats without filters
+  const { data: statsData, isLoading: statsLoading } = useGetAdmins({});
   const { data, isLoading, error, refetch } = useGetAdmins({
     page,
     take: 10,
@@ -232,7 +223,6 @@ export default function AdminAccountsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -251,7 +241,6 @@ export default function AdminAccountsPage() {
         </Button>
       </div>
 
-      {/* Stats Cards - Only Total Admins and Verified */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardContent className="p-6">
@@ -298,7 +287,6 @@ export default function AdminAccountsPage() {
         </Card>
       </div>
 
-      {/* Filters and Search */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -311,7 +299,6 @@ export default function AdminAccountsPage() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row gap-4 mb-6">
-            {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -321,7 +308,7 @@ export default function AdminAccountsPage() {
                 className="pl-10"
               />
             </div>
-            {/* Verification Filter */}
+
             <Select
               value={verification}
               onValueChange={(v) => setVerification(v || "all")}
@@ -337,7 +324,6 @@ export default function AdminAccountsPage() {
             </Select>
           </div>
 
-          {/* Admins Table */}
           <div className="rounded-md border">
             <Table>
               <TableHeader>
@@ -467,7 +453,6 @@ export default function AdminAccountsPage() {
             </Table>
           </div>
 
-          {/* Pagination */}
           <div className="flex items-center justify-between mt-6">
             <div className="text-sm text-muted-foreground">
               Showing <strong>{admins.length}</strong> of{" "}
@@ -500,7 +485,6 @@ export default function AdminAccountsPage() {
         </CardContent>
       </Card>
 
-      {/* Admin Detail Modal */}
       <Dialog open={showDetailModal} onOpenChange={setShowDetailModal}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -514,7 +498,6 @@ export default function AdminAccountsPage() {
           </DialogHeader>
           {selectedAdmin && (
             <div className="space-y-6">
-              {/* Profile Section */}
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
                   <AvatarImage
@@ -558,7 +541,6 @@ export default function AdminAccountsPage() {
                 </div>
               </div>
 
-              {/* Details Grid */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-muted-foreground">
@@ -619,7 +601,6 @@ export default function AdminAccountsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Modal */}
       <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
         <DialogContent>
           <DialogHeader>

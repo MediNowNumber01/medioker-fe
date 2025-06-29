@@ -12,7 +12,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-// Helper function for breadcrumb
 function getBreadcrumbFromPath(pathname: string) {
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length <= 1) return "Dashboard";
@@ -43,7 +42,7 @@ export function SuperAdminHeader() {
 
   return (
     <div className="border-b sticky top-0 z-50 bg-background">
-      {/* Navigation Header */}
+      
       <div className="flex h-16 items-center gap-2 px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
@@ -59,7 +58,6 @@ export function SuperAdminHeader() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-
     </div>
   );
 }

@@ -8,7 +8,7 @@ import ActionCard from "./components/ActionCard";
 import DisplayImage from "./components/DisplayImage";
 import DisplayInfo from "./components/DisplayInfo";
 
-// The Skeleton component remains unchanged and is a great placeholder.
+
 const ProductDetailsPageSkeleton = () => (
     <div className="container mx-auto px-4 py-6">
       <div className="grid lg:grid-cols-3 gap-8">

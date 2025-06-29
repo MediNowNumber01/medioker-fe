@@ -125,8 +125,6 @@ const PharmacySelector: FC<PharmacySelectorProps> = ({
             </DialogContent>
           </form>
         </Dialog>
-
-        {/* display */}
       </Card>
     </div>
   );

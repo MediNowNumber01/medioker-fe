@@ -61,7 +61,6 @@ const UpdatePharmacy: FC<UpdatePharmacyProps> = ({ pharmacyId }) => {
   const [selectedImage, setSelectedImage] = useState<string>("");
   const pictref = useRef<HTMLInputElement>(null);
 
-  // handle name validation
   const [debounceName] = useDebounce(formik.values.name, 500);
   const [validName, setValidName] = useState<boolean>(true);
   const [validNameError, setValidNameError] = useState<string>("");
@@ -96,7 +95,6 @@ const UpdatePharmacy: FC<UpdatePharmacyProps> = ({ pharmacyId }) => {
       });
   }, [debounceName]);
 
-  // handle picture change
   const onchangepicture = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
     if (file) {
@@ -128,7 +126,6 @@ const UpdatePharmacy: FC<UpdatePharmacyProps> = ({ pharmacyId }) => {
   return (
     <section className="container mx-auto flex flex-col gap-4 p-2">
       <Card>
-        {/* header */}
         <div className="relative ">
           <CircleArrowLeft
             className="hidden absolute  md:block left-10 -top-5 translate-y-1/2 h-10 w-10 cursor-pointer "
@@ -144,7 +141,7 @@ const UpdatePharmacy: FC<UpdatePharmacyProps> = ({ pharmacyId }) => {
             <Separator className="my-4" />
           </div>
         </div>
-        {/* form */}
+
         <form
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 px-4"
@@ -191,7 +188,7 @@ const UpdatePharmacy: FC<UpdatePharmacyProps> = ({ pharmacyId }) => {
               </p>
             )}
           </div>
-          {/* isMain */}
+
           <div className="space-y-2">
             <Label>Pharmacy Type</Label>
             <Select
@@ -224,7 +221,7 @@ const UpdatePharmacy: FC<UpdatePharmacyProps> = ({ pharmacyId }) => {
                 </p>
               )}
           </div>
-          {/* name */}
+
           <div className="space-y-2">
             <Label>Pharmacy Name</Label>
             <div className="flex items-center">
@@ -256,8 +253,6 @@ const UpdatePharmacy: FC<UpdatePharmacyProps> = ({ pharmacyId }) => {
               <p className="text-destructive text-sm">{validNameError}</p>
             )}
           </div>
-
-          {/* detail location */}
 
           <div className="space-y-2">
             <Label className="mb-2">Location</Label>

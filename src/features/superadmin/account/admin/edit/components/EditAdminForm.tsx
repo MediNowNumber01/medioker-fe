@@ -1,39 +1,45 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import useUpdateAdmin from "@/hooks/api/admin/useUpdateAdmin"
-import { generateInitials } from "@/lib/generateInitials"
-import { type Admin, AdminRole } from "@/types/admin"
-import { useFormik } from "formik"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { type ChangeEvent, useEffect, useRef, useState } from "react"
-import { toast } from "sonner"
-import { EditAdminSchema } from "../schemas"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import useUpdateAdmin from "@/hooks/api/admin/useUpdateAdmin";
+import { generateInitials } from "@/lib/generateInitials";
+import { type Admin, AdminRole } from "@/types/admin";
+import { useFormik } from "formik";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { EditAdminSchema } from "../schemas";
 
 interface EditAdminFormProps {
-  admin: Admin
-  isLoading?: boolean
+  admin: Admin;
+  isLoading?: boolean;
 }
 
 export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
-  const { mutateAsync: updateAdmin, isPending } = useUpdateAdmin(admin.id!)
-  const router = useRouter()
+  const { mutateAsync: updateAdmin, isPending } = useUpdateAdmin(admin.id!);
+  const router = useRouter();
 
-  const [preview, setPreview] = useState<string | null>(null)
-  const imageRef = useRef<HTMLInputElement>(null)
+  const [preview, setPreview] = useState<string | null>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (admin?.account) {
-      setPreview(admin.account.profilePict || null)
+      setPreview(admin.account.profilePict || null);
     }
-  }, [admin])
+  }, [admin]);
 
-  const isCredentialsUser = admin?.account?.provider === "CREDENTIAL"
-  const isGoogleUser = admin?.account?.provider === "GOOGLE"
+  const isCredentialsUser = admin?.account?.provider === "CREDENTIAL";
+  const isGoogleUser = admin?.account?.provider === "GOOGLE";
 
   const formik = useFormik({
     initialValues: {
@@ -47,60 +53,65 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
     validationSchema: EditAdminSchema(isCredentialsUser),
     enableReinitialize: true,
     onSubmit: async (values) => {
-      const emailChanged = values.email !== admin?.account?.email
+      const emailChanged = values.email !== admin?.account?.email;
 
       const payload: {
-        fullName: string
-        email?: string
-        profilePict?: File | null
-        adminRole: AdminRole
-        password?: string
+        fullName: string;
+        email?: string;
+        profilePict?: File | null;
+        adminRole: AdminRole;
+        password?: string;
       } = {
         fullName: values.fullName,
         profilePict: values.profilePict,
         adminRole: values.adminRole,
-      }
+      };
 
       if (emailChanged && !isGoogleUser) {
-        payload.email = values.email
+        payload.email = values.email;
       }
 
       if (isCredentialsUser && values.password) {
-        payload.password = values.password
+        payload.password = values.password;
       }
 
       await updateAdmin(payload, {
         onSuccess: () => {
           if (emailChanged) {
-            toast.success("Admin updated! The admin will need to verify their new email address.", {
-              description: "Email verification will be required for the new email.",
-            })
+            toast.success(
+              "Admin updated! The admin will need to verify their new email address.",
+              {
+                description:
+                  "Email verification will be required for the new email.",
+              }
+            );
           } else {
-            toast.success("Admin updated successfully!")
+            toast.success("Admin updated successfully!");
           }
-          router.push("/superadmin/accounts/admin")
+          router.push("/superadmin/accounts/admin");
         },
-      })
+      });
     },
-  })
+  });
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      formik.setFieldValue("profilePict", file)
-      setPreview(URL.createObjectURL(file))
+      formik.setFieldValue("profilePict", file);
+      setPreview(URL.createObjectURL(file));
     }
-  }
+  };
 
   const handleRemovePreview = () => {
-    formik.setFieldValue("profilePict", null)
-    setPreview(admin?.account?.profilePict || null)
+    formik.setFieldValue("profilePict", null);
+    setPreview(admin?.account?.profilePict || null);
     if (imageRef.current) {
-      imageRef.current.value = ""
+      imageRef.current.value = "";
     }
-  }
+  };
 
-  const isNewImagePreview = preview !== admin?.account?.profilePict && preview !== null
+  const isNewImagePreview =
+    preview !== admin?.account?.profilePict && preview !== null;
 
   if (isLoading) {
     return (
@@ -118,22 +129,23 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
         </div>
         <div className="h-10 w-full bg-muted rounded-md animate-pulse mt-4"></div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
-      {/* Back Button */}
-      
-
       <form onSubmit={formik.handleSubmit} className="space-y-6">
-        {/* Profile Picture Section */}
         <div className="grid gap-2 items-center justify-center text-center">
           <Label>Profile Picture</Label>
           <div className="relative mx-auto h-28 w-28">
             <div className="h-28 w-28 rounded-full bg-muted border-2 border-dashed flex items-center justify-center overflow-hidden">
               {preview ? (
-                <Image src={preview || "/placeholder.svg"} alt="Preview" fill className="rounded-full object-cover" />
+                <Image
+                  src={preview || "/placeholder.svg"}
+                  alt="Preview"
+                  fill
+                  className="rounded-full object-cover"
+                />
               ) : (
                 <div className="text-3xl font-semibold text-muted-foreground">
                   {generateInitials(admin?.account?.fullName)}
@@ -141,7 +153,6 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
               )}
             </div>
 
-            {/* Only show remove button for new image preview, not for existing profile pictures */}
             {isNewImagePreview && (
               <Button
                 size="icon"
@@ -175,11 +186,12 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
             onChange={handleImageChange}
           />
           {formik.touched.profilePict && formik.errors.profilePict && (
-            <p className="text-xs text-destructive">{formik.errors.profilePict as string}</p>
+            <p className="text-xs text-destructive">
+              {formik.errors.profilePict as string}
+            </p>
           )}
         </div>
 
-        {/* Full Name */}
         <div className="grid gap-2">
           <Label htmlFor="fullName">Full Name</Label>
           <Input
@@ -195,7 +207,6 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
           )}
         </div>
 
-        {/* Email */}
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -208,14 +219,15 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
             disabled={isPending || isGoogleUser}
           />
           {isGoogleUser && (
-            <p className="text-xs text-muted-foreground mt-1">Email cannot be changed for Google accounts.</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Email cannot be changed for Google accounts.
+            </p>
           )}
           {formik.touched.email && formik.errors.email && (
             <p className="text-xs text-destructive">{formik.errors.email}</p>
           )}
         </div>
 
-        {/* Admin Role */}
         <div className="grid gap-2">
           <Label htmlFor="adminRole">Admin Role</Label>
           <Select
@@ -236,15 +248,18 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
             </SelectContent>
           </Select>
           {formik.touched.adminRole && formik.errors.adminRole && (
-            <p className="text-xs text-destructive">{formik.errors.adminRole}</p>
+            <p className="text-xs text-destructive">
+              {formik.errors.adminRole}
+            </p>
           )}
         </div>
 
-        {/* Password Section - Only for Credential Users */}
         {!isGoogleUser && (
           <>
             <div className="border-t pt-4 mt-4">
-              <h3 className="text-sm font-medium text-muted-foreground">Change Password (Optional)</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">
+                Change Password (Optional)
+              </h3>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">New Password</Label>
@@ -258,7 +273,9 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
                 disabled={isPending}
               />
               {formik.touched.password && formik.errors.password && (
-                <p className="text-xs text-destructive">{formik.errors.password}</p>
+                <p className="text-xs text-destructive">
+                  {formik.errors.password}
+                </p>
               )}
             </div>
             <div className="grid gap-2">
@@ -272,18 +289,24 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
                 onBlur={formik.handleBlur}
                 disabled={isPending}
               />
-              {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                <p className="text-xs text-destructive">{formik.errors.confirmPassword}</p>
-              )}
+              {formik.touched.confirmPassword &&
+                formik.errors.confirmPassword && (
+                  <p className="text-xs text-destructive">
+                    {formik.errors.confirmPassword}
+                  </p>
+                )}
             </div>
           </>
         )}
 
-        {/* Submit Button */}
-        <Button type="submit" className="w-full" disabled={isPending || !formik.dirty}>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isPending || !formik.dirty}
+        >
           {isPending ? "Saving..." : "Save Changes"}
         </Button>
       </form>
     </div>
-  )
+  );
 }

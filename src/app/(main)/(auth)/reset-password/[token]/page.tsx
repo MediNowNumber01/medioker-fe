@@ -18,6 +18,10 @@ export default function ResetPasswordTokenRoute() {
     redirect(`/login`);
   }
 
+  if (!token) {
+    redirect(`/login`);
+  }
+
   const { isLoading, isError, error } = useVerifyResetToken(token);
 
   useEffect(() => {
@@ -26,7 +30,7 @@ export default function ResetPasswordTokenRoute() {
       const errorMessage =
         axiosError.response?.data?.message ||
         "Your password reset link is invalid or has expired.";
-      
+
       toast.error(errorMessage);
       redirect(`/login`);
     }
@@ -34,9 +38,9 @@ export default function ResetPasswordTokenRoute() {
 
   if (isLoading) {
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
     );
   }
 
