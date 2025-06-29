@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   AlertDialog,
@@ -48,12 +48,12 @@ export function EditProfileForm() {
 
   useEffect(() => {
     if (user) {
-      setPreview(user.profilePict || null);
+      setPreview(user.profilePict || null)
     }
-  }, [user]);
+  }, [user])
 
-  const isCredentialsUser = user?.provider === "CREDENTIAL";
-  const isGoogleUser = user?.provider === "GOOGLE";
+  const isCredentialsUser = user?.provider === "CREDENTIAL"
+  const isGoogleUser = user?.provider === "GOOGLE"
 
   const formik = useFormik({
     initialValues: {
@@ -65,37 +65,33 @@ export function EditProfileForm() {
     },
     validationSchema: EditProfileSchema(isCredentialsUser),
     onSubmit: async (values) => {
-      const emailChanged = values.email !== user?.email;
+      const emailChanged = values.email !== user?.email
 
       const payload: {
-        fullName: string;
-        email?: string;
-        profilePict?: File | null;
-        password?: string;
+        fullName: string
+        email?: string
+        profilePict?: File | null
+        password?: string
       } = {
         fullName: values.fullName,
         profilePict: values.profilePict,
-      };
+      }
 
       if (emailChanged && !isGoogleUser) {
-        payload.email = values.email;
+        payload.email = values.email
       }
 
       if (isCredentialsUser && values.password) {
-        payload.password = values.password;
+        payload.password = values.password
       }
 
       await updateProfile(payload, {
         onSuccess: async () => {
           if (emailChanged) {
-            toast.success(
-              "Profile updated! Please check your new email to re-verify.",
-              {
-                description:
-                  "You will be logged out for security reasons in 3 seconds.",
-              }
-            );
-            setTimeout(() => signOut({ callbackUrl: "/login" }), 1000);
+            toast.success("Profile updated! Please check your new email to re-verify.", {
+              description: "You will be logged out for security reasons in 3 seconds.",
+            })
+            setTimeout(() => signOut({ callbackUrl: "/login" }), 1000)
           } else {
             toast.success("Profile updated successfully!");
 
@@ -103,12 +99,12 @@ export function EditProfileForm() {
             router.push("/profile");
           }
         },
-      });
+      })
     },
-  });
+  })
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
       if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
         toast.error(
@@ -127,24 +123,24 @@ export function EditProfileForm() {
       formik.setFieldValue("profilePict", file);
       setPreview(URL.createObjectURL(file));
     }
-  };
+  }
 
   const handleDeleteExistingPicture = () => {
     deletePicture(undefined, {
       onSuccess: async () => {
-        setPreview(null);
-        await updateSession();
+        setPreview(null)
+        await updateSession()
       },
-    });
-  };
+    })
+  }
 
   const handleRemovePreview = () => {
-    formik.setFieldValue("profilePict", null);
-    setPreview(user?.profilePict || null);
+    formik.setFieldValue("profilePict", null)
+    setPreview(user?.profilePict || null)
     if (imageRef.current) {
-      imageRef.current.value = "";
+      imageRef.current.value = ""
     }
-  };
+  }
 
   const isNewImagePreview = preview !== user?.profilePict && preview !== null;
 
@@ -170,7 +166,7 @@ export function EditProfileForm() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (

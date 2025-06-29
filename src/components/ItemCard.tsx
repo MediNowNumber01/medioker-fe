@@ -31,25 +31,11 @@ const ItemCard: FC<ItemCardProps> = ({ className, product, navigate }) => {
   const stockQuantity = product.Stock?.[0]?.quantity ?? 0;
 
   const getStockStatus = (stock: number) => {
-    if (stock === 0)
-      return {
-        text: "Out of Stock",
-        color: "text-red-600",
-        bgColor: "bg-red-50",
-      };
-    if (stock < 20)
-      return {
-        text: "Low Stock",
-        color: "text-orange-600",
-        bgColor: "bg-orange-50",
-      };
-    return {
-      text: "In Stock",
-      color: "text-green-600",
-      bgColor: "bg-green-50",
-    };
+    // ... (fungsi ini tidak berubah)
+    if (stock === 0) return { text: "Out of Stock", color: "text-red-600", bgColor: "bg-red-50" };
+    if (stock < 20) return { text: "Low Stock", color: "text-orange-600", bgColor: "bg-orange-50" };
+    return { text: "In Stock", color: "text-green-600", bgColor: "bg-green-50" };
   };
-
   const rangePrice = (units: UnitProduct[]) => {
     if (!units || units.length === 0) return "Rp 0";
     if (units.length === 1) return formatPrice(units[0].price);
@@ -155,13 +141,7 @@ const ItemCard: FC<ItemCardProps> = ({ className, product, navigate }) => {
           </div>
         </CardFooter>
         <div
-          className={`rounded-full ${
-            product.golongan === "OBAT_BEBAS"
-              ? "bg-green-500"
-              : product.golongan === "OBAT_KERAS"
-              ? "bg-red-500"
-              : "bg-blue-500"
-          } p-0 absolute top-1 right-1 aspect-square w-[2rem] border-2 border-black`}
+          className={`rounded-full ${ product.golongan === "OBAT_BEBAS" ? "bg-green-500" : product.golongan === "OBAT_KERAS" ? "bg-red-500" : "bg-blue-500" } p-0 absolute top-1 right-1 aspect-square w-[2rem] border-2 border-black`}
         ></div>
       </Card>
     </Link>
