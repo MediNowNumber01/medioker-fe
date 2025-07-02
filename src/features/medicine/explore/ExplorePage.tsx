@@ -302,7 +302,7 @@ const ExplorePage = () => {
             </div>
 
             {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
                 {Array.from({ length: 10 }).map((_, index) => (
                   <Card key={index} className="overflow-hidden">
                     <CardContent className="p-0">
