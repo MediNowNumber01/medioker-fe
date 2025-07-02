@@ -17,7 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Filter, X } from "lucide-react";
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import PharmacySelector from "../pharmacySelector/PharmacySelector";
 import useGetCategories from "@/hooks/api/Category/useGetCategories";
 
@@ -31,8 +31,11 @@ interface SideFilterProps {
   onCategoryChange: (category: string[]) => void;
   sleectedPharmacy: Pharmacy | null;
   onPharmacyChange: (pharmacy: string) => void;
+  userLocation: { lat: number; lng: number } | null;
+  selectionReason: SelectionReason;
 }
 
+type SelectionReason = "nearest" | "main" | null;
 const SideFilter: FC<SideFilterProps> = ({
   className,
   selectedGolongan,
@@ -43,6 +46,8 @@ const SideFilter: FC<SideFilterProps> = ({
   selectedCategories = [],
   sleectedPharmacy,
   onPharmacyChange,
+  userLocation,
+  selectionReason,
 }) => {
   const { data: categories } = useGetCategories({
     sortBy: "name",
@@ -58,6 +63,8 @@ const SideFilter: FC<SideFilterProps> = ({
       <PharmacySelector
         pharmacy={sleectedPharmacy}
         setPharmacy={onPharmacyChange}
+        userLocation={userLocation}
+         selectionReason={selectionReason}
       />
 
       <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
@@ -178,7 +185,11 @@ const SideFilter: FC<SideFilterProps> = ({
                               word.charAt(0).toUpperCase() +
                               word.slice(1).toLowerCase()
                           )
-                          .join(" ")}
+                          .join(" ") === "Obat Terbatas"
+                          ? "Restricted Medicine"
+                          : group === "OBAT_KERAS"
+                          ? "Hard Medicine"
+                          : "Over-the-Counter Medicine"}
                       </Label>
                     </div>
                   ))}

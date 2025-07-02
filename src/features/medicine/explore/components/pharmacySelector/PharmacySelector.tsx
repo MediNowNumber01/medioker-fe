@@ -16,37 +16,92 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { MapPin } from "lucide-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import PharmacyCard from "./PharmacyCard";
 import useGetPharmacies from "@/hooks/api/Pharmacy/useGetPharmacies";
 import PaginationComponent from "@/components/PaginationComponent";
 import { useDebounce } from "use-debounce";
+import { haversineDistance } from "@/lib/haversineDistance";
+
+type SelectionReason = "nearest" | "main" | null;
 
 interface PharmacySelectorProps {
   className?: string;
   pharmacy: Pharmacy | null;
   setPharmacy: (value: string) => void;
+  userLocation: { lat: number; lng: number } | null;
+  selectionReason: SelectionReason;
 }
+
+type PharmacyWithDistance = Pharmacy & { distance?: number };
 
 const PharmacySelector: FC<PharmacySelectorProps> = ({
   className,
   pharmacy,
   setPharmacy,
+  userLocation,
+  selectionReason,
 }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
   const [sortOrder, setSortOrder] = useState("asc");
   const [page, setPage] = useState<number>(1);
   const { data: pharmacies, isLoading } = useGetPharmacies({
-    take: 5,
+    take: 500,
     search: debouncedSearch,
     sortBy: "name",
     sortOrder,
     page,
   });
+
+  const [sortedPharmacies, setSortedPharmacies] = useState<
+    PharmacyWithDistance[]
+  >([]);
+  const [selectedPharmacyDistance, setSelectedPharmacyDistance] = useState<
+    number | undefined
+  >();
+
+  const nearestPharmacyId =
+    userLocation && sortedPharmacies.length > 0 ? sortedPharmacies[0].id : null;
+
+  useEffect(() => {
+    if (pharmacies) {
+      let processedPharmacies: PharmacyWithDistance[] = [...pharmacies.data];
+
+      if (debouncedSearch) {
+        processedPharmacies = processedPharmacies.filter((p) =>
+          p.name.toLowerCase().includes(debouncedSearch.toLowerCase())
+        );
+      }
+
+      if (userLocation) {
+        processedPharmacies = processedPharmacies
+          .map((p) => ({
+            ...p,
+            distance: haversineDistance(
+              userLocation.lat,
+              userLocation.lng,
+              parseFloat(p.lat),
+              parseFloat(p.lng)
+            ),
+          }))
+          .sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
+      } else {
+        processedPharmacies.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      setSortedPharmacies(processedPharmacies);
+      if (pharmacy) {
+        const currentSelected = processedPharmacies.find(
+          (p) => p.id === pharmacy.id
+        );
+        setSelectedPharmacyDistance(currentSelected?.distance);
+      }
+    }
+  }, [pharmacies, userLocation, debouncedSearch, pharmacy]);
   return (
     <div className={className}>
-      <Card className="px-4 py-2 mb-4 gap-2  ">
+      <Card className="px-4 py-2 mb-4 gap-2 pb-6 ">
         <CardTitle className=" flex items-center gap-2 text-[1.25rem] font-semibold">
           <MapPin className="h-5 w-5" />
           Select Pharmacy
@@ -59,6 +114,7 @@ const PharmacySelector: FC<PharmacySelectorProps> = ({
                 className="w-full"
                 pharmacy={pharmacy}
                 onClick={() => {}}
+                distance={selectedPharmacyDistance}
               />
             </DialogTrigger>
             <DialogContent className="flex flex-col max-h-[90vh] overflow-y-auto gap-2">
@@ -76,6 +132,7 @@ const PharmacySelector: FC<PharmacySelectorProps> = ({
                       className="w-full hover:cursor-default"
                       pharmacy={pharmacy}
                       onClick={() => {}}
+                      distance={selectedPharmacyDistance}
                     />
                   ) : null}
                 </div>
@@ -95,24 +152,27 @@ const PharmacySelector: FC<PharmacySelectorProps> = ({
                   {isLoading ? (
                     <div>Loading...</div>
                   ) : (
-                    pharmacies?.data.map((pharmacy) => (
-                      <DialogClose key={pharmacy.id} className="w-full">
+                    sortedPharmacies.map((p) => (
+                      <DialogClose key={p.id} className="w-full">
                         <PharmacyCard
-                          fixedLayout={true}
-                          pharmacy={pharmacy}
+                          pharmacy={p}
                           onClick={() => {
-                            setPharmacy(pharmacy.id);
+                            setPharmacy(p.id);
                           }}
+                          distance={p.distance}
+                          isSelected={pharmacy?.id === p.id}
+                          isNearest={p.id === nearestPharmacyId}
+                          isMain={p.isMain}
                         />
                       </DialogClose>
                     ))
                   )}
-                  <PaginationComponent
+                  {/* <PaginationComponent
                     paginationMeta={pharmacies?.meta}
                     isLoading={isLoading}
                     onPageChange={setPage}
                     numberNarest={0}
-                  />
+                  /> */}
                 </div>
               </div>
               <DialogFooter>

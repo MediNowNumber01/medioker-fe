@@ -1,21 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import useGetUserAddresses from "@/hooks/api/address/useGetUserAddresses";
 import { cn } from "@/lib/utils";
 import { UserAddress } from "@/types/userAddress";
-import { Building2, Home, MapPin, Plus } from "lucide-react";
+import { Building2, Home, MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { AddressForm } from "../../profile/addresses/components/AddressForm";
 
 interface AddressSelectionModalProps {
   onAddressSelect: (addressId: string) => void;
@@ -40,10 +33,15 @@ export function AddressSelectionModal({
   const { data: addresses, isLoading, refetch } = useGetUserAddresses();
   const [selectedValue, setSelectedValue] = useState(currentAddressId);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleConfirm = () => {
     onAddressSelect(selectedValue);
     onClose();
+  };
+
+  const handleNewAddress = () => {
+    router.push("/profile/addresses/");
   };
 
   return (
@@ -89,6 +87,7 @@ export function AddressSelectionModal({
         <Button onClick={handleConfirm} disabled={!selectedValue}>
           Confirm Selection
         </Button>
+        <Button onClick={handleNewAddress}>Manage Address</Button>
       </div>
     </div>
   );

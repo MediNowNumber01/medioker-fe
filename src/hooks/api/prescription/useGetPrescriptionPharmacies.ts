@@ -23,7 +23,6 @@ const useGetPrescriptionPharmacies = ({ lat, lng }: GetPharmaciesParams) => {
           : "/prescriptions/pharmacies";
 
       const response = await axiosInstance.get(url);
-      console.log(response.data.data);
       
       return response.data.data;
     },

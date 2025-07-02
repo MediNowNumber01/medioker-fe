@@ -1,4 +1,3 @@
-// app/forgot-password/[token]/page.tsx
 "use client";
 
 import { redirect, useParams } from "next/navigation";
@@ -10,11 +9,9 @@ import useVerifyResetToken from "@/hooks/api/auth/useVerifyTokenIsValid";
 
 export default function ResetPasswordTokenRoute() {
   const params = useParams();
-  const token = params.token as string; // 'token' will be undefined if not in URL
+  const token = params.token as string;
 
-  // --- MODIFIED CHECK HERE ---
-  // If no token is provided in the URL, redirect immediately
-  if (!token) { // Checks for undefined, null, or empty string if that were possible from params
+  if (!token) {
     redirect(`/login`);
   }
 
@@ -44,6 +41,5 @@ export default function ResetPasswordTokenRoute() {
     );
   }
 
-  // Only render ResetPasswordPage if token is present and verification is not in error state
   return <ResetPasswordPage token={token} />;
 }

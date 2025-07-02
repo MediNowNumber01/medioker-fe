@@ -106,7 +106,7 @@ const MobileFilter: FC<MobileFilterProps> = ({
             
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">Golongan</span>
+                <span className="text-sm font-medium">Group Category</span>
                 {selectedGolongan && (
                   <Badge variant="secondary" className="bg-green-100 text-green-800">
                     Selected
@@ -118,13 +118,17 @@ const MobileFilter: FC<MobileFilterProps> = ({
                   <SelectValue placeholder="Select Golongan" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Golongan</SelectItem>
+                  <SelectItem value="all">Group Category</SelectItem>
                   {Object.values(Golongan).map((golongan) => (
                     <SelectItem key={golongan} value={golongan}>
                       {golongan
-                        .split("_")
-                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                        .join(" ")}
+                          .split("_")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() +
+                              word.slice(1).toLowerCase()
+                          )
+                          .join(" ") === "Obat Terbatas" ? "Restricted Medicine" : golongan === "OBAT_KERAS" ? "Hard Medicine" : "Over-the-Counter Medicine"}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -150,9 +154,13 @@ const MobileFilter: FC<MobileFilterProps> = ({
                   {Object.values(Acquisition).map((acquisition) => (
                     <SelectItem key={acquisition} value={acquisition}>
                       {acquisition
-                        .split("_")
-                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                        .join(" ")}
+                          .split("_")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() +
+                              word.slice(1).toLowerCase()
+                          )
+                          .join(" ") === "Herbal" ? "Herbs" : acquisition === "NON_GENERIK" ? "Non-Generic" : "Generic"}
                     </SelectItem>
                   ))}
                 </SelectContent>

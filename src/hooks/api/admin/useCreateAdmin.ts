@@ -22,16 +22,14 @@ const useCreateAdmin = () => {
 
   return useMutation({
     mutationFn: async (payload: CreateAdminPayload) => {
-        console.log("HIT");
-        
       const formData = new FormData();
-      
-      formData.append('fullName', payload.fullName);
-      formData.append('email', payload.email);
-      formData.append('password', payload.password);
-      formData.append('adminRole', payload.adminRole);
-      formData.append('profilePict', payload.profilePict);
-      
+
+      formData.append("fullName", payload.fullName);
+      formData.append("email", payload.email);
+      formData.append("password", payload.password);
+      formData.append("adminRole", payload.adminRole);
+      formData.append("profilePict", payload.profilePict);
+
       const { data } = await axiosInstance.post("/admins", formData);
       return data;
     },

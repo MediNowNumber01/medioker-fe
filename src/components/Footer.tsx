@@ -1,15 +1,13 @@
+import {
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import {
-  Instagram,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Mail,
-  Phone,
-  MapPin,
-} from "lucide-react";
 
 export default function Footer() {
   return (
@@ -31,24 +29,14 @@ export default function Footer() {
               medicines, expert care, delivered to your doorstep.
             </p>
             <div className="flex gap-2 mt-2">
-              <Link href="#" aria-label="Facebook">
-                <Button variant="ghost" size="icon">
-                  <Facebook className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="#" aria-label="Instagram">
+              <Link href="instagram.com/hfwiratama" aria-label="Instagram">
                 <Button variant="ghost" size="icon">
                   <Instagram className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="#" aria-label="Twitter">
+              <Link href="x.com/VladimirSugeng" aria-label="Twitter">
                 <Button variant="ghost" size="icon">
                   <Twitter className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="#" aria-label="LinkedIn">
-                <Button variant="ghost" size="icon">
-                  <Linkedin className="h-5 w-5" />
                 </Button>
               </Link>
             </div>

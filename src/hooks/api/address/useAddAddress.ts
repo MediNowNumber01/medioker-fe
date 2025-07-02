@@ -17,11 +17,10 @@ const useAddAddress = () => {
   return useMutation({
     mutationFn: async (payload: AddAddressPayload) => {
       const { data } = await axiosInstance.post(
-        "/addresses/add-address",
+        "/addresses/",
         payload
       );
 
-      console.log(data);
       
       return data;
     },

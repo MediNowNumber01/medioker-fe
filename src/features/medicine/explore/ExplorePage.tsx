@@ -9,7 +9,7 @@ import {
   parseAsStringEnum,
   parseAsArrayOf,
 } from "nuqs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import ItemCard from "../../../components/ItemCard";
 import PaginationComponent from "../../../components/PaginationComponent";
@@ -22,8 +22,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Filter, Package, AlertCircle } from "lucide-react";
+import useGetPharmacies from "@/hooks/api/Pharmacy/useGetPharmacies";
+import { haversineDistance } from "@/lib/haversineDistance";
+
+type SelectionReason = "nearest" | "main" | null;
 
 const ExplorePage = () => {
+  const [selectionReason, setSelectionReason] = useState<SelectionReason>(null);
+  const [isLocationProcessing, setIsLocationProcessing] = useState(true);
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault("")
@@ -59,25 +65,99 @@ const ExplorePage = () => {
     parseAsString.withDefault("")
   );
 
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [isLocationFetched, setIsLocationFetched] = useState(false);
+  const { data: allPharmacies, isLoading: isLoadingPharmacies } =
+    useGetPharmacies({
+      take: 500,
+    });
   const {
     data: getProductsResponse,
     isLoading,
     isError,
-  } = useGetProducts({
-    categoryId: categories.length > 0 ? categories : undefined,
-    search: debouncedSearch || undefined,
-    acquisition: acquisition || undefined,
-    golongan: golongan || undefined,
-    take: 20,
-    page,
-    sortBy: sortBy || "name",
-    sortOrder: sortOrder === "asc" || sortOrder === "desc" ? sortOrder : "asc",
-    pharmacyId: selectedPharmacyId || undefined,
-  });
+  } = useGetProducts(
+    {
+      categoryId: categories.length > 0 ? categories : undefined,
+      search: debouncedSearch || undefined,
+      acquisition: acquisition || undefined,
+      golongan: golongan || undefined,
+      take: 12,
+      page,
+      sortBy: sortBy || "name",
+      sortOrder:
+        sortOrder === "asc" || sortOrder === "desc" ? sortOrder : "asc",
+      pharmacyId: selectedPharmacyId || undefined,
+    },
+    { enabled: !!selectedPharmacyId }
+  );
 
   const products = getProductsResponse?.data;
   const pharmacy = getProductsResponse?.pharmacy;
   const meta = getProductsResponse?.meta;
+
+  useEffect(() => {
+    const setMainPharmacy = () => {
+      if (allPharmacies) {
+        const mainPharmacy = allPharmacies.data.find((p) => p.isMain === true);
+        if (mainPharmacy) {
+          setSelectedPharmacyId(mainPharmacy.id);
+          setSelectionReason("main");
+        }
+        setIsLocationProcessing(false);
+      }
+    };
+
+    if (isLoadingPharmacies || selectedPharmacyId) {
+      setIsLocationProcessing(false);
+      return;
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setUserLocation(location);
+
+          if (allPharmacies) {
+            const sorted = [...allPharmacies.data]
+              .map((p) => ({
+                ...p,
+                distance: haversineDistance(
+                  location.lat,
+                  location.lng,
+                  parseFloat(p.lat),
+                  parseFloat(p.lng)
+                ),
+              }))
+              .sort((a, b) => a.distance - b.distance);
+
+            if (sorted.length > 0) {
+              setSelectedPharmacyId(sorted[0].id);
+              setSelectionReason(null);
+            }
+            setIsLocationProcessing(false);
+          }
+        },
+
+        () => {
+          setMainPharmacy();
+        }
+      );
+    } else {
+      setMainPharmacy();
+    }
+  }, [
+    allPharmacies,
+    isLoadingPharmacies,
+    selectedPharmacyId,
+    setSelectedPharmacyId,
+  ]);
 
   const handleCategoryChange = (checked: string[]) => {
     setCategories(checked);
@@ -110,7 +190,6 @@ const ExplorePage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
       <LocationRequester />
 
-      
       <section className="bg-white border-b">
         <div className="container mx-auto px-4 py-8 md:px-6">
           <div className="max-w-3xl">
@@ -126,21 +205,19 @@ const ExplorePage = () => {
         </div>
       </section>
 
-      
       <div className="container mx-auto px-4 py-6 md:px-6">
-        
         <div className="md:hidden mb-6">
           <PharmacySelector
             pharmacy={pharmacy ?? null}
             setPharmacy={setSelectedPharmacyId}
+            userLocation={userLocation}
+            selectionReason={selectionReason}
           />
         </div>
 
-        
         <Card className="mb-6 shadow-sm border-0 bg-white/80 backdrop-blur-sm">
           <CardContent className="p-4 md:p-6">
             <div className="flex flex-col lg:flex-row gap-4">
-              
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -156,7 +233,6 @@ const ExplorePage = () => {
                 </div>
               </div>
 
-              
               <div className="lg:hidden">
                 <MobileFilter
                   onAcquisitionChange={(val) =>
@@ -175,7 +251,6 @@ const ExplorePage = () => {
               </div>
             </div>
 
-            
             {activeFiltersCount > 0 && (
               <div className="flex items-center gap-2 mt-4 pt-4 border-t">
                 <Filter className="h-4 w-4 text-gray-500" />
@@ -194,11 +269,9 @@ const ExplorePage = () => {
           </CardContent>
         </Card>
 
-        
         <div className="flex flex-col lg:flex-row gap-6">
-          
           <aside className="hidden lg:block lg:w-80 flex-shrink-0">
-            <div className="sticky top-20">
+            <div className="sticky top-10">
               <SideFilter
                 selectedAquisition={acquisition}
                 selectedGolongan={golongan}
@@ -206,6 +279,8 @@ const ExplorePage = () => {
                 onAcquisitionChange={(val) =>
                   setAcquisition(val as Acquisition)
                 }
+                userLocation={userLocation}
+                selectionReason={selectionReason}
                 onGolonganChange={(val) => setGolongan(val as Golongan)}
                 onCategoryChange={handleCategoryChange}
                 onPharmacyChange={setSelectedPharmacyId}
@@ -214,9 +289,7 @@ const ExplorePage = () => {
             </div>
           </aside>
 
-          
           <main className="flex-1 min-w-0">
-            
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <Package className="h-5 w-5 text-gray-600" />
@@ -226,14 +299,8 @@ const ExplorePage = () => {
                     : `${meta?.total || 0} Products Found`}
                 </h2>
               </div>
-              {meta?.total && (
-                <Badge variant="outline" className="hidden sm:flex">
-                  Page {page} of {Math.ceil(meta.total / (meta.take || 20))}
-                </Badge>
-              )}
             </div>
 
-            
             {isLoading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {Array.from({ length: 10 }).map((_, index) => (
@@ -291,7 +358,7 @@ const ExplorePage = () => {
               </Card>
             ) : (
               <>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
                   {products.map((product) => (
                     <ItemCard
                       key={product.id}
@@ -302,7 +369,6 @@ const ExplorePage = () => {
                   ))}
                 </div>
 
-                
                 <div className="flex justify-center">
                   <PaginationComponent
                     paginationMeta={meta}

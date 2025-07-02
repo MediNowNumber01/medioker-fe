@@ -1,35 +1,8 @@
 "use client";
 
-import { useFormik } from "formik";
-import { type ChangeEvent, useEffect, useRef, useState } from "react";
-import { UploadPrescriptionSchema } from "../schemas";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import {
-  ChevronsUpDown,
-  Home,
-  MapPin,
-  Trash2,
-  UploadCloud,
-  FileImage,
-  Truck,
-  Store,
-  CheckCircle2,
-} from "lucide-react";
-import Image from "next/image";
-import { toast } from "sonner";
-import useGetUserAddresses from "@/hooks/api/address/useGetUserAddresses";
-import useCreatePrescription from "@/hooks/api/prescription/useCreatePrescription";
-import useGetPrescriptionPharmacies, {
-  type PharmacyWithDistance,
-} from "@/hooks/api/prescription/useGetPrescriptionPharmacies";
-import useAxios from "@/hooks/useAxios";
-import type { UserAddress } from "@/types/userAddress";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -37,13 +10,45 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AddressSelectionModal } from "./AddressSelectionModal";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import useGetUserAddresses from "@/hooks/api/address/useGetUserAddresses";
+import useGetPharmacies from "@/hooks/api/Pharmacy/useGetPharmacies";
+import useCreatePrescription from "@/hooks/api/prescription/useCreatePrescription";
+import useAxios from "@/hooks/useAxios";
+import { haversineDistance } from "@/lib/haversineDistance";
+import { Pharmacy } from "@/types/semuaNgerapiinyaNtar";
+import type { UserAddress } from "@/types/userAddress";
+import { useFormik } from "formik";
+import {
+  CheckCircle2,
+  ChevronsUpDown,
+  FileImage,
+  Home,
+  Store,
+  Trash2,
+  Truck,
+  UploadCloud,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { UploadPrescriptionSchema } from "../schemas";
+import { AddressSelectionModal } from "./AddressSelectionModal";
+import { PrescriptionPharmacyCard } from "./PrescriptionPharmacyCard";
 
+type PharmacyWithDistance = Pharmacy & { distance?: number };
 export function UploadPrescriptionForm() {
   useAxios();
   const { data: session } = useSession();
+  const [activePreviewIndex, setActivePreviewIndex] = useState<number | null>(
+    null
+  );
+
   const { mutateAsync: createPrescription, isPending } =
     useCreatePrescription();
   const imageRef = useRef<HTMLInputElement>(null);
@@ -55,18 +60,15 @@ export function UploadPrescriptionForm() {
   const [selectedAddress, setSelectedAddress] = useState<UserAddress | null>(
     null
   );
+  const [selectionReason, setSelectionReason] = useState<
+    "nearest" | "main" | null
+  >(null);
   const [selectedPharmacy, setSelectedPharmacy] =
     useState<PharmacyWithDistance | null>(null);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isPharmacyModalOpen, setIsPharmacyModalOpen] = useState(false);
   const { data: userAddresses, isLoading: isLoadingAddresses } =
     useGetUserAddresses();
-  const { data: pharmacies, isLoading: isLoadingPharmacies } =
-    useGetPrescriptionPharmacies({
-      lat: userLocation?.latitude,
-      lng: userLocation?.longitude,
-    });
-
   const ALLOWED_IMAGE_TYPES = [
     "image/jpeg",
     "image/png",
@@ -74,6 +76,14 @@ export function UploadPrescriptionForm() {
     "image/gif",
     "image/heic",
   ];
+
+  const { data: rawPharmacies, isLoading: isLoadingPharmacies } =
+    useGetPharmacies({
+      take: 1000,
+    });
+  const [processedPharmacies, setProcessedPharmacies] = useState<
+    PharmacyWithDistance[]
+  >([]);
 
   const isVerified = session?.user?.isVerified;
   useEffect(() => {
@@ -84,12 +94,33 @@ export function UploadPrescriptionForm() {
             latitude: position.coords.latitude.toString(),
             longitude: position.coords.longitude.toString(),
           }),
-        () => setUserLocation({ latitude: "-7.7956", longitude: "110.3695" })
+        () => setUserLocation(null)
       );
     } else {
-      setUserLocation({ latitude: "-7.7956", longitude: "110.3695" });
+      setUserLocation(null);
     }
   }, []);
+
+  useEffect(() => {
+    if (!rawPharmacies?.data) return;
+
+    let pharmacies = [...rawPharmacies.data];
+
+    if (userLocation) {
+      pharmacies = pharmacies
+        .map((p) => ({
+          ...p,
+          distance: haversineDistance(
+            parseFloat(userLocation.latitude),
+            parseFloat(userLocation.longitude),
+            parseFloat(p.lat),
+            parseFloat(p.lng)
+          ),
+        }))
+        .sort((a, b) => a.distance - b.distance);
+    }
+    setProcessedPharmacies(pharmacies);
+  }, [rawPharmacies, userLocation]);
 
   const formik = useFormik({
     initialValues: {
@@ -106,6 +137,30 @@ export function UploadPrescriptionForm() {
   });
 
   useEffect(() => {
+    if (processedPharmacies.length === 0 || selectedPharmacy) return;
+
+    let pharmacyToSelect: PharmacyWithDistance | undefined;
+
+    if (userLocation) {
+      pharmacyToSelect = processedPharmacies[0];
+      setSelectionReason("nearest");
+    } else {
+      pharmacyToSelect = processedPharmacies.find((p) => p.isMain);
+      setSelectionReason("main");
+    }
+
+    if (pharmacyToSelect) {
+      setSelectedPharmacy(pharmacyToSelect);
+      formik.setFieldValue("pharmacyId", pharmacyToSelect.id);
+    }
+  }, [
+    processedPharmacies,
+    selectedPharmacy,
+    userLocation,
+    formik.setFieldValue,
+  ]);
+
+  useEffect(() => {
     if (userAddresses && !selectedAddress) {
       const primaryAddress = userAddresses.find(
         (addr: UserAddress) => addr.isPrimary
@@ -116,13 +171,6 @@ export function UploadPrescriptionForm() {
       }
     }
   }, [userAddresses, selectedAddress, formik.setFieldValue]);
-
-  useEffect(() => {
-    if (pharmacies && pharmacies.length > 0 && !selectedPharmacy) {
-      setSelectedPharmacy(pharmacies[0]);
-      formik.setFieldValue("pharmacyId", pharmacies[0].id);
-    }
-  }, [pharmacies, selectedPharmacy, formik.setFieldValue]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -173,6 +221,9 @@ export function UploadPrescriptionForm() {
     setPreviews(updatedPreviews);
     if (imageRef.current) imageRef.current.value = "";
   };
+  const handlePreviewClick = (index: number) => {
+    setActivePreviewIndex(activePreviewIndex === index ? null : index);
+  };
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
@@ -190,19 +241,27 @@ export function UploadPrescriptionForm() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {previews.map((src, index) => (
-                <div key={index} className="relative group">
+                <div
+                  key={index}
+                  className="relative group "
+                  onClick={() => handlePreviewClick(index)}
+                >
                   <div className="aspect-square rounded-xl border-2 border-border overflow-hidden bg-muted">
                     <Image
                       src={src || "/placeholder.svg"}
                       alt={`Preview ${index + 1}`}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover transition-transform group-hover:scale-105 overflow-hidden"
                     />
                   </div>
                   <Button
                     size="icon"
                     variant="destructive"
-                    className="absolute -top-2 -right-2 h-7 w-7 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    className={`absolute -top-2 -right-2 h-7 w-7 rounded-full shadow-lg transition-opacity z-10 ${
+                      activePreviewIndex === index
+                        ? "opacity-100"
+                        : "opacity-0 group-hover:opacity-100"
+                    }`}
                     type="button"
                     onClick={() => removeImage(index)}
                   >
@@ -410,88 +469,42 @@ export function UploadPrescriptionForm() {
                   onOpenChange={setIsPharmacyModalOpen}
                 >
                   <DialogTrigger asChild>
-                    <Card className="cursor-pointer hover:shadow-md transition-all duration-200 border-2 hover:border-primary/50">
-                      <CardContent className="p-4">
-                        {isLoadingPharmacies ? (
-                          <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 bg-muted rounded-full animate-pulse" />
-                            <div className="space-y-2 flex-1">
-                              <div className="h-4 bg-muted rounded animate-pulse" />
-                              <div className="h-3 bg-muted rounded w-2/3 animate-pulse" />
-                            </div>
-                          </div>
-                        ) : selectedPharmacy ? (
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
-                                <MapPin className="h-5 w-5 text-green-600" />
-                              </div>
-                              <div>
-                                <p className="font-medium">
-                                  {selectedPharmacy.name}
-                                </p>
-                                <p className="text-sm text-muted-foreground line-clamp-1">
-                                  {selectedPharmacy.detailLocation}
-                                </p>
-                              </div>
-                            </div>
-                            <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="h-10 w-10 bg-muted rounded-full flex items-center justify-center">
-                                <MapPin className="h-5 w-5 text-muted-foreground" />
-                              </div>
-                              <p className="text-muted-foreground">
-                                Select pharmacy
-                              </p>
-                            </div>
-                            <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
+                    <div className="cursor-pointer">
+                      <PrescriptionPharmacyCard
+                        pharmacy={selectedPharmacy}
+                        isLoading={isLoadingPharmacies && !selectedPharmacy}
+                        isNearest={selectionReason === "nearest"}
+                        isMain={selectionReason === "main"}
+                        isModalTrigger
+                      />
+                    </div>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-lg">
                     <DialogHeader>
                       <DialogTitle>Select Pharmacy</DialogTitle>
                     </DialogHeader>
-                    <div className="space-y-2 max-h-[60vh] overflow-y-auto">
-                      {pharmacies?.map((p: any) => (
-                        <Card
+                    <div className="space-y-2 max-h-[60vh] overflow-y-auto p-1">
+                      {/* 4. Perbarui JSX untuk menggunakan data yang sudah diproses */}
+                      {processedPharmacies.map((p) => (
+                        <div
                           key={p.id}
-                          className="cursor-pointer hover:shadow-md transition-all duration-200 border hover:border-primary/50"
+                          className="cursor-pointer"
                           onClick={() => {
                             setSelectedPharmacy(p);
                             formik.setFieldValue("pharmacyId", p.id);
+                            setSelectionReason(null);
                             setIsPharmacyModalOpen(false);
                           }}
                         >
-                          <CardContent className="p-4">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
-                                  <MapPin className="h-5 w-5 text-green-600" />
-                                </div>
-                                <div>
-                                  <p className="font-medium">{p.name}</p>
-                                  <p className="text-sm text-muted-foreground">
-                                    {p.detailLocation}
-                                  </p>
-                                </div>
-                              </div>
-                              {p.distance && p.distance <= 10 && (
-                                <Badge
-                                  variant="secondary"
-                                  className="bg-green-100 text-green-700"
-                                >
-                                  Nearby
-                                </Badge>
-                              )}
-                            </div>
-                          </CardContent>
-                        </Card>
+                          <PrescriptionPharmacyCard
+                            pharmacy={p}
+                            isNearest={
+                              p.id === processedPharmacies[0]?.id &&
+                              !!userLocation
+                            }
+                            isMain={p.isMain}
+                          />
+                        </div>
                       ))}
                     </div>
                   </DialogContent>
