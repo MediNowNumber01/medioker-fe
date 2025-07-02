@@ -16,7 +16,7 @@ const useDeleteAdmin = () => {
     },
     onSuccess: () => {
       toast.success("Admin account deleted successfully.");
-      queryClient.invalidateQueries({ queryKey: ["admin"] });
+      queryClient.invalidateQueries({ queryKey: ["admins"] });
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(

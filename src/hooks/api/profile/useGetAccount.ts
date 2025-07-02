@@ -10,7 +10,6 @@ const useGetAccount = () => {
     queryKey: ["get-account"],
     queryFn: async () => {
       const { data } = await axiosInstance.get<Account>(`/accounts/user`);
-      console.log(data);
       
       return data;
     },

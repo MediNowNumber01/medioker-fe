@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import useLogin from "@/hooks/api/auth/useLogin";
 import { cn } from "@/lib/utils";
 import { useFormik } from "formik";
-import { Eye, EyeOff } from "lucide-react"; 
+import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -32,7 +32,7 @@ export function LoginForm({
   const { mutateAsync: login, isPending } = useLogin();
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [errorBuffer, setErrorBuffer] = useState<string | null>(null);
 
@@ -48,7 +48,6 @@ export function LoginForm({
     },
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
-      localStorage.setItem("lastPath", redirectUrl);
       await login(values);
     },
   });
@@ -61,7 +60,7 @@ export function LoginForm({
       const newUrl =
         window.location.pathname + (params.size ? "?" + params.toString() : "");
       router.replace(newUrl);
-      setErrorBuffer(null); 
+      setErrorBuffer(null);
     }
   }, [errorBuffer, router]);
 
@@ -133,7 +132,7 @@ export function LoginForm({
                     Forgot Password?
                   </Link>
                 </div>
-               
+
                 <div className="relative">
                   <Input
                     id="password"
@@ -144,7 +143,7 @@ export function LoginForm({
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     disabled={isPending}
-                    className="pr-10" 
+                    className="pr-10"
                   />
                   <Button
                     type="button"

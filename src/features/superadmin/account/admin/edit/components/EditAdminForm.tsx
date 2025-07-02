@@ -26,7 +26,7 @@ interface EditAdminFormProps {
 }
 
 export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
-  const { mutateAsync: updateAdmin, isPending } = useUpdateAdmin(admin.id!);
+  const { mutateAsync: updateAdmin, isPending } = useUpdateAdmin(admin.id);
   const router = useRouter();
 
   const [preview, setPreview] = useState<string | null>(null);
@@ -38,6 +38,8 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
     }
   }, [admin]);
 
+  console.log("admin", admin.id);
+  
   const isCredentialsUser = admin?.account?.provider === "CREDENTIAL";
   const isGoogleUser = admin?.account?.provider === "GOOGLE";
 
@@ -75,6 +77,8 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
         payload.password = values.password;
       }
 
+      console.log("update", payload);
+      
       await updateAdmin(payload, {
         onSuccess: () => {
           if (emailChanged) {
@@ -88,7 +92,7 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
           } else {
             toast.success("Admin updated successfully!");
           }
-          router.push("/superadmin/accounts/admin");
+          router.push("/superadmin/accounts/admins");
         },
       });
     },

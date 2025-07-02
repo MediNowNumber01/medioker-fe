@@ -71,7 +71,7 @@ export function AddressForm({ onSuccess }: AddressFormProps) {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           rows={3}
-          disabled={isPending}
+          disabled
         />
         <p className="text-xs text-destructive h-3">
           {formik.touched.fullAddress && formik.errors.fullAddress}

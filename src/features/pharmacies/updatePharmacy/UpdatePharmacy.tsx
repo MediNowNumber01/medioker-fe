@@ -40,7 +40,6 @@ const UpdatePharmacy: FC<UpdatePharmacyProps> = ({ pharmacyId }) => {
   if (isError) {
     return redirect("/superadmin/pharmacies");
   }
-  console.log("pharmacy", pharmacy);
   const initialValues = {
     name: pharmacy?.data.name || "",
     picture: null,
