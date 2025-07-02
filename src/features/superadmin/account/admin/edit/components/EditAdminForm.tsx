@@ -38,8 +38,6 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
     }
   }, [admin]);
 
-  console.log("admin", admin.id);
-  
   const isCredentialsUser = admin?.account?.provider === "CREDENTIAL";
   const isGoogleUser = admin?.account?.provider === "GOOGLE";
 
@@ -77,8 +75,6 @@ export function EditAdminForm({ admin, isLoading }: EditAdminFormProps) {
         payload.password = values.password;
       }
 
-      console.log("update", payload);
-      
       await updateAdmin(payload, {
         onSuccess: () => {
           if (emailChanged) {

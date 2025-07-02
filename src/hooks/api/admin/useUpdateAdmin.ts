@@ -11,6 +11,8 @@ interface UpdateAdminPayload {
   fullName: string;
   adminRole: AdminRole;
   profilePict?: File | null;
+  email?: string
+  password?: string
 }
 
 const useUpdateAdmin = (accountId: string) => {
@@ -25,6 +27,12 @@ const useUpdateAdmin = (accountId: string) => {
       formData.append("adminRole", payload.adminRole);
       if (payload.profilePict) {
         formData.append("profilePict", payload.profilePict);
+      }
+      if (payload.email) {
+        formData.append("email", payload.email);
+      }
+      if(payload.password) {
+        formData.append("password", payload.password);
       }
 
       const { data } = await axiosInstance.patch(

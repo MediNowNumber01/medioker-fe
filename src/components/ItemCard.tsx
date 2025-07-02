@@ -19,7 +19,7 @@ interface ItemCardProps {
 
 const ItemCard: FC<ItemCardProps> = ({ className, product, navigate }) => {
   const [expanded, setExpanded] = useState(false)
-  const imageUrl = product.ProductImage?.[0]?.imageUrl ?? "/images/placeholder-product.png"
+  const imageUrl = product.ProductImage?.[0]?.imageUrl ?? "/images/placeholder-product.jpg"
   const stockQuantity = product.Stock?.[0]?.quantity ?? 0
 
   const getStockStatus = (stock: number) => {
